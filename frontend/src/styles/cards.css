@@ -1,0 +1,175 @@
+/* Moment Card Styles — Polaroid & Postcard Aesthetic */
+
+.moment-card-wrapper {
+  perspective: 1000px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.moment-card {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  background-color: var(--paper-white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-polaroid);
+  padding: 16px 16px 20px 16px;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: rotate(var(--tilt, 0deg));
+  border: 1px solid rgba(43, 40, 37, 0.07);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Single-Focus Hero Presentation */
+.single-focus-wrapper {
+  width: 100%;
+  max-width: 490px;
+  margin: 0 auto;
+}
+
+.single-focus-wrapper .moment-card {
+  max-width: 490px;
+  box-shadow: var(--shadow-hero);
+  padding: 18px 18px 24px 18px;
+  border-radius: 16px;
+}
+
+.single-focus-wrapper .moment-photo-container {
+  aspect-ratio: 4 / 3;
+  max-height: 380px;
+  border-radius: 10px;
+}
+
+.single-focus-wrapper .moment-text-card {
+  min-height: 290px;
+  padding: 36px 32px 28px 32px;
+  border-radius: 16px;
+}
+
+.single-focus-wrapper .moment-body-text {
+  font-size: 1.28rem;
+  line-height: 1.65;
+  color: var(--ink-dark);
+}
+
+/* Photo Postcard Frame */
+.moment-photo-container {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: var(--bg-canvas-subtle);
+  position: relative;
+}
+
+.moment-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.moment-card:hover .moment-photo {
+  transform: scale(1.02);
+}
+
+/* Quiet Metadata */
+.moment-meta {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.moment-author {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.94rem;
+  color: var(--ink-dark);
+}
+
+.moment-time {
+  font-family: var(--font-handwritten);
+  font-size: 1.25rem;
+  color: var(--ink-light);
+}
+
+.moment-caption {
+  margin-top: 10px;
+  font-size: 0.98rem;
+  color: var(--ink-medium);
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+/* Text-Only Moment Postcard */
+.moment-text-card {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 28px 24px 22px 24px;
+  position: relative;
+}
+
+/* Varied Soft Pastel Tints for Text Moments */
+.moment-text-card.tint-sun {
+  background-color: #FFFDF4;
+  border-top: 5px solid var(--sun-yellow);
+}
+
+.moment-text-card.tint-sky {
+  background-color: #F7FAFD;
+  border-top: 5px solid var(--sky-blue);
+}
+
+.moment-text-card.tint-peach {
+  background-color: #FFF9F7;
+  border-top: 5px solid var(--peach-pink);
+}
+
+.moment-text-card.tint-lavender {
+  background-color: #FAF8FE;
+  border-top: 5px solid var(--lavender);
+}
+
+.moment-text-card.tint-sage {
+  background-color: #F8FAF6;
+  border-top: 5px solid var(--sage-green);
+}
+
+.moment-quote-mark {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  line-height: 0.8;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+.moment-body-text {
+  font-size: 1.08rem;
+  font-weight: 500;
+  color: var(--ink-dark);
+  line-height: 1.6;
+  font-style: normal;
+  flex-grow: 1;
+}
+
+.moment-text-footer {
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(43, 40, 37, 0.12);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.moment-signature {
+  font-family: var(--font-handwritten);
+  font-size: 1.45rem;
+  color: var(--ink-dark);
+}

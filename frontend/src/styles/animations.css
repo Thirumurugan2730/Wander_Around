@@ -1,0 +1,88 @@
+/* Animations & Transitions */
+
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px) rotate(var(--base-rot, 0deg));
+  }
+  50% {
+    transform: translateY(-6px) rotate(calc(var(--base-rot, 0deg) + 0.4deg));
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(18px) rotate(var(--tilt, 0deg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px) rotate(var(--tilt, 0deg));
+  }
+}
+
+.float-slow {
+  animation: floatGentle 6s ease-in-out infinite;
+}
+
+.float-delayed {
+  animation: floatGentle 7s ease-in-out 1.5s infinite;
+}
+
+.pulse-soft {
+  animation: pulseSoft 4s ease-in-out infinite;
+}
+
+.card-enter {
+  animation: cardEntrance 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.anim-fade-up {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.anim-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.anim-delay-2 {
+  animation-delay: 0.2s;
+}
+
+.anim-delay-3 {
+  animation-delay: 0.3s;
+}
+
+/* Reduced Motion Safety */
+@media (prefers-reduced-motion: reduce) {
+  .float-slow,
+  .float-delayed,
+  .pulse-soft,
+  .card-enter,
+  .anim-fade-up {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
