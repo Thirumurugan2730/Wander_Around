@@ -29,15 +29,15 @@ const INITIAL_LANE_DELAYS = [-24, -15, -7, -29, -11];
  * - 5 vertical altitude lanes with safe margins (no vertical cropping)
  * - Pure GPU CSS transform keyframe animations
  * - Staggered entrance timing ensuring no cloud crowding or collisions
- * - Balanced cloud scale (15-25% increase to reach ideal middle ground)
+ * - Natural atmospheric depth (background slower/softer, foreground crisp/dynamic)
  */
 export function useWanderingLayout(posts = []) {
   return useMemo(() => {
     const count = posts.length;
     if (count === 0) return [];
 
-    // Ideal balanced cloud scale tier: noticeable, fluffy, charming, leaving plenty of sky
-    const cloudScale = count <= 5 ? 0.98 : count <= 15 ? 0.90 : 0.82;
+    // Base scale tier
+    const baseCloudScale = count <= 5 ? 0.98 : count <= 15 ? 0.90 : 0.82;
 
     return posts.map((post, index) => {
       const postKey = String(post.id || index);
@@ -49,10 +49,30 @@ export function useWanderingLayout(posts = []) {
 
       const hasPhoto = Boolean(post.hasPhoto || post.has_photo || post.imagePath || post.image_path);
 
-      // Traversal duration: heavier photo clouds glide majestically (34s-44s), text notes (28s-36s)
-      const baseDuration = hasPhoto
-        ? 34 + Math.floor(pseudoRandom(seed + 1) * 10)
-        : 28 + Math.floor(pseudoRandom(seed + 1) * 8);
+      // Depth classification for natural atmospheric perspective
+      const depthVal = pseudoRandom(seed + 4);
+      let depthClass = 'depth-mid';
+      let zIndex = 15;
+      let effectiveScale = baseCloudScale;
+      let speedFactor = 1.0;
+
+      if (depthVal < 0.28) {
+        depthClass = 'depth-far';
+        zIndex = 5;
+        effectiveScale = Number((baseCloudScale * 0.86).toFixed(2));
+        speedFactor = 1.25; // Slower background drift
+      } else if (depthVal > 0.72) {
+        depthClass = 'depth-near';
+        zIndex = 22;
+        effectiveScale = Number((baseCloudScale * 1.06).toFixed(2));
+        speedFactor = 0.88; // Slightly faster foreground glide
+      }
+
+      // Traversal duration: heavier photo clouds glide majestically, text notes lighter
+      const rawDuration = hasPhoto
+        ? 34 + Math.floor(pseudoRandom(seed + 1) * 8)
+        : 28 + Math.floor(pseudoRandom(seed + 1) * 6);
+      const baseDuration = Math.round(rawDuration * speedFactor);
 
       // Staggered delay:
       // First wave (index < 5) has negative delays to be naturally distributed across screen width on load
@@ -61,25 +81,12 @@ export function useWanderingLayout(posts = []) {
       if (laneQueueIndex === 0) {
         animationDelay = `${INITIAL_LANE_DELAYS[laneIndex]}s`;
       } else {
-        const queuedDelay = (laneQueueIndex * 15 + (pseudoRandom(seed + 2) * 5)).toFixed(1);
+        const queuedDelay = (laneQueueIndex * 14 + (pseudoRandom(seed + 2) * 5)).toFixed(1);
         animationDelay = `${queuedDelay}s`;
       }
 
-      // Deterministic physical photo tilt: -3.5deg to +3.5deg
-      const baseRot = (pseudoRandom(seed + 3) * 7 - 3.5).toFixed(1);
-
-      // Depth classification for atmospheric perspective
-      const depthVal = pseudoRandom(seed + 4);
-      let depthClass = 'depth-mid';
-      let zIndex = 15;
-
-      if (depthVal < 0.28) {
-        depthClass = 'depth-far';
-        zIndex = 5;
-      } else if (depthVal > 0.72) {
-        depthClass = 'depth-near';
-        zIndex = 22;
-      }
+      // Deterministic physical photo tilt: -3deg to +3deg
+      const baseRot = (pseudoRandom(seed + 3) * 6 - 3).toFixed(1);
 
       // Sunlight classification based on altitude lane (upper lanes catch more sunlight)
       let sunlitClass = 'sunlit-neutral';
@@ -109,7 +116,7 @@ export function useWanderingLayout(posts = []) {
         style: {
           zIndex,
           '--rot-start': `${baseRot}deg`,
-          '--cloud-scale': `${cloudScale}`,
+          '--cloud-scale': `${effectiveScale}`,
           '--lane-index': `${laneIndex}`,
           animationDuration: `${baseDuration}s`,
           animationDelay,

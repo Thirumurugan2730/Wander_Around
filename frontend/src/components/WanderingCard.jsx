@@ -55,11 +55,14 @@ export default function WanderingCard({
         />
       </div>
 
-      {/* 2. Memory Integrated Directly Inside the Cloud (NO RECTANGULAR CARDS, NO BORDERS, NO SEPARATE CONTAINERS) */}
+      {/* 2. Atmospheric Cloud Mist Halo (Diffuse vapor behind the memory) */}
+      <div className="cloud-mist-halo" aria-hidden="true" />
+
+      {/* 3. Memory Integrated Directly Inside the Cloud (cloud → mist → memory → mist → cloud) */}
       <article className="cloud-memory-article">
         {hasPhoto ? (
           <div className="cloud-photo-ensemble">
-            {/* The photo gently emerges from the cloud with soft feathered edges */}
+            {/* The photo gently emerges from the cloud with soft feathered atmospheric edges */}
             <div className="cloud-photo-wrapper">
               {fullImageUrl && !imageError ? (
                 <img
@@ -76,6 +79,8 @@ export default function WanderingCard({
                   <span>{imageError ? '☁️' : '☀️'}</span>
                 </div>
               )}
+              {/* Soft vapor wisp crossing over middle/lower part of photo */}
+              <div className="cloud-photo-vapor-overlay" aria-hidden="true" />
             </div>
 
             {/* If post includes handwritten thoughts, it flows below in natural ink */}
@@ -109,7 +114,7 @@ export default function WanderingCard({
         )}
       </article>
 
-      {/* 3. Cloud Foreground Wisps Layer (laps over bottom/edges so memory is nestled inside) */}
+      {/* 4. Cloud Foreground Wisps Layer (laps over bottom/edges so memory is nestled inside) */}
       <div className="cloud-foreground-wrapper">
         <CloudSilhouette
           variant={cloudVariant}
