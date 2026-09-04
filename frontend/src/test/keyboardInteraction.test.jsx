@@ -28,7 +28,7 @@ describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => 
       expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Text cloud memory by Thiru/i });
+    const card = screen.getByRole('button', { name: /Handwritten memory drifting in cloud by Thiru/i });
     fireEvent.keyDown(card, { key: 'Enter', code: 'Enter' });
 
     await waitFor(() => {
@@ -47,7 +47,7 @@ describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => 
       expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Text cloud memory by Maya/i });
+    const card = screen.getByRole('button', { name: /Handwritten memory drifting in cloud by Maya/i });
     fireEvent.keyDown(card, { key: ' ', code: 'Space' });
 
     await waitFor(() => {
@@ -66,7 +66,7 @@ describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => 
       expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Photo cloud memory by Sam/i });
+    const card = screen.getByRole('button', { name: /Photo memory drifting in cloud by Sam/i });
     fireEvent.click(card);
 
     await waitFor(() => {
@@ -92,7 +92,7 @@ describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => 
       expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Text cloud memory by Thiru/i });
+    const card = screen.getByRole('button', { name: /Handwritten memory drifting in cloud by Thiru/i });
     fireEvent.click(card);
 
     const dialog = await screen.findByRole('dialog');

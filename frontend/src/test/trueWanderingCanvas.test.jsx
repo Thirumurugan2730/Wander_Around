@@ -82,7 +82,7 @@ describe('Wandering Through Clouds Comprehensive Suite', () => {
     expect(screen.getByText('— Writer')).toBeInTheDocument();
 
     // Check Photo-only
-    const photoOnlyCard = screen.getByRole('button', { name: /Photo cloud memory by Photographer/i });
+    const photoOnlyCard = screen.getByRole('button', { name: /Photo memory drifting in cloud by Photographer/i });
     expect(photoOnlyCard).toBeInTheDocument();
 
     // Check Photo + text
@@ -111,7 +111,7 @@ describe('Wandering Through Clouds Comprehensive Suite', () => {
       expect(screen.getByText(/1 cloud drifting through today/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Photo cloud memory by Storyteller/i });
+    const card = screen.getByRole('button', { name: /Photo memory drifting in cloud by Storyteller/i });
     fireEvent.click(card);
 
     // Verify modal is open
@@ -149,7 +149,7 @@ describe('Wandering Through Clouds Comprehensive Suite', () => {
     expect(canvas).not.toHaveClass('is-paused');
 
     // Click to expand
-    const card = screen.getByRole('button', { name: /Text cloud memory by User1/i });
+    const card = screen.getByRole('button', { name: /Handwritten memory drifting in cloud by User1/i });
     fireEvent.click(card);
 
     // Canvas is now paused

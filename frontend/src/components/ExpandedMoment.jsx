@@ -1,16 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { resolveImageUrl, formatTimeAgo } from '../utils/image';
 
-const CLOUD_TINTS = [
-  'cloud-tint-pure',
-  'cloud-tint-sun',
-  'cloud-tint-sky',
-  'cloud-tint-peach',
-  'cloud-tint-lavender',
-  'cloud-tint-mint',
-];
-
-export default function ExpandedMoment({ post, index = 0, onClose }) {
+export default function ExpandedMoment({ post, onClose }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const containerRef = useRef(null);
@@ -23,8 +14,6 @@ export default function ExpandedMoment({ post, index = 0, onClose }) {
   const createdAt = post.createdAt || post.created_at;
   const formattedTime = formatTimeAgo(createdAt);
   const fullImageUrl = hasPhoto && imagePath ? resolveImageUrl(imagePath) : null;
-
-  const tint = CLOUD_TINTS[index % CLOUD_TINTS.length];
 
   // Focus close button on mount & listen to Escape key
   useEffect(() => {
@@ -73,8 +62,10 @@ export default function ExpandedMoment({ post, index = 0, onClose }) {
         </button>
 
         {hasPhoto ? (
-          /* Expanded Photo Cloud Focus */
-          <article className={`expanded-cloud-frame expanded-photo-view ${tint}`}>
+          /* Expanded Photograph Memory */
+          <article className="expanded-memory-card expanded-photo-container">
+            <div className="expanded-washi-tape" aria-hidden="true" />
+
             <div className="expanded-photo-viewport">
               {fullImageUrl && !imageError ? (
                 <img
@@ -86,16 +77,16 @@ export default function ExpandedMoment({ post, index = 0, onClose }) {
                   style={{ opacity: imageLoaded ? 1 : 0.6 }}
                 />
               ) : (
-                <div className="cloud-photo-placeholder">
+                <div className="expanded-placeholder-box">
                   <span>{imageError ? '☁️ photo faded' : 'Gathering light...'}</span>
                 </div>
               )}
             </div>
 
-            <div className="expanded-details-bar">
-              <div className="expanded-meta-bar">
-                <span className="expanded-author">{username}</span>
-                <span className="expanded-time">{formattedTime}</span>
+            <div className="expanded-photo-details">
+              <div className="expanded-meta-row">
+                <span className="expanded-author-name">{username}</span>
+                <span className="expanded-timestamp">{formattedTime}</span>
               </div>
 
               {text && (
@@ -106,17 +97,18 @@ export default function ExpandedMoment({ post, index = 0, onClose }) {
             </div>
           </article>
         ) : (
-          /* Expanded Text Cloud Focus */
-          <article className={`expanded-cloud-frame expanded-text-view ${tint}`}>
+          /* Expanded Handwritten Paper Note Memory */
+          <article className="expanded-memory-card expanded-note-container">
+            <div className="expanded-note-washi-tape" aria-hidden="true" />
             <div className="expanded-quote-mark" aria-hidden="true">“</div>
 
-            <div className="expanded-text-content">
-              <p className="expanded-body-text">{text || 'A quiet thought recorded today.'}</p>
+            <div className="expanded-note-content">
+              <p className="expanded-note-body">{text || 'A quiet thought recorded today.'}</p>
             </div>
 
-            <div className="expanded-text-footer">
-              <span className="expanded-signature">— {username}</span>
-              <span className="expanded-time">{formattedTime}</span>
+            <div className="expanded-note-footer">
+              <span className="expanded-note-signature">— {username}</span>
+              <span className="expanded-note-timestamp">{formattedTime}</span>
             </div>
           </article>
         )}

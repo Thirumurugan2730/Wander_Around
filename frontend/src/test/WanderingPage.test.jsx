@@ -59,7 +59,7 @@ describe('WanderingPage Wandering Through Clouds', () => {
     expect(fetchSpy).toHaveBeenCalledTimes(1);
 
     // Click on First moment card
-    const firstCard = screen.getByRole('button', { name: /Text cloud memory by UserA/i });
+    const firstCard = screen.getByRole('button', { name: /Handwritten memory drifting in cloud by UserA/i });
     fireEvent.click(firstCard);
 
     // Dialog / Expanded modal appears on same screen

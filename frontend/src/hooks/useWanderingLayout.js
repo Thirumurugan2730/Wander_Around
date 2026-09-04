@@ -17,32 +17,21 @@ function stringToSeed(str) {
   return Math.abs(hash);
 }
 
-/**
- * 8 distinct, visible continuous cloud wandering animation trajectories.
- */
-const CLOUD_TRAJECTORIES = [
-  'cloudDriftLoopA', // left -> up -> right -> down
-  'cloudDriftLoopB', // right -> down -> left -> up
-  'cloudDriftDiagonal', // diagonal sway
-  'cloudDriftWave', // wide horizontal floating wave
-  'cloudDriftCircle', // slow circular eddy
-  'cloudDriftSway', // gentle vertical floating swing
-  'cloudDriftInfinity', // smooth figure-8 drift
-  'cloudDriftBreeze', // gentle angled drift
+const WIND_TRAJECTORIES = [
+  'windDriftBreezeA',
+  'windDriftBreezeB',
+  'windDriftAscend',
+  'windDriftDescend',
+  'windDriftWave',
+  'windDriftSweep',
 ];
 
-const CLOUD_TINTS = [
-  'cloud-tint-pure',
-  'cloud-tint-sun',
-  'cloud-tint-sky',
-  'cloud-tint-peach',
-  'cloud-tint-lavender',
-  'cloud-tint-mint',
-];
+const PHOTO_COMPOSITIONS = ['photo-rest', 'photo-hang', 'photo-overlap'];
+const TEXT_COMPOSITIONS = ['text-note', 'text-tuck'];
 
 /**
- * Computes organic, distributed, non-overlapping canvas cloud coordinates for all moments.
- * Generates stable positions, scales, depths, and independent drifting physics.
+ * Computes organic sky positions, cloud silhouettes, photo/note compositions,
+ * depth levels, and wind-drift physics for every moment.
  */
 export function useWanderingLayout(posts = []) {
   return useMemo(() => {
@@ -52,6 +41,7 @@ export function useWanderingLayout(posts = []) {
     // Single moment: centered gracefully in the middle sky
     if (count === 1) {
       const post = posts[0];
+      const hasPhoto = Boolean(post.hasPhoto || post.has_photo || post.imagePath || post.image_path);
       return [{
         post,
         style: {
@@ -60,23 +50,24 @@ export function useWanderingLayout(posts = []) {
           transform: 'translate(-50%, -50%)',
           '--rot-start': '-1.5deg',
           '--rot-delta': '2deg',
-          '--drift-x': '28px',
-          '--drift-y': '20px',
-          '--drift-dur': '20s',
+          '--wind-drift-x': '45px',
+          '--wind-drift-y': '22px',
+          '--drift-dur': '26s',
           '--drift-delay': '0s',
           '--cloud-scale': '1.08',
-          animationName: 'cloudDriftLoopA',
-          animationDuration: '20s',
+          animationName: 'windDriftBreezeA',
+          animationDuration: '26s',
           animationTimingFunction: 'ease-in-out',
           animationIterationCount: 'infinite',
         },
-        tint: 'cloud-tint-sun',
-        depthClass: 'cloud-depth-near',
+        cloudVariant: 0,
+        compositionType: hasPhoto ? (post.text ? 'photo-text-combo' : 'photo-rest') : 'text-note',
+        depthClass: 'depth-near',
         isProminent: true,
       }];
     }
 
-    // Grid zone partitioning to guarantee even dispersion without clumping
+    // Grid zone partitioning to guarantee wide dispersion across the sky
     const cols = count <= 3 ? 2 : count <= 8 ? 3 : count <= 15 ? 4 : count <= 24 ? 5 : 6;
     const rows = Math.ceil(count / cols);
 
@@ -85,7 +76,7 @@ export function useWanderingLayout(posts = []) {
 
     return posts.map((post, index) => {
       const postKey = String(post.id || index);
-      const seed = stringToSeed(postKey) + index * 43;
+      const seed = stringToSeed(postKey) + index * 47;
 
       const col = index % cols;
       const row = Math.floor(index / cols);
@@ -100,37 +91,51 @@ export function useWanderingLayout(posts = []) {
       const clampedX = Math.max(4, Math.min(84, baseX));
       const clampedY = Math.max(6, Math.min(82, baseY));
 
-      // Deterministic rotation: -4deg to +4deg
-      const baseRot = (pseudoRandom(seed + 3) * 8 - 4).toFixed(1);
-      const rotDelta = (pseudoRandom(seed + 4) * 2.2 + 1.0).toFixed(1);
+      // Deterministic photo tilt: -4.5deg to +4.5deg
+      const baseRot = (pseudoRandom(seed + 3) * 9 - 4.5).toFixed(1);
+      const rotDelta = (pseudoRandom(seed + 4) * 2.5 + 1.2).toFixed(1);
 
-      // Depth classification for natural sky perspective
+      // Depth classification for atmospheric perspective
       const depthVal = pseudoRandom(seed + 5);
-      let depthClass = 'cloud-depth-mid';
+      let depthClass = 'depth-mid';
       let scale = 1.0;
       let zIndex = 15;
 
       if (depthVal < 0.28) {
-        depthClass = 'cloud-depth-far';
+        depthClass = 'depth-far';
         scale = 0.88;
         zIndex = 5;
       } else if (depthVal > 0.72) {
-        depthClass = 'cloud-depth-near';
+        depthClass = 'depth-near';
         scale = 1.08;
-        zIndex = 20;
+        zIndex = 22;
       }
 
-      // Continuous visible drift ranges (20px to 45px)
-      const driftX = ((pseudoRandom(seed + 6) * 30 + 15) * (pseudoRandom(seed + 7) > 0.5 ? 1 : -1)).toFixed(0);
-      const driftY = ((pseudoRandom(seed + 8) * 26 + 12) * (pseudoRandom(seed + 9) > 0.5 ? 1 : -1)).toFixed(0);
+      // Wind drift translation (noticeable movement in 2-3s: 35px to 75px)
+      const driftX = (pseudoRandom(seed + 6) * 35 + 40).toFixed(0);
+      const driftY = ((pseudoRandom(seed + 7) * 25 + 15) * (pseudoRandom(seed + 8) > 0.5 ? 1 : -1)).toFixed(0);
 
-      // Duration: 14s to 26s (calm but clearly moving continuously)
-      const driftDur = (15 + pseudoRandom(seed + 10) * 11).toFixed(1);
-      const driftDelay = (pseudoRandom(seed + 11) * 6).toFixed(1);
+      // Durations: 20s, 26s, 32s, 38s, 44s, 50s
+      const durations = [20, 26, 32, 38, 44, 50];
+      const driftDur = durations[Math.floor(pseudoRandom(seed + 9) * durations.length)];
+      const driftDelay = (pseudoRandom(seed + 10) * 8).toFixed(1);
 
-      // Unique trajectory variant
-      const trajectory = CLOUD_TRAJECTORIES[index % CLOUD_TRAJECTORIES.length];
-      const tint = CLOUD_TINTS[index % CLOUD_TINTS.length];
+      const trajectory = WIND_TRAJECTORIES[index % WIND_TRAJECTORIES.length];
+      const cloudVariant = index % 4;
+
+      // Composition assignment
+      const hasPhoto = Boolean(post.hasPhoto || post.has_photo || post.imagePath || post.image_path);
+      let compositionType = 'photo-rest';
+
+      if (hasPhoto) {
+        if (post.text && post.text.trim().length > 0) {
+          compositionType = 'photo-text-combo';
+        } else {
+          compositionType = PHOTO_COMPOSITIONS[Math.floor(pseudoRandom(seed + 11) * PHOTO_COMPOSITIONS.length)];
+        }
+      } else {
+        compositionType = TEXT_COMPOSITIONS[Math.floor(pseudoRandom(seed + 12) * TEXT_COMPOSITIONS.length)];
+      }
 
       return {
         post,
@@ -140,8 +145,8 @@ export function useWanderingLayout(posts = []) {
           zIndex,
           '--rot-start': `${baseRot}deg`,
           '--rot-delta': `${rotDelta}deg`,
-          '--drift-x': `${driftX}px`,
-          '--drift-y': `${driftY}px`,
+          '--wind-drift-x': `${driftX}px`,
+          '--wind-drift-y': `${driftY}px`,
           '--drift-dur': `${driftDur}s`,
           '--drift-delay': `${driftDelay}s`,
           '--cloud-scale': `${scale}`,
@@ -151,7 +156,8 @@ export function useWanderingLayout(posts = []) {
           animationTimingFunction: 'ease-in-out',
           animationIterationCount: 'infinite',
         },
-        tint,
+        cloudVariant,
+        compositionType,
         depthClass,
         isProminent: count <= 3,
       };

@@ -3,6 +3,7 @@ import { getTodayPosts } from '../api/client';
 import { useWanderingLayout } from '../hooks/useWanderingLayout';
 import WanderingCard from '../components/WanderingCard';
 import ExpandedMoment from '../components/ExpandedMoment';
+import WindLayer from '../components/WindLayer';
 import LoadingState from '../components/LoadingState';
 import EmptyState from '../components/EmptyState';
 
@@ -55,7 +56,7 @@ export default function WanderingPage() {
     };
   }, [fetchPosts]);
 
-  // Compute organic, stable positions and motion vectors for all posts
+  // Compute organic, stable positions, cloud silhouettes, compositions, and motion vectors
   const positionedCards = useWanderingLayout(posts);
 
   // Handler for opening a moment
@@ -68,23 +69,18 @@ export default function WanderingPage() {
     setSelectedPost(null);
   }, []);
 
-  const selectedIndex = selectedPost
-    ? posts.findIndex((p) => (p.id ? p.id === selectedPost.id : p === selectedPost))
-    : 0;
-
   return (
     <main className="wandering-page" aria-label="Wandering Sky Canvas">
-      {/* Ambient Parallax Silhouettes */}
+      {/* Ambient Sun Haze & Distant Clouds */}
+      <div className="ambient-sun-haze" aria-hidden="true" />
       <div className="ambient-sky-cloud ambient-cloud-1" aria-hidden="true" />
       <div className="ambient-sky-cloud ambient-cloud-2" aria-hidden="true" />
       <div className="ambient-sky-cloud ambient-cloud-3" aria-hidden="true" />
 
-      {/* Atmospheric Ambient Glows */}
-      <div className="ambient-glow-sun" aria-hidden="true" />
-      <div className="ambient-glow-sky" aria-hidden="true" />
-      <div className="ambient-glow-lavender" aria-hidden="true" />
+      {/* Visible Wind Trails & Floating Motes */}
+      <WindLayer />
 
-      {/* Atmospheric Header Info */}
+      {/* Atmospheric Sky Header */}
       <header className="wandering-top-nav" aria-label="Sky information">
         <div className="wandering-header-badge">
           <div className="pill">
@@ -126,20 +122,21 @@ export default function WanderingPage() {
         </div>
       )}
 
-      {/* Living Sky Canvas with all cloud moments wandering simultaneously */}
+      {/* Living Sky Canvas with all memories carried by wind */}
       {!loading && !error && posts.length > 0 && (
         <section
           className={`wandering-canvas-container ${selectedPost ? 'is-paused' : ''}`}
           aria-label="Interactive floating memories"
         >
-          {positionedCards.map(({ post, style, tint, depthClass }, index) => {
+          {positionedCards.map(({ post, style, cloudVariant, compositionType, depthClass }, index) => {
             const postKey = post.id || `moment-${index}`;
             return (
               <WanderingCard
                 key={postKey}
                 post={post}
                 style={style}
-                tint={tint}
+                cloudVariant={cloudVariant}
+                compositionType={compositionType}
                 depthClass={depthClass}
                 onSelect={handleSelectPost}
               />
@@ -152,7 +149,6 @@ export default function WanderingPage() {
       {selectedPost && (
         <ExpandedMoment
           post={selectedPost}
-          index={selectedIndex >= 0 ? selectedIndex : 0}
           onClose={handleCloseExpanded}
         />
       )}
@@ -174,6 +170,8 @@ export default function WanderingPage() {
           box-shadow: var(--shadow-card);
           text-align: center;
           border: 1px solid rgba(43, 40, 37, 0.08);
+          position: relative;
+          z-index: 20;
         }
 
         .error-icon {

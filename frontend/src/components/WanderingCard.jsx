@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { resolveImageUrl, formatTimeAgo } from '../utils/image';
+import CloudSilhouette from './CloudSilhouette';
 
-export default function WanderingCard({ post, style, tint = 'cloud-tint-pure', depthClass = 'cloud-depth-mid', onSelect }) {
+export default function WanderingCard({
+  post,
+  style,
+  cloudVariant = 0,
+  compositionType = 'photo-rest',
+  depthClass = 'depth-mid',
+  onSelect,
+}) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -22,61 +30,82 @@ export default function WanderingCard({ post, style, tint = 'cloud-tint-pure', d
   };
 
   const cardAriaLabel = hasPhoto
-    ? `Photo cloud memory by ${username}${text ? `: ${text}` : ''}. Click to open.`
-    : `Text cloud memory by ${username}: "${text || ''}". Click to open.`;
+    ? `Photo memory drifting in cloud by ${username}${text ? `: ${text}` : ''}. Click to open.`
+    : `Handwritten memory drifting in cloud by ${username}: "${text || ''}". Click to open.`;
 
   return (
     <div
       role="button"
       tabIndex={0}
-      className={`wandering-cloud-anchor ${depthClass}`}
+      className={`memory-cloud-anchor ${depthClass} comp-${compositionType}`}
       style={style}
       onClick={() => onSelect(post)}
       onKeyDown={handleKeyDown}
       aria-label={cardAriaLabel}
     >
+      {/* Real Organic Fluffy Cloud Silhouette */}
+      <div className="cloud-backdrop-wrapper">
+        <CloudSilhouette variant={cloudVariant} className="cloud-silhouette-svg" />
+      </div>
+
       {hasPhoto ? (
-        /* Photo Cloud Moment */
-        <article className={`cloud-card cloud-photo-card ${tint}`}>
-          <div className="cloud-photo-frame">
-            {fullImageUrl && !imageError ? (
-              <img
-                src={fullImageUrl}
-                alt={text || `Photo by ${username}`}
-                className="cloud-photo-img"
-                loading="lazy"
-                onLoad={() => setImageLoaded(true)}
-                onError={() => setImageError(true)}
-                style={{ opacity: imageLoaded ? 1 : 0.4 }}
-              />
-            ) : (
-              <div className="cloud-photo-placeholder">
-                <span>{imageError ? '☁️' : '☀️'}</span>
-              </div>
-            )}
+        /* Photograph Memory Carried by Cloud */
+        <article className="photo-memory-item">
+          <div className="photo-print-frame">
+            <div className="washi-tape-photo" aria-hidden="true" />
+
+            <div className="photo-image-wrapper">
+              {fullImageUrl && !imageError ? (
+                <img
+                  src={fullImageUrl}
+                  alt={text || `Memory by ${username}`}
+                  className="photo-print-img"
+                  loading="lazy"
+                  onLoad={() => setImageLoaded(true)}
+                  onError={() => setImageError(true)}
+                  style={{ opacity: imageLoaded ? 1 : 0.4 }}
+                />
+              ) : (
+                <div className="photo-placeholder-box">
+                  <span>{imageError ? '☁️' : '☀️'}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Quiet Photo Caption Margin */}
+            <div className="photo-bottom-margin">
+              <span className="photo-handwritten-author">{username}</span>
+              <span className="photo-handwritten-time">{formattedTime}</span>
+            </div>
           </div>
 
-          <div className="cloud-meta-row">
-            <span className="cloud-author">{username}</span>
-            <span className="cloud-time">{formattedTime}</span>
-          </div>
+          {/* Attached Handwritten Note for Photo + Text */}
+          {text && compositionType === 'photo-text-combo' && (
+            <div className="attached-note-scrap">
+              <div className="mini-pin-tape" aria-hidden="true" />
+              <p className="attached-note-text">{text}</p>
+            </div>
+          )}
 
-          {text && (
-            <p className="cloud-caption-preview">
-              {text}
-            </p>
+          {text && compositionType !== 'photo-text-combo' && (
+            <p className="photo-inline-caption">{text}</p>
           )}
         </article>
       ) : (
-        /* Text-Only Cloud Moment */
-        <article className={`cloud-card cloud-text-card ${tint}`}>
-          <div className="cloud-quote-mark" aria-hidden="true">“</div>
+        /* Handwritten Paper Note Carried by Cloud */
+        <article className="text-note-memory-item">
+          <div className="paper-note-scrap">
+            <div className="note-washi-tape" aria-hidden="true" />
+            <div className="note-quote-mark" aria-hidden="true">“</div>
 
-          <p className="cloud-body-text">{text || 'A quiet thought drifting through the sky.'}</p>
+            <p className="note-handwritten-body">
+              {text || 'A quiet thought recorded today.'}
+            </p>
 
-          <div className="cloud-text-footer">
-            <span className="cloud-signature">— {username}</span>
-            <span className="cloud-time">{formattedTime}</span>
+            <div className="note-signature-row">
+              <span className="note-signature">— {username}</span>
+              <span className="note-timestamp">{formattedTime}</span>
+            </div>
           </div>
         </article>
       )}

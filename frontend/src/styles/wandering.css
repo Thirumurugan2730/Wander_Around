@@ -1,5 +1,5 @@
 /* ==========================================================================
-   DAILY WANDER — "WANDERING THROUGH CLOUDS" SKY ENVIRONMENT
+   DAILY WANDER — "WANDERING THROUGH CLOUDS" NOSTALGIC SKY ENVIRONMENT
    ========================================================================== */
 
 /* Sky Canvas Page */
@@ -8,53 +8,169 @@
   min-height: calc(100vh - 70px);
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #CEEAF7 0%, #DFECF7 28%, #F4EEF9 58%, #FFF5EB 82%, #FEF8F2 100%);
+  background: linear-gradient(180deg, #9AC8E2 0%, #BDDFEF 22%, #DFEBF2 48%, #F7EDE2 78%, #FAF2E8 100%);
   overflow-x: hidden;
   user-select: none;
 }
 
-/* Ambient Sky Clouds (Distant Parallax Silhouettes) */
+/* Subtle Film Grain / Atmospheric Texture */
+.wandering-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(43, 40, 37, 0.035) 1px, transparent 0);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.7;
+}
+
+/* Atmospheric Sun Haze */
+.ambient-sun-haze {
+  position: absolute;
+  top: -120px;
+  right: -80px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 238, 180, 0.6) 0%, rgba(255, 246, 225, 0.25) 45%, rgba(255, 255, 255, 0) 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Distant Ambient Clouds */
 .ambient-sky-cloud {
   position: absolute;
   pointer-events: none;
-  opacity: 0.35;
-  filter: blur(8px);
+  opacity: 0.38;
+  filter: blur(6px);
   z-index: 1;
 }
 
 .ambient-cloud-1 {
-  top: 12%;
-  left: 6%;
-  width: 260px;
-  height: 90px;
+  top: 10%;
+  left: 4%;
+  width: 280px;
+  height: 95px;
   background: #FFFFFF;
-  border-radius: 100px;
-  animation: ambientFloatSlow 48s ease-in-out infinite alternate;
+  border-radius: 120px;
+  animation: ambientDriftSlow 52s ease-in-out infinite alternate;
 }
 
 .ambient-cloud-2 {
-  top: 65%;
-  right: 8%;
-  width: 320px;
-  height: 110px;
+  top: 60%;
+  right: 6%;
+  width: 340px;
+  height: 115px;
   background: #FFFFFF;
-  border-radius: 120px;
-  animation: ambientFloatSlow 56s ease-in-out 6s infinite alternate-reverse;
+  border-radius: 140px;
+  animation: ambientDriftSlow 60s ease-in-out 8s infinite alternate-reverse;
 }
 
 .ambient-cloud-3 {
-  bottom: 15%;
-  left: 18%;
-  width: 220px;
-  height: 75px;
+  bottom: 12%;
+  left: 14%;
+  width: 240px;
+  height: 80px;
   background: #FFFFFF;
-  border-radius: 90px;
-  animation: ambientFloatSlow 42s ease-in-out 12s infinite alternate;
+  border-radius: 100px;
+  animation: ambientDriftSlow 46s ease-in-out 14s infinite alternate;
 }
 
-@keyframes ambientFloatSlow {
+@keyframes ambientDriftSlow {
   0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(60px, -24px, 0); }
+  100% { transform: translate3d(80px, -20px, 0); }
+}
+
+/* ==========================================================================
+   VISIBLE WIND LAYER & BREEZE STREAKS
+   ========================================================================== */
+
+.wind-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.wind-svg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+
+.wind-streak {
+  stroke-dasharray: 180 800;
+  stroke-dashoffset: 980;
+  animation: windFlow 18s linear infinite;
+  opacity: 0.6;
+}
+
+.wind-streak-1 {
+  animation-duration: 16s;
+  animation-delay: 0s;
+}
+
+.wind-streak-2 {
+  animation-duration: 22s;
+  animation-delay: 4s;
+}
+
+.wind-streak-3 {
+  animation-duration: 19s;
+  animation-delay: 8s;
+}
+
+.wind-streak-4 {
+  animation-duration: 25s;
+  animation-delay: 12s;
+}
+
+@keyframes windFlow {
+  0% {
+    stroke-dashoffset: 980;
+  }
+  100% {
+    stroke-dashoffset: -980;
+  }
+}
+
+/* Floating Wind Motes */
+.wind-particle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+  animation: particleFly 18s linear infinite;
+}
+
+.particle-1 { top: 18%; left: -20px; animation-duration: 14s; animation-delay: 0s; }
+.particle-2 { top: 35%; left: -20px; animation-duration: 18s; animation-delay: 3s; width: 6px; height: 6px; }
+.particle-3 { top: 52%; left: -20px; animation-duration: 16s; animation-delay: 7s; }
+.particle-4 { top: 68%; left: -20px; animation-duration: 20s; animation-delay: 11s; width: 4px; height: 4px; }
+.particle-5 { top: 82%; left: -20px; animation-duration: 15s; animation-delay: 5s; }
+.particle-6 { top: 25%; left: -20px; animation-duration: 22s; animation-delay: 9s; width: 7px; height: 7px; opacity: 0.5; }
+
+@keyframes particleFly {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.8);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(105vw, -40px, 0) scale(1.1);
+    opacity: 0;
+  }
 }
 
 /* Minimal Sky Header */
@@ -81,10 +197,10 @@
   font-size: 1.35rem;
   color: var(--ink-medium);
   letter-spacing: 0.01em;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
 }
 
-/* Sky Wandering Canvas Viewport */
+/* Sky Canvas Container */
 .wandering-canvas-container {
   position: relative;
   flex: 1;
@@ -103,126 +219,97 @@
   pointer-events: none;
 }
 
-.wandering-canvas-container.is-paused .wandering-cloud-anchor {
+.wandering-canvas-container.is-paused .memory-cloud-anchor {
   animation-play-state: paused !important;
 }
 
 /* ==========================================================================
-   FLOATING CLOUD MOMENT CARDS
+   MEMORY CLOUD ANCHOR & DEPTH TIERS
    ========================================================================== */
 
-.wandering-cloud-anchor {
+.memory-cloud-anchor {
   position: absolute;
   cursor: pointer;
   outline: none;
-  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.1s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.1s ease;
   will-change: transform;
 }
 
-.wandering-cloud-anchor:hover,
-.wandering-cloud-anchor:focus-visible {
+.memory-cloud-anchor:hover,
+.memory-cloud-anchor:focus-visible {
   z-index: 50 !important;
   transform: scale(calc(var(--cloud-scale, 1) * 1.08)) rotate(var(--rot-start, 0deg)) !important;
 }
 
-.wandering-cloud-anchor:focus-visible {
+.memory-cloud-anchor:focus-visible {
   outline: 3px solid var(--coral-accent);
-  outline-offset: 6px;
+  outline-offset: 8px;
   border-radius: 40px;
 }
 
 /* Depth Tiers */
-.cloud-depth-near {
-  filter: drop-shadow(0 18px 36px rgba(100, 150, 190, 0.28)) drop-shadow(0 4px 10px rgba(43, 40, 37, 0.06));
+.depth-near {
+  filter: drop-shadow(0 20px 40px rgba(60, 110, 150, 0.32)) drop-shadow(0 4px 12px rgba(43, 40, 37, 0.08));
 }
 
-.cloud-depth-mid {
-  filter: drop-shadow(0 14px 28px rgba(100, 150, 190, 0.22)) drop-shadow(0 3px 8px rgba(43, 40, 37, 0.05));
+.depth-mid {
+  filter: drop-shadow(0 14px 28px rgba(60, 110, 150, 0.24)) drop-shadow(0 3px 8px rgba(43, 40, 37, 0.06));
 }
 
-.cloud-depth-far {
-  opacity: 0.94;
-  filter: drop-shadow(0 8px 18px rgba(100, 150, 190, 0.16));
+.depth-far {
+  opacity: 0.92;
+  filter: drop-shadow(0 8px 18px rgba(60, 110, 150, 0.18));
 }
 
-/* Organic Fluffy Cloud Container */
-.cloud-card {
-  position: relative;
-  background: #FFFFFF;
-  border-radius: 42px 48px 40px 46px;
-  padding: 14px 16px 18px 16px;
-  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.9), inset 0 -3px 8px rgba(180, 210, 235, 0.25);
-  border: 1.5px solid rgba(255, 255, 255, 0.85);
-  transition: box-shadow 0.25s ease, background-color 0.25s ease;
-  pointer-events: auto;
-}
-
-/* Cloud Puffs (Billowing Silhouettes) */
-.cloud-card::before,
-.cloud-card::after {
-  content: '';
+/* Organic Fluffy Cloud Silhouette Backdrop */
+.cloud-backdrop-wrapper {
   position: absolute;
-  background: inherit;
-  border-radius: 50%;
-  z-index: -1;
+  inset: -28px -36px -28px -36px;
+  z-index: 1;
   pointer-events: none;
 }
 
-.cloud-card::before {
-  width: 58px;
-  height: 58px;
-  top: -18px;
-  left: 22px;
+.cloud-svg-shape {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.cloud-card::after {
-  width: 72px;
-  height: 72px;
-  top: -24px;
-  right: 28px;
+/* ==========================================================================
+   PHOTOGRAPH MEMORIES (NOSTALGIC PRINTS)
+   ========================================================================== */
+
+.photo-memory-item {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Soft Cloud Tints */
-.cloud-tint-pure {
-  background: #FFFFFF;
+/* Authentic Printed Photograph Frame */
+.photo-print-frame {
+  position: relative;
+  width: 220px;
+  background: #FFFDF9;
+  border: 1px solid rgba(43, 40, 37, 0.09);
+  border-radius: 6px;
+  padding: 10px 10px 14px 10px;
+  box-shadow: 0 8px 24px rgba(43, 40, 37, 0.12), 0 2px 6px rgba(43, 40, 37, 0.05);
+  transform: rotate(var(--rot-start, 0deg));
+  transition: transform 0.3s ease;
 }
 
-.cloud-tint-sun {
-  background: #FFFDF0;
-}
-
-.cloud-tint-sky {
-  background: #F4FAFD;
-}
-
-.cloud-tint-peach {
-  background: #FFF8F4;
-}
-
-.cloud-tint-lavender {
-  background: #FAF7FE;
-}
-
-.cloud-tint-mint {
-  background: #F5FAF5;
-}
-
-/* Photo Cloud Moments */
-.cloud-photo-card {
-  width: 230px;
-}
-
-.cloud-photo-frame {
+.photo-image-wrapper {
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  border-radius: 24px;
-  background: #EAF4FA;
+  border-radius: 4px;
+  background: #EAF3F8;
   position: relative;
-  box-shadow: 0 4px 14px rgba(43, 40, 37, 0.08);
 }
 
-.cloud-photo-img {
+.photo-print-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -230,102 +317,33 @@
   transition: transform 0.4s ease, opacity 0.25s ease;
 }
 
-.wandering-cloud-anchor:hover .cloud-photo-img {
-  transform: scale(1.04);
+.memory-cloud-anchor:hover .photo-print-img {
+  transform: scale(1.03);
 }
 
-.cloud-photo-placeholder {
+.photo-placeholder-box {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.8rem;
-  background: #F2EEEC;
+  background: #F1ECE6;
 }
 
-.cloud-meta-row {
-  margin-top: 10px;
+/* Bottom Margin with Handwritten Notes */
+.photo-bottom-margin {
+  margin-top: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px;
+  padding: 0 2px;
 }
 
-.cloud-author {
-  font-family: var(--font-heading);
+.photo-handwritten-author {
+  font-family: var(--font-handwritten);
+  font-size: 1.3rem;
   font-weight: 600;
-  font-size: 0.88rem;
-  color: var(--ink-dark);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 125px;
-}
-
-.cloud-time {
-  font-family: var(--font-handwritten);
-  font-size: 1.15rem;
-  color: var(--ink-light);
-}
-
-.cloud-caption-preview {
-  margin-top: 6px;
-  padding: 0 4px;
-  font-size: 0.86rem;
-  color: var(--ink-medium);
-  line-height: 1.38;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Text-Only Cloud Moments */
-.cloud-text-card {
-  width: 220px;
-  min-height: 140px;
-  padding: 22px 18px 16px 18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.cloud-quote-mark {
-  font-family: var(--font-heading);
-  font-size: 2.6rem;
-  line-height: 0.5;
-  color: var(--sky-blue);
-  opacity: 0.65;
-  margin-bottom: 8px;
-  user-select: none;
-}
-
-.cloud-body-text {
-  font-family: var(--font-body);
-  font-size: 0.98rem;
-  font-weight: 500;
-  color: var(--ink-dark);
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  flex-grow: 1;
-}
-
-.cloud-text-footer {
-  margin-top: 12px;
-  padding-top: 8px;
-  border-top: 1px dashed rgba(114, 184, 216, 0.35);
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
-
-.cloud-signature {
-  font-family: var(--font-handwritten);
-  font-size: 1.35rem;
   color: var(--ink-dark);
   white-space: nowrap;
   overflow: hidden;
@@ -333,26 +351,289 @@
   max-width: 120px;
 }
 
+.photo-handwritten-time {
+  font-family: var(--font-handwritten);
+  font-size: 1.15rem;
+  color: var(--ink-light);
+}
+
+/* Washi Tape Accent */
+.washi-tape-photo {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  width: 55px;
+  height: 16px;
+  background: rgba(255, 241, 196, 0.92);
+  border-left: 2px dashed rgba(204, 169, 92, 0.45);
+  border-right: 2px dashed rgba(204, 169, 92, 0.45);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* Composition Variants */
+.comp-photo-rest .photo-print-frame {
+  margin-top: 6px;
+}
+
+.comp-photo-hang .photo-print-frame {
+  margin-top: 18px;
+}
+
+.comp-photo-overlap .photo-print-frame {
+  margin-left: 12px;
+}
+
+/* Attached Handwritten Note for Photo + Text */
+.attached-note-scrap {
+  position: absolute;
+  bottom: -22px;
+  right: -24px;
+  max-width: 160px;
+  background: #FFFDEE;
+  border: 1px solid rgba(43, 40, 37, 0.1);
+  border-radius: 3px;
+  padding: 8px 10px;
+  box-shadow: 0 6px 16px rgba(43, 40, 37, 0.12);
+  transform: rotate(3deg);
+  z-index: 20;
+}
+
+.mini-pin-tape {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 12px;
+  background: rgba(255, 216, 204, 0.88);
+  border-left: 1px dashed rgba(180, 120, 100, 0.4);
+  border-right: 1px dashed rgba(180, 120, 100, 0.4);
+}
+
+.attached-note-text {
+  font-family: var(--font-handwritten);
+  font-size: 1.15rem;
+  color: var(--ink-dark);
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.photo-inline-caption {
+  margin-top: 6px;
+  font-family: var(--font-handwritten);
+  font-size: 1.15rem;
+  color: var(--ink-medium);
+  line-height: 1.25;
+  text-align: center;
+  max-width: 200px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 /* ==========================================================================
-   EXPANDED SAME-SCREEN CLOUD FOCUS MODAL
+   HANDWRITTEN PAPER NOTES (TEXT-ONLY MEMORIES)
+   ========================================================================== */
+
+.text-note-memory-item {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.paper-note-scrap {
+  position: relative;
+  width: 215px;
+  min-height: 135px;
+  background: #FFFDF7;
+  border: 1px solid rgba(43, 40, 37, 0.1);
+  border-radius: 4px;
+  padding: 16px 14px 12px 14px;
+  box-shadow: 0 8px 22px rgba(43, 40, 37, 0.11), 0 2px 6px rgba(43, 40, 37, 0.04);
+  transform: rotate(var(--rot-start, 0deg));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.note-washi-tape {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(1deg);
+  width: 50px;
+  height: 15px;
+  background: rgba(217, 238, 248, 0.92);
+  border-left: 2px dashed rgba(114, 184, 216, 0.5);
+  border-right: 2px dashed rgba(114, 184, 216, 0.5);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  pointer-events: none;
+}
+
+.note-quote-mark {
+  font-family: var(--font-handwritten);
+  font-size: 2.8rem;
+  line-height: 0.4;
+  color: var(--ink-light);
+  margin-bottom: 6px;
+  user-select: none;
+}
+
+.note-handwritten-body {
+  font-family: var(--font-handwritten);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--ink-dark);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.note-signature-row {
+  margin-top: 10px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(43, 40, 37, 0.12);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.note-signature {
+  font-family: var(--font-handwritten);
+  font-size: 1.3rem;
+  color: var(--ink-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.note-timestamp {
+  font-family: var(--font-handwritten);
+  font-size: 1.15rem;
+  color: var(--ink-light);
+}
+
+/* ==========================================================================
+   CONTINUOUS WIND-DRIFT KEYFRAMES (NOTICEABLE IN 2-3 SECONDS)
+   ========================================================================== */
+
+/* Trajectory 1: Breeze Drift A (rightward wind with gentle lift) */
+@keyframes windDriftBreezeA {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  25% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * 0.4), calc(var(--wind-drift-y, 20px) * -0.7), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 1.01));
+  }
+  50% {
+    transform: translate3d(var(--wind-drift-x, 45px), calc(var(--wind-drift-y, 20px) * 0.5), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  75% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * -0.3), var(--wind-drift-y, 20px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
+  }
+}
+
+/* Trajectory 2: Breeze Drift B (sweeping rightward drift) */
+@keyframes windDriftBreezeB {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  30% {
+    transform: translate3d(var(--wind-drift-x, 45px), calc(var(--wind-drift-y, 20px) * -0.8), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
+  }
+  65% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * 0.6), var(--wind-drift-y, 20px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.8deg))) scale(var(--cloud-scale, 1));
+  }
+}
+
+/* Trajectory 3: Ascending Gust */
+@keyframes windDriftAscend {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  35% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * 0.8), calc(var(--wind-drift-y, 20px) * -1.2), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 2deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
+  }
+  70% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * -0.4), calc(var(--wind-drift-y, 20px) * 0.6), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 2deg))) scale(var(--cloud-scale, 1));
+  }
+}
+
+/* Trajectory 4: Descending Thermal */
+@keyframes windDriftDescend {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  35% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * 0.9), var(--wind-drift-y, 20px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
+  }
+  70% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * -0.5), calc(var(--wind-drift-y, 20px) * -0.7), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 1.01));
+  }
+}
+
+/* Trajectory 5: Undulating Wave */
+@keyframes windDriftWave {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  20% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * 0.5), calc(var(--wind-drift-y, 20px) * -1), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 2.2deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
+  }
+  50% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * 1.1), 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  80% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * -0.4), var(--wind-drift-y, 20px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 2.2deg))) scale(calc(var(--cloud-scale, 1) * 0.98));
+  }
+}
+
+/* Trajectory 6: Sweeping Breeze Current */
+@keyframes windDriftSweep {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  30% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * 1.2), calc(var(--wind-drift-y, 20px) * 0.4), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 1.01));
+  }
+  65% {
+    transform: translate3d(calc(var(--wind-drift-x, 45px) * -0.7), calc(var(--wind-drift-y, 20px) * -0.8), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
+  }
+}
+
+/* ==========================================================================
+   EXPANDED SAME-SCREEN MODAL FOCUS (NOSTALGIC PRINT & DIARY NOTE)
    ========================================================================== */
 
 .expanded-backdrop {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(35, 55, 75, 0.42);
+  background: rgba(30, 50, 70, 0.45);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
-  animation: cloudBackdropFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: backdropFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   cursor: pointer;
 }
 
-@keyframes cloudBackdropFade {
+@keyframes backdropFadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
@@ -362,17 +643,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 720px;
+  max-width: 700px;
   width: 100%;
   max-height: 92vh;
   cursor: default;
-  animation: cloudModalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: modalScaleUp 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-@keyframes cloudModalPop {
+@keyframes modalScaleUp {
   from {
     opacity: 0;
-    transform: scale(0.84) translateY(20px);
+    transform: scale(0.85) translateY(18px);
   }
   to {
     opacity: 1;
@@ -386,17 +667,17 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1.5px solid rgba(114, 184, 216, 0.35);
+  background: #FFFDF9;
+  border: 1.5px solid rgba(43, 40, 37, 0.16);
   border-radius: var(--radius-full);
-  padding: 9px 18px;
-  margin-bottom: 14px;
+  padding: 8px 18px;
+  margin-bottom: 12px;
   font-family: var(--font-heading);
-  font-size: 0.96rem;
+  font-size: 0.95rem;
   font-weight: 500;
   color: var(--ink-dark);
   cursor: pointer;
-  box-shadow: 0 6px 18px rgba(43, 40, 37, 0.12);
+  box-shadow: 0 4px 14px rgba(43, 40, 37, 0.14);
   transition: all 0.2s ease;
 }
 
@@ -404,7 +685,7 @@
   background-color: var(--sun-yellow);
   border-color: var(--ink-dark);
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(43, 40, 37, 0.18);
+  box-shadow: 0 6px 18px rgba(43, 40, 37, 0.2);
 }
 
 .expanded-close-btn:focus-visible {
@@ -412,33 +693,46 @@
   outline-offset: 2px;
 }
 
-/* Expanded Cloud Card Frame */
-.expanded-cloud-frame {
+/* Expanded Memory Card Container */
+.expanded-memory-card {
   position: relative;
   width: 100%;
-  background: #FFFFFF;
-  border-radius: 40px;
-  box-shadow: 0 24px 60px rgba(40, 80, 120, 0.25), 0 4px 16px rgba(43, 40, 37, 0.08);
-  border: 2px solid rgba(255, 255, 255, 0.95);
+  background: #FFFDF9;
+  border-radius: 8px;
+  box-shadow: 0 24px 60px rgba(35, 60, 85, 0.28), 0 6px 18px rgba(43, 40, 37, 0.1);
+  border: 1px solid rgba(43, 40, 37, 0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-/* Expanded Photo Presentation */
-.expanded-photo-view {
-  padding: 24px 24px 28px 24px;
+/* Expanded Photograph Presentation */
+.expanded-photo-container {
+  padding: 22px 22px 26px 22px;
   max-height: 84vh;
-  display: flex;
-  flex-direction: column;
+}
+
+.expanded-washi-tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 85px;
+  height: 22px;
+  background: rgba(255, 241, 196, 0.92);
+  border-left: 2px dashed rgba(204, 169, 92, 0.5);
+  border-right: 2px dashed rgba(204, 169, 92, 0.5);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+  z-index: 10;
 }
 
 .expanded-photo-viewport {
   width: 100%;
   max-height: 60vh;
   min-height: 240px;
-  border-radius: 28px;
-  background: #EBF3F8;
+  border-radius: 4px;
+  background: #EAF3F8;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -452,220 +746,124 @@
   height: auto;
   object-fit: contain;
   display: block;
-  border-radius: 20px;
+  border-radius: 4px;
   transition: opacity 0.3s ease;
 }
 
-.expanded-details-bar {
-  margin-top: 18px;
+.expanded-placeholder-box {
+  font-family: var(--font-handwritten);
+  font-size: 1.6rem;
+  color: var(--ink-light);
+}
+
+.expanded-photo-details {
+  margin-top: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   overflow-y: auto;
 }
 
-.expanded-meta-bar {
+.expanded-meta-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.expanded-author {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 1.25rem;
+.expanded-author-name {
+  font-family: var(--font-handwritten);
+  font-weight: 700;
+  font-size: 1.55rem;
   color: var(--ink-dark);
 }
 
-.expanded-time {
+.expanded-timestamp {
   font-family: var(--font-handwritten);
-  font-size: 1.55rem;
+  font-size: 1.35rem;
   color: var(--ink-light);
 }
 
 .expanded-caption-wrapper {
-  padding-top: 10px;
-  border-top: 1px dashed rgba(114, 184, 216, 0.3);
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(43, 40, 37, 0.15);
 }
 
 .expanded-caption-text {
-  font-size: 1.15rem;
+  font-family: var(--font-handwritten);
+  font-size: 1.45rem;
+  font-weight: 600;
   color: var(--ink-dark);
-  line-height: 1.65;
+  line-height: 1.4;
   word-break: break-word;
 }
 
-/* Expanded Text Presentation */
-.expanded-text-view {
-  padding: 50px 42px 42px 42px;
-  min-height: 300px;
+/* Expanded Handwritten Paper Note */
+.expanded-note-container {
+  padding: 48px 38px 36px 38px;
+  min-height: 290px;
+  background: #FFFDF7;
+}
+
+.expanded-note-washi-tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(1deg);
+  width: 90px;
+  height: 22px;
+  background: rgba(217, 238, 248, 0.95);
+  border-left: 2px dashed rgba(114, 184, 216, 0.55);
+  border-right: 2px dashed rgba(114, 184, 216, 0.55);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  pointer-events: none;
 }
 
 .expanded-quote-mark {
-  font-family: var(--font-heading);
-  font-size: 4.8rem;
-  line-height: 0.4;
-  color: var(--sky-blue);
-  opacity: 0.6;
-  margin-bottom: 16px;
+  font-family: var(--font-handwritten);
+  font-size: 4.5rem;
+  line-height: 0.3;
+  color: var(--ink-faint);
+  margin-bottom: 14px;
   user-select: none;
 }
 
-.expanded-text-content {
-  margin: 12px 0 24px 0;
-  max-height: 54vh;
+.expanded-note-content {
+  margin: 10px 0 20px 0;
+  max-height: 52vh;
   overflow-y: auto;
 }
 
-.expanded-body-text {
-  font-size: 1.48rem;
-  font-weight: 500;
+.expanded-note-body {
+  font-family: var(--font-handwritten);
+  font-size: 1.75rem;
+  font-weight: 600;
   color: var(--ink-dark);
-  line-height: 1.7;
+  line-height: 1.45;
   letter-spacing: -0.01em;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
-.expanded-text-footer {
+.expanded-note-footer {
   margin-top: auto;
-  padding-top: 18px;
-  border-top: 1px dashed rgba(114, 184, 216, 0.35);
+  padding-top: 16px;
+  border-top: 1px dashed rgba(43, 40, 37, 0.15);
   display: flex;
   align-items: baseline;
   justify-content: space-between;
 }
 
-.expanded-signature {
+.expanded-note-signature {
   font-family: var(--font-handwritten);
-  font-size: 1.85rem;
+  font-size: 1.7rem;
   color: var(--ink-dark);
 }
 
-/* ==========================================================================
-   8 DISTINCT VISIBLE CONTINUOUS WANDERING DRIFT KEYFRAMES
-   ========================================================================== */
-
-/* Trajectory 1: left -> up -> right -> down -> repeat */
-@keyframes cloudDriftLoopA {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  25% {
-    transform: translate3d(calc(var(--drift-x, 24px) * -1), calc(var(--drift-y, 18px) * -1), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
-  }
-  50% {
-    transform: translate3d(var(--drift-x, 24px), calc(var(--drift-y, 18px) * -0.5), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  75% {
-    transform: translate3d(calc(var(--drift-x, 24px) * 0.4), var(--drift-y, 18px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
-  }
-}
-
-/* Trajectory 2: right -> down -> left -> up -> repeat */
-@keyframes cloudDriftLoopB {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  25% {
-    transform: translate3d(var(--drift-x, 24px), var(--drift-y, 18px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
-  }
-  50% {
-    transform: translate3d(calc(var(--drift-x, 24px) * -0.8), calc(var(--drift-y, 18px) * 0.6), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  75% {
-    transform: translate3d(calc(var(--drift-x, 24px) * -0.5), calc(var(--drift-y, 18px) * -0.9), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
-  }
-}
-
-/* Trajectory 3: diagonal sway */
-@keyframes cloudDriftDiagonal {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  35% {
-    transform: translate3d(var(--drift-x, 24px), calc(var(--drift-y, 18px) * -1), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
-  }
-  70% {
-    transform: translate3d(calc(var(--drift-x, 24px) * -0.7), var(--drift-y, 18px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(var(--cloud-scale, 1));
-  }
-}
-
-/* Trajectory 4: wide horizontal wave */
-@keyframes cloudDriftWave {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  20% {
-    transform: translate3d(calc(var(--drift-x, 24px) * 0.7), calc(var(--drift-y, 18px) * -0.6), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.01));
-  }
-  50% {
-    transform: translate3d(calc(var(--drift-x, 24px) * 1.2), calc(var(--drift-y, 18px) * 0.4), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  80% {
-    transform: translate3d(calc(var(--drift-x, 24px) * -0.6), calc(var(--drift-y, 18px) * -0.4), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
-  }
-}
-
-/* Trajectory 5: slow circular eddy */
-@keyframes cloudDriftCircle {
-  0% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  25% {
-    transform: translate3d(var(--drift-x, 24px), calc(var(--drift-y, 18px) * 0.5), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
-  }
-  50% {
-    transform: translate3d(0, var(--drift-y, 18px), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  75% {
-    transform: translate3d(calc(var(--drift-x, 24px) * -1), calc(var(--drift-y, 18px) * 0.5), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
-  }
-  100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-}
-
-/* Trajectory 6: vertical breathing float */
-@keyframes cloudDriftSway {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  40% {
-    transform: translate3d(calc(var(--drift-x, 24px) * -0.4), calc(var(--drift-y, 18px) * -1.2), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.03));
-  }
-  80% {
-    transform: translate3d(calc(var(--drift-x, 24px) * 0.5), calc(var(--drift-y, 18px) * 0.8), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.98));
-  }
-}
-
-/* Trajectory 7: smooth figure-8 drift */
-@keyframes cloudDriftInfinity {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  25% {
-    transform: translate3d(var(--drift-x, 24px), calc(var(--drift-y, 18px) * -0.8), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.01));
-  }
-  50% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  75% {
-    transform: translate3d(calc(var(--drift-x, 24px) * -1), calc(var(--drift-y, 18px) * 0.8), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
-  }
-}
-
-/* Trajectory 8: gentle breeze path */
-@keyframes cloudDriftBreeze {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  30% {
-    transform: translate3d(calc(var(--drift-x, 24px) * 1.1), calc(var(--drift-y, 18px) * 0.4), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
-  }
-  65% {
-    transform: translate3d(calc(var(--drift-x, 24px) * -0.8), calc(var(--drift-y, 18px) * -0.7), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
-  }
+.expanded-note-timestamp {
+  font-family: var(--font-handwritten);
+  font-size: 1.35rem;
+  color: var(--ink-light);
 }
 
 /* ==========================================================================
@@ -686,50 +884,64 @@
     min-height: 82vh;
   }
 
-  .cloud-photo-card {
-    width: 155px;
-    padding: 10px 10px 12px 10px;
-    border-radius: 30px;
+  .photo-print-frame {
+    width: 150px;
+    padding: 7px 7px 10px 7px;
   }
 
-  .cloud-photo-frame {
-    border-radius: 18px;
-  }
-
-  .cloud-author {
-    font-size: 0.78rem;
-    max-width: 80px;
-  }
-
-  .cloud-time {
-    font-size: 0.98rem;
-  }
-
-  .cloud-caption-preview {
-    font-size: 0.76rem;
-    -webkit-line-clamp: 1;
-  }
-
-  .cloud-text-card {
-    width: 148px;
-    min-height: 105px;
-    padding: 14px 12px 10px 12px;
-    border-radius: 28px;
-  }
-
-  .cloud-body-text {
-    font-size: 0.84rem;
-    -webkit-line-clamp: 2;
-  }
-
-  .cloud-signature {
-    font-size: 1.1rem;
+  .photo-handwritten-author {
+    font-size: 1.05rem;
     max-width: 75px;
   }
 
-  .cloud-quote-mark {
-    font-size: 1.8rem;
-    margin-bottom: 4px;
+  .photo-handwritten-time {
+    font-size: 0.95rem;
+  }
+
+  .attached-note-scrap {
+    max-width: 120px;
+    bottom: -16px;
+    right: -14px;
+    padding: 6px 8px;
+  }
+
+  .attached-note-text {
+    font-size: 0.95rem;
+  }
+
+  .photo-inline-caption {
+    font-size: 0.95rem;
+    max-width: 140px;
+  }
+
+  .paper-note-scrap {
+    width: 145px;
+    min-height: 105px;
+    padding: 12px 10px 10px 10px;
+  }
+
+  .note-handwritten-body {
+    font-size: 1.1rem;
+  }
+
+  .note-signature {
+    font-size: 1.05rem;
+    max-width: 70px;
+  }
+
+  .note-timestamp {
+    font-size: 0.92rem;
+  }
+
+  .note-quote-mark {
+    font-size: 2rem;
+    margin-bottom: 2px;
+  }
+
+  .washi-tape-photo, .note-washi-tape {
+    width: 40px;
+    height: 12px;
+    top: -6px;
   }
 
   /* Expanded Modal on Mobile */
@@ -737,42 +949,36 @@
     max-width: 94vw;
   }
 
-  .expanded-cloud-frame {
-    border-radius: 32px;
-  }
-
-  .expanded-photo-view {
-    padding: 16px 16px 20px 16px;
+  .expanded-photo-container {
+    padding: 14px 14px 18px 14px;
   }
 
   .expanded-photo-viewport {
     max-height: 48vh;
-    border-radius: 20px;
   }
 
   .expanded-full-photo {
     max-height: 48vh;
-    border-radius: 16px;
   }
 
-  .expanded-text-view {
-    padding: 32px 22px 24px 22px;
-    min-height: 240px;
+  .expanded-note-container {
+    padding: 30px 20px 22px 20px;
+    min-height: 220px;
   }
 
-  .expanded-body-text {
-    font-size: 1.18rem;
+  .expanded-note-body {
+    font-size: 1.4rem;
   }
 }
 
 /* Tablet viewports (481px to 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
-  .cloud-photo-card {
-    width: 190px;
+  .photo-print-frame {
+    width: 185px;
   }
 
-  .cloud-text-card {
-    width: 185px;
+  .paper-note-scrap {
+    width: 180px;
     min-height: 120px;
   }
 }
@@ -784,28 +990,30 @@
     min-height: 84vh;
   }
 
-  .cloud-photo-card {
-    width: 260px;
+  .photo-print-frame {
+    width: 245px;
   }
 
-  .cloud-text-card {
-    width: 250px;
-    min-height: 160px;
+  .paper-note-scrap {
+    width: 240px;
+    min-height: 155px;
   }
 
-  .cloud-body-text {
-    font-size: 1.08rem;
+  .note-handwritten-body {
+    font-size: 1.45rem;
   }
 }
 
 /* Reduced Motion Safety */
 @media (prefers-reduced-motion: reduce) {
-  .wandering-cloud-anchor,
-  .ambient-sky-cloud {
+  .memory-cloud-anchor,
+  .ambient-sky-cloud,
+  .wind-streak,
+  .wind-particle {
     animation: none !important;
     transform: rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1)) !important;
   }
-  
+
   .expanded-backdrop,
   .expanded-modal-wrapper {
     animation: none !important;
