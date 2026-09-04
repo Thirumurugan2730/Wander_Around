@@ -391,6 +391,13 @@ body.wandering-active {
   transition: z-index 0.1s ease;
   will-change: transform;
   transform: translate3d(-360px, 0, 0);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Lane 0: High Sky (~10% Top - Safe distance below header) */
@@ -750,15 +757,16 @@ body.wandering-active {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(25, 45, 65, 0.48);
+  background: rgba(25, 45, 65, 0.52);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: max(16px, env(safe-area-inset-top, 16px)) max(16px, env(safe-area-inset-right, 16px)) max(16px, env(safe-area-inset-bottom, 16px)) max(16px, env(safe-area-inset-left, 16px));
   animation: backdropFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 @keyframes backdropFadeIn {
@@ -771,17 +779,18 @@ body.wandering-active {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 700px;
+  max-width: 680px;
   width: 100%;
-  max-height: 92vh;
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 36px);
   cursor: default;
   animation: modalScaleUp 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  box-sizing: border-box;
 }
 
 @keyframes modalScaleUp {
   from {
     opacity: 0;
-    transform: scale(0.85) translateY(18px);
+    transform: scale(0.88) translateY(16px);
   }
   to {
     opacity: 1;
@@ -789,17 +798,19 @@ body.wandering-active {
   }
 }
 
-/* Close Control */
+/* Close Control - Comfortable 44px+ Hit Target for Mobile */
 .expanded-close-btn {
   align-self: flex-end;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: #FFFDF9;
   border: 1.5px solid rgba(43, 40, 37, 0.16);
   border-radius: var(--radius-full);
-  padding: 8px 18px;
-  margin-bottom: 12px;
+  min-height: 44px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
   font-family: var(--font-heading);
   font-size: 0.95rem;
   font-weight: 500;
@@ -807,6 +818,8 @@ body.wandering-active {
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(43, 40, 37, 0.14);
   transition: all 0.2s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .expanded-close-btn:hover {
@@ -826,18 +839,19 @@ body.wandering-active {
   position: relative;
   width: 100%;
   background: #FFFDF9;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 24px 60px rgba(35, 60, 85, 0.28), 0 6px 18px rgba(43, 40, 37, 0.1);
   border: 1px solid rgba(43, 40, 37, 0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 /* Expanded Photograph Presentation */
 .expanded-photo-container {
-  padding: 22px 22px 26px 22px;
-  max-height: 84vh;
+  padding: 20px 20px 24px 20px;
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 90px);
 }
 
 .expanded-washi-tape {
@@ -857,9 +871,9 @@ body.wandering-active {
 
 .expanded-photo-viewport {
   width: 100%;
-  max-height: 60vh;
-  min-height: 240px;
-  border-radius: 4px;
+  max-height: 56dvh;
+  min-height: 200px;
+  border-radius: 6px;
   background: #EAF3F8;
   display: flex;
   align-items: center;
@@ -869,12 +883,12 @@ body.wandering-active {
 
 .expanded-full-photo {
   max-width: 100%;
-  max-height: 60vh;
+  max-height: 56dvh;
   width: auto;
   height: auto;
   object-fit: contain;
   display: block;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: opacity 0.3s ease;
 }
 
@@ -885,11 +899,12 @@ body.wandering-active {
 }
 
 .expanded-photo-details {
-  margin-top: 16px;
+  margin-top: 14px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .expanded-meta-row {
@@ -901,13 +916,13 @@ body.wandering-active {
 .expanded-author-name {
   font-family: var(--font-handwritten);
   font-weight: 700;
-  font-size: 1.55rem;
+  font-size: clamp(1.35rem, 4.2vw, 1.55rem);
   color: var(--ink-dark);
 }
 
 .expanded-timestamp {
   font-family: var(--font-handwritten);
-  font-size: 1.35rem;
+  font-size: clamp(1.15rem, 3.6vw, 1.35rem);
   color: var(--ink-light);
 }
 
@@ -919,7 +934,7 @@ body.wandering-active {
 
 .expanded-caption-text {
   font-family: var(--font-handwritten);
-  font-size: 1.45rem;
+  font-size: clamp(1.2rem, 4.0vw, 1.45rem);
   font-weight: 600;
   color: var(--ink-dark);
   line-height: 1.4;
@@ -928,8 +943,9 @@ body.wandering-active {
 
 /* Expanded Handwritten Paper Note */
 .expanded-note-container {
-  padding: 48px 38px 36px 38px;
-  min-height: 290px;
+  padding: 44px 34px 32px 34px;
+  min-height: 260px;
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 90px);
   background: #FFFDF7;
 }
 
@@ -949,22 +965,23 @@ body.wandering-active {
 
 .expanded-quote-mark {
   font-family: var(--font-handwritten);
-  font-size: 4.5rem;
+  font-size: clamp(3.2rem, 8vw, 4.5rem);
   line-height: 0.3;
   color: var(--ink-faint);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   user-select: none;
 }
 
 .expanded-note-content {
-  margin: 10px 0 20px 0;
-  max-height: 52vh;
+  margin: 10px 0 18px 0;
+  max-height: 48dvh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .expanded-note-body {
   font-family: var(--font-handwritten);
-  font-size: 1.75rem;
+  font-size: clamp(1.35rem, 4.6vw, 1.75rem);
   font-weight: 600;
   color: var(--ink-dark);
   line-height: 1.45;
@@ -975,7 +992,7 @@ body.wandering-active {
 
 .expanded-note-footer {
   margin-top: auto;
-  padding-top: 16px;
+  padding-top: 14px;
   border-top: 1px dashed rgba(43, 40, 37, 0.15);
   display: flex;
   align-items: baseline;
@@ -984,64 +1001,142 @@ body.wandering-active {
 
 .expanded-note-signature {
   font-family: var(--font-handwritten);
-  font-size: 1.7rem;
+  font-size: clamp(1.35rem, 4.2vw, 1.7rem);
   color: var(--ink-dark);
 }
 
 .expanded-note-timestamp {
   font-family: var(--font-handwritten);
-  font-size: 1.35rem;
+  font-size: clamp(1.15rem, 3.6vw, 1.35rem);
   color: var(--ink-light);
 }
 
 /* ==========================================================================
-   RESPONSIVE SKY ADAPTATIONS (PROPORTIONAL SIZING ACROSS VIEWPORTS)
+   RESPONSIVE SKY ADAPTATIONS (CAREFULLY TUNED ACROSS ALL MOBILE VIEWPORTS)
    ========================================================================== */
 
-/* Mobile viewports (320px to 480px, e.g. 375x667, 430x932) */
-@media (max-width: 480px) {
-  .nostalgic-sun-container {
-    top: 2%;
-    right: 5%;
-    transform: scale(0.68);
+/* Extra Small Phones (320px to 360px wide, e.g. iPhone SE 1st Gen, small Androids) */
+@media (max-width: 360px) {
+  .wandering-top-nav {
+    padding: max(8px, env(safe-area-inset-top, 8px)) max(12px, env(safe-area-inset-right, 12px)) 4px max(12px, env(safe-area-inset-left, 12px));
   }
 
-  .wandering-top-nav {
-    padding: 10px 14px;
+  .nostalgic-sun-container {
+    top: 1%;
+    right: 3%;
+    transform: scale(0.55);
   }
 
   .wandering-hint {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
   }
 
   .cloud-photo-wrapper {
-    width: 130px;
-    height: 95px;
+    width: 120px;
+    height: 86px;
+    border-radius: 14px;
   }
 
   .cloud-photo-caption {
-    font-size: 0.98rem;
-    max-width: 140px;
+    font-size: 0.92rem;
+    max-width: 130px;
+    line-height: 1.2;
   }
 
   .cloud-text-ensemble {
-    max-width: 155px;
+    max-width: 140px;
+    padding: 3px 2px;
+  }
+
+  .cloud-handwritten-thought {
+    font-size: 1.10rem;
+    line-height: 1.22;
+  }
+
+  .cloud-memory-byline {
+    font-size: 0.86rem;
+    gap: 3px;
+    margin-top: 2px;
+  }
+
+  .cloud-byline-author {
+    max-width: 65px;
+  }
+
+  .cloud-backdrop-wrapper,
+  .cloud-foreground-wrapper {
+    inset: -8px -12px -8px -12px;
+  }
+
+  .cloud-mist-halo {
+    inset: -6px -10px -6px -10px;
+  }
+
+  .expanded-modal-wrapper {
+    max-width: 95vw;
+  }
+
+  .expanded-photo-container {
+    padding: 12px 12px 16px 12px;
+  }
+
+  .expanded-photo-viewport {
+    max-height: 40dvh;
+    min-height: 150px;
+  }
+
+  .expanded-note-container {
+    padding: 24px 14px 18px 14px;
+    min-height: 170px;
+  }
+}
+
+/* Standard Mobile Viewports (361px to 480px, e.g. 375x667, 390x844, 412x915, 430x932) */
+@media (min-width: 361px) and (max-width: 480px) {
+  .nostalgic-sun-container {
+    top: 2%;
+    right: 5%;
+    transform: scale(0.62);
+  }
+
+  .wandering-top-nav {
+    padding: max(10px, env(safe-area-inset-top, 10px)) max(16px, env(safe-area-inset-right, 16px)) 6px max(16px, env(safe-area-inset-left, 16px));
+  }
+
+  .wandering-hint {
+    font-size: clamp(0.98rem, 3.2vw, 1.1rem);
+  }
+
+  .cloud-photo-wrapper {
+    width: clamp(126px, 33vw, 142px);
+    height: clamp(90px, 23.5vw, 102px);
+    border-radius: 16px;
+  }
+
+  .cloud-photo-caption {
+    font-size: clamp(0.96rem, 3.0vw, 1.04rem);
+    max-width: clamp(140px, 40vw, 160px);
+    line-height: 1.25;
+  }
+
+  .cloud-text-ensemble {
+    max-width: clamp(150px, 44vw, 175px);
     padding: 4px 2px;
   }
 
   .cloud-handwritten-thought {
-    font-size: 1.15rem;
-    line-height: 1.25;
+    font-size: clamp(1.15rem, 3.6vw, 1.26rem);
+    line-height: 1.26;
   }
 
   .cloud-memory-byline {
-    font-size: 0.92rem;
+    font-size: clamp(0.90rem, 2.8vw, 0.98rem);
     gap: 4px;
     margin-top: 3px;
   }
 
   .cloud-byline-author {
-    max-width: 75px;
+    max-width: clamp(70px, 22vw, 85px);
   }
 
   .cloud-backdrop-wrapper,
@@ -1049,9 +1144,13 @@ body.wandering-active {
     inset: -10px -15px -10px -15px;
   }
 
+  .cloud-mist-halo {
+    inset: -8px -12px -8px -12px;
+  }
+
   /* Expanded Modal on Mobile */
   .expanded-modal-wrapper {
-    max-width: 94vw;
+    max-width: min(92vw, 420px);
   }
 
   .expanded-photo-container {
@@ -1059,40 +1158,47 @@ body.wandering-active {
   }
 
   .expanded-photo-viewport {
-    max-height: 48vh;
+    max-height: 44dvh;
+    min-height: 175px;
   }
 
   .expanded-full-photo {
-    max-height: 48vh;
+    max-height: 44dvh;
   }
 
   .expanded-note-container {
-    padding: 30px 20px 22px 20px;
-    min-height: 220px;
+    padding: 28px 18px 20px 18px;
+    min-height: 200px;
   }
 
   .expanded-note-body {
-    font-size: 1.4rem;
+    font-size: clamp(1.3rem, 4.4vw, 1.55rem);
   }
 }
 
-/* Tablet viewports (481px to 768px) */
+/* Tablet Viewports (481px to 768px, e.g. iPad Mini, tablets) */
 @media (min-width: 481px) and (max-width: 768px) {
   .cloud-photo-wrapper {
-    width: 145px;
-    height: 105px;
+    width: 148px;
+    height: 108px;
+    border-radius: 16px;
   }
 
   .cloud-text-ensemble {
-    max-width: 175px;
+    max-width: 180px;
   }
 
   .cloud-handwritten-thought {
-    font-size: 1.25rem;
+    font-size: 1.28rem;
+  }
+
+  .cloud-photo-caption {
+    font-size: 1.1rem;
+    max-width: 170px;
   }
 }
 
-/* Large Screens (1440px to 1920px+, e.g. 1440x900) */
+/* Large Screens (1440px to 1920px+, e.g. 1440x900, 4K) */
 @media (min-width: 1440px) {
   .cloud-photo-wrapper {
     width: 185px;
@@ -1114,6 +1220,73 @@ body.wandering-active {
 
   .cloud-memory-byline {
     font-size: 1.15rem;
+  }
+}
+
+/* Mobile Landscape Orientation (phones held horizontally) */
+@media (max-height: 500px) and (orientation: landscape) {
+  .wandering-top-nav {
+    padding: max(6px, env(safe-area-inset-top, 6px)) max(14px, env(safe-area-inset-right, 14px)) 2px max(14px, env(safe-area-inset-left, 14px));
+  }
+
+  .nostalgic-sun-container {
+    top: 1%;
+    right: 4%;
+    transform: scale(0.48);
+  }
+
+  .lane-0 { top: 9%; }
+  .lane-1 { top: 25%; }
+  .lane-2 { top: 41%; }
+  .lane-3 { top: 57%; }
+  .lane-4 { top: 71%; }
+
+  .cloud-photo-wrapper {
+    width: 112px;
+    height: 78px;
+    border-radius: 12px;
+  }
+
+  .cloud-photo-caption {
+    font-size: 0.88rem;
+    max-width: 125px;
+  }
+
+  .cloud-text-ensemble {
+    max-width: 135px;
+    padding: 2px 2px;
+  }
+
+  .cloud-handwritten-thought {
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  .cloud-memory-byline {
+    font-size: 0.82rem;
+  }
+
+  .expanded-modal-wrapper {
+    max-height: calc(100dvh - 20px);
+    max-width: 540px;
+  }
+
+  .expanded-photo-viewport {
+    max-height: 50dvh;
+    min-height: 120px;
+  }
+
+  .expanded-full-photo {
+    max-height: 50dvh;
+  }
+
+  .expanded-note-container {
+    padding: 20px 18px 16px 18px;
+    min-height: 140px;
+  }
+
+  .expanded-note-body {
+    font-size: 1.25rem;
   }
 }
 
