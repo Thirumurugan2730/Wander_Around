@@ -4,12 +4,12 @@ import CloudSilhouette from './CloudSilhouette';
 
 export default function WanderingCard({
   post,
+  laneClass = 'lane-0',
   style,
   cloudVariant = 0,
   compositionType = 'photo-rest',
   depthClass = 'depth-mid',
   sunlitClass = 'sunlit-neutral',
-  motionState = 'floating',
   onSelect,
 }) {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -39,7 +39,7 @@ export default function WanderingCard({
     <div
       role="button"
       tabIndex={0}
-      className={`memory-cloud-anchor ${depthClass} ${sunlitClass} motion-${motionState} comp-${compositionType}`}
+      className={`memory-cloud-anchor ${laneClass} ${depthClass} ${sunlitClass} comp-${compositionType}`}
       style={style}
       onClick={() => onSelect(post)}
       onKeyDown={handleKeyDown}

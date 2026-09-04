@@ -1,16 +1,36 @@
 /* ==========================================================================
    DAILY WANDER — "WANDERING THROUGH CLOUDS" NOSTALGIC SKY ENVIRONMENT
+   Fixed full-screen viewport, zero scroll, sequential one-by-one cloud stream
    ========================================================================== */
 
-/* Sky Canvas Page */
+/* Prevent Document & Body Scrolling on Wandering Page */
+html.wandering-active,
+body.wandering-active {
+  overflow: hidden !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  position: fixed !important;
+  width: 100% !important;
+  overscroll-behavior: none !important;
+  touch-action: none !important;
+}
+
+/* Fixed Full-Screen Sky Canvas */
 .wandering-page {
-  position: relative;
-  min-height: calc(100vh - 70px);
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100dvh;
+  max-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #72A9CE 0%, #A2D0E7 22%, #DDE8EE 48%, #FCECD7 78%, #FAF2E8 100%);
-  overflow-x: hidden;
+  background: linear-gradient(180deg, #6FA7CD 0%, #9FD0E7 22%, #DCE8EE 48%, #FCEBD5 78%, #FAF2E8 100%);
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
   user-select: none;
+  z-index: 1;
 }
 
 /* Subtle Film Grain Texture Overlay */
@@ -41,7 +61,7 @@
 
 .nostalgic-sun-container {
   position: absolute;
-  top: 4%;
+  top: 3%;
   right: 12%;
   width: 200px;
   height: 200px;
@@ -125,14 +145,8 @@
 }
 
 @keyframes sunCoronaBreathe {
-  0% {
-    transform: scale(0.96);
-    opacity: 0.85;
-  }
-  100% {
-    transform: scale(1.06);
-    opacity: 1;
-  }
+  0% { transform: scale(0.96); opacity: 0.85; }
+  100% { transform: scale(1.06); opacity: 1; }
 }
 
 /* ==========================================================================
@@ -142,7 +156,7 @@
 .ambient-sky-cloud {
   position: absolute;
   pointer-events: none;
-  opacity: 0.42;
+  opacity: 0.38;
   filter: blur(5px);
   z-index: 1;
 }
@@ -183,7 +197,8 @@
 }
 
 /* ==========================================================================
-   VISIBLE WIND LAYER, BREEZE RIBBONS & SURGING WIND GUSTS
+   PHYSICALLY TRAVELING 10-SECOND WIND WAVE & BREEZE STREAKS
+   Wind physically travels LEFT → CENTER → RIGHT across the sky every 10 seconds
    ========================================================================== */
 
 .wind-layer {
@@ -192,7 +207,6 @@
   pointer-events: none;
   overflow: hidden;
   z-index: 3;
-  transition: opacity 0.5s ease;
 }
 
 .wind-svg {
@@ -203,127 +217,117 @@
 }
 
 .wind-streak {
-  stroke-dasharray: 200 900;
-  stroke-dashoffset: 1100;
-  animation: windFlow 20s linear infinite;
+  stroke-dasharray: 220 900;
+  stroke-dashoffset: 1120;
+  animation: windFlowLoop 10s linear infinite;
   opacity: 0.65;
-  transition: stroke-width 0.4s ease, opacity 0.4s ease;
 }
 
-.wind-streak-1 { animation-duration: 18s; animation-delay: 0s; }
-.wind-streak-2 { animation-duration: 24s; animation-delay: 5s; }
-.wind-streak-3 { animation-duration: 21s; animation-delay: 9s; }
-.wind-streak-4 { animation-duration: 28s; animation-delay: 14s; }
-.wind-streak-5 { animation-duration: 16s; animation-delay: 3s; }
+.wind-streak-1 { animation-duration: 9.5s; animation-delay: 0s; }
+.wind-streak-2 { animation-duration: 10.5s; animation-delay: 1.5s; }
+.wind-streak-3 { animation-duration: 10s; animation-delay: 3s; }
+.wind-streak-4 { animation-duration: 11s; animation-delay: 4.5s; }
+.wind-streak-5 { animation-duration: 9s; animation-delay: 1s; }
 
-/* Accelerated wind stream animation during 10-second gust */
-.wind-is-gusting .wind-streak {
-  animation: windFlowGust 5.5s cubic-bezier(0.2, 0.8, 0.3, 1) infinite;
-  opacity: 0.95;
+@keyframes windFlowLoop {
+  0% { stroke-dashoffset: 1120; }
+  100% { stroke-dashoffset: -1120; }
 }
 
-@keyframes windFlow {
-  0% { stroke-dashoffset: 1100; }
-  100% { stroke-dashoffset: -1100; }
+/* Traveling 10-Second Wind Wave (Physically sweeps Left → Center → Right) */
+.wind-travel-wave {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 320px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 250, 235, 0.18) 40%, rgba(255, 255, 255, 0.32) 70%, transparent 100%);
+  filter: blur(12px);
+  animation: windWavePass 10s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+  pointer-events: none;
 }
 
-@keyframes windFlowGust {
-  0% { stroke-dashoffset: 1600; }
-  100% { stroke-dashoffset: -1600; }
+@keyframes windWavePass {
+  0% {
+    transform: translate3d(-350px, 0, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  65% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(calc(100vw + 350px), 0, 0);
+    opacity: 0;
+  }
 }
 
-/* Wispy Cloud Breeze Ribbons (Cirrus Vapor Bands) */
+/* Wispy Cloud Breeze Ribbons */
 .breeze-ribbon {
   position: absolute;
   height: 18px;
   background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.45) 45%, rgba(255, 248, 230, 0.4) 65%, transparent 100%);
   border-radius: 20px;
   filter: blur(4px);
-  animation: ribbonFlow 32s linear infinite;
+  animation: ribbonTravel 10s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
-.breeze-ribbon-1 { top: 22%; left: -200px; width: 380px; animation-duration: 28s; animation-delay: 0s; }
-.breeze-ribbon-2 { top: 48%; left: -240px; width: 440px; animation-duration: 36s; animation-delay: 11s; }
-.breeze-ribbon-3 { top: 72%; left: -220px; width: 360px; animation-duration: 32s; animation-delay: 20s; }
+.breeze-ribbon-1 { top: 20%; width: 380px; animation-delay: 0.2s; }
+.breeze-ribbon-2 { top: 48%; width: 440px; animation-delay: 1.2s; }
+.breeze-ribbon-3 { top: 72%; width: 360px; animation-delay: 2.2s; }
 
-.wind-is-gusting .breeze-ribbon {
-  animation: ribbonGust 5.8s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+@keyframes ribbonTravel {
+  0% {
+    transform: translate3d(-450px, 0, 0);
+    opacity: 0;
+  }
+  20% { opacity: 0.8; }
+  75% { opacity: 0.8; }
+  100% {
+    transform: translate3d(calc(100vw + 450px), -25px, 0);
+    opacity: 0;
+  }
 }
 
-@keyframes ribbonFlow {
-  0% { transform: translate3d(0, 0, 0); opacity: 0; }
-  15% { opacity: 0.7; }
-  85% { opacity: 0.7; }
-  100% { transform: translate3d(calc(100vw + 400px), -30px, 0); opacity: 0; }
-}
-
-@keyframes ribbonGust {
-  0% { transform: translate3d(-300px, 0, 0); opacity: 0; }
-  25% { opacity: 0.85; }
-  80% { opacity: 0.85; }
-  100% { transform: translate3d(calc(100vw + 500px), -40px, 0); opacity: 0; }
-}
-
-/* Gust Wave Front (Visible luminous surge travelling Left to Right) */
-.gust-wave-front {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 245, 220, 0.18) 50%, rgba(255, 255, 255, 0.28) 70%, transparent 100%);
-  animation: gustFrontSweep 5.5s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
-  pointer-events: none;
-}
-
-@keyframes gustFrontSweep {
-  0% { transform: translate3d(-100vw, 0, 0); opacity: 0; }
-  20% { opacity: 0.9; }
-  80% { opacity: 0.9; }
-  100% { transform: translate3d(120vw, 0, 0); opacity: 0; }
-}
-
-/* Floating Wind Particles (Sunlit Motes & Cloud Seeds) */
+/* Floating Wind Particles (Sunlit Motes & Seeds) */
 .wind-particle {
   position: absolute;
   border-radius: 50%;
-  animation: particleFloat 22s linear infinite;
-}
-
-.wind-is-gusting .wind-particle {
-  animation: particleGust 5.2s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+  animation: particleTravel 10s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
 /* Golden Sunlit Motes */
-.particle-sun-1 { top: 15%; left: -20px; width: 5px; height: 5px; background: #FFE8A0; box-shadow: 0 0 8px #FFD770; animation-duration: 15s; animation-delay: 0s; }
-.particle-sun-2 { top: 28%; left: -20px; width: 6px; height: 6px; background: #FFF0B8; box-shadow: 0 0 8px #FFE080; animation-duration: 19s; animation-delay: 3s; }
-.particle-sun-3 { top: 40%; left: -20px; width: 4px; height: 4px; background: #FFE08A; box-shadow: 0 0 6px #FFD060; animation-duration: 17s; animation-delay: 7s; }
-.particle-sun-4 { top: 22%; left: -20px; width: 5px; height: 5px; background: #FFF4C8; box-shadow: 0 0 7px #FFE890; animation-duration: 22s; animation-delay: 11s; }
-.particle-sun-5 { top: 35%; left: -20px; width: 7px; height: 7px; background: #FFEA9F; box-shadow: 0 0 9px #FFDA70; animation-duration: 16s; animation-delay: 5s; opacity: 0.75; }
-.particle-sun-6 { top: 46%; left: -20px; width: 4px; height: 4px; background: #FFF1BD; box-shadow: 0 0 6px #FFE585; animation-duration: 20s; animation-delay: 9s; }
-.particle-sun-7 { top: 18%; left: -20px; width: 6px; height: 6px; background: #FFE694; box-shadow: 0 0 8px #FFD565; animation-duration: 25s; animation-delay: 13s; }
-.particle-sun-8 { top: 32%; left: -20px; width: 5px; height: 5px; background: #FFF6CE; box-shadow: 0 0 8px #FFEC9E; animation-duration: 18s; animation-delay: 15s; }
+.particle-sun-1 { top: 15%; width: 5px; height: 5px; background: #FFE8A0; box-shadow: 0 0 8px #FFD770; animation-delay: 0s; }
+.particle-sun-2 { top: 26%; width: 6px; height: 6px; background: #FFF0B8; box-shadow: 0 0 8px #FFE080; animation-delay: 0.8s; }
+.particle-sun-3 { top: 38%; width: 4px; height: 4px; background: #FFE08A; box-shadow: 0 0 6px #FFD060; animation-delay: 1.6s; }
+.particle-sun-4 { top: 22%; width: 5px; height: 5px; background: #FFF4C8; box-shadow: 0 0 7px #FFE890; animation-delay: 2.4s; }
+.particle-sun-5 { top: 34%; width: 7px; height: 7px; background: #FFEA9F; box-shadow: 0 0 9px #FFDA70; animation-delay: 3.2s; opacity: 0.75; }
+.particle-sun-6 { top: 44%; width: 4px; height: 4px; background: #FFF1BD; box-shadow: 0 0 6px #FFE585; animation-delay: 4.0s; }
+.particle-sun-7 { top: 18%; width: 6px; height: 6px; background: #FFE694; box-shadow: 0 0 8px #FFD565; animation-delay: 4.8s; }
+.particle-sun-8 { top: 30%; width: 5px; height: 5px; background: #FFF6CE; box-shadow: 0 0 8px #FFEC9E; animation-delay: 5.6s; }
 
 /* Translucent White Cloud Seeds */
-.particle-seed-1 { top: 55%; left: -20px; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-duration: 16s; animation-delay: 1s; }
-.particle-seed-2 { top: 68%; left: -20px; width: 6px; height: 6px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-duration: 21s; animation-delay: 4s; }
-.particle-seed-3 { top: 78%; left: -20px; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 5px rgba(255, 255, 255, 0.9); animation-duration: 18s; animation-delay: 8s; }
-.particle-seed-4 { top: 86%; left: -20px; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.75); box-shadow: 0 0 6px rgba(255, 255, 255, 0.85); animation-duration: 23s; animation-delay: 12s; }
-.particle-seed-5 { top: 62%; left: -20px; width: 7px; height: 7px; background: rgba(255, 255, 255, 0.7); box-shadow: 0 0 8px rgba(255, 255, 255, 0.85); animation-duration: 17s; animation-delay: 6s; opacity: 0.65; }
-.particle-seed-6 { top: 74%; left: -20px; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 5px rgba(255, 255, 255, 0.9); animation-duration: 22s; animation-delay: 10s; }
-.particle-seed-7 { top: 82%; left: -20px; width: 6px; height: 6px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 0 7px rgba(255, 255, 255, 0.9); animation-duration: 26s; animation-delay: 14s; }
-.particle-seed-8 { top: 92%; left: -20px; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-duration: 19s; animation-delay: 16s; }
+.particle-seed-1 { top: 54%; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-delay: 0.4s; }
+.particle-seed-2 { top: 66%; width: 6px; height: 6px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-delay: 1.2s; }
+.particle-seed-3 { top: 76%; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 5px rgba(255, 255, 255, 0.9); animation-delay: 2.0s; }
+.particle-seed-4 { top: 84%; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.75); box-shadow: 0 0 6px rgba(255, 255, 255, 0.85); animation-delay: 2.8s; }
+.particle-seed-5 { top: 60%; width: 7px; height: 7px; background: rgba(255, 255, 255, 0.7); box-shadow: 0 0 8px rgba(255, 255, 255, 0.85); animation-delay: 3.6s; opacity: 0.65; }
+.particle-seed-6 { top: 72%; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 5px rgba(255, 255, 255, 0.9); animation-delay: 4.4s; }
+.particle-seed-7 { top: 80%; width: 6px; height: 6px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 0 7px rgba(255, 255, 255, 0.9); animation-delay: 5.2s; }
+.particle-seed-8 { top: 90%; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-delay: 6.0s; }
 
-@keyframes particleFloat {
-  0% { transform: translate3d(0, 0, 0) scale(0.8); opacity: 0; }
-  10% { opacity: 0.85; }
-  50% { transform: translate3d(55vw, -25px, 0) scale(1.05); }
-  90% { opacity: 0.85; }
-  100% { transform: translate3d(calc(100vw + 50px), -45px, 0) scale(1.1); opacity: 0; }
-}
-
-@keyframes particleGust {
-  0% { transform: translate3d(-100px, 0, 0) scale(0.9); opacity: 0; }
-  15% { opacity: 1; }
-  85% { opacity: 1; }
-  100% { transform: translate3d(calc(100vw + 150px), -35px, 0) scale(1.2); opacity: 0; }
+@keyframes particleTravel {
+  0% {
+    transform: translate3d(-100px, 0, 0) scale(0.8);
+    opacity: 0;
+  }
+  15% { opacity: 0.9; }
+  85% { opacity: 0.9; }
+  100% {
+    transform: translate3d(calc(100vw + 100px), -35px, 0) scale(1.1);
+    opacity: 0;
+  }
 }
 
 /* ==========================================================================
@@ -336,7 +340,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 28px;
+  padding: 14px 24px;
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
@@ -357,17 +361,15 @@
 }
 
 /* ==========================================================================
-   SKY CANVAS CONTAINER & PAUSE STATE
+   FIXED SKY CANVAS CONTAINER & PAUSE STATE
    ========================================================================== */
 
 .wandering-canvas-container {
-  position: relative;
-  flex: 1;
-  width: 100%;
-  min-height: 80vh;
-  max-width: 1600px;
-  margin: 0 auto;
-  overflow: visible;
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
   transition: filter 0.4s ease, opacity 0.4s ease;
   z-index: 10;
 }
@@ -383,87 +385,142 @@
 }
 
 /* ==========================================================================
-   MEMORY CLOUD ANCHOR & 10-SECOND COORDINATED GUST MOTION
+   SEQUENTIAL ONE-BY-ONE CLOUD STREAM (5 VERTICAL ALTITUDE LANES)
+   Moves LEFT → RIGHT across the fixed viewport with natural mass and easing
    ========================================================================== */
 
 .memory-cloud-anchor {
   position: absolute;
+  left: 0;
   cursor: pointer;
   outline: none;
   transition: z-index 0.1s ease;
-  will-change: transform, opacity;
+  will-change: transform;
+  transform: translate3d(-380px, 0, 0);
 }
 
-/* State 1: Calm Floating (~10s calm phase between gusts) */
-.memory-cloud-anchor.motion-floating {
-  animation: gustFloatCalm 9.5s ease-in-out infinite;
+/* Lane 0: High Sky (~8% Top) */
+.lane-0 {
+  top: 7%;
+  animation-name: cloudStreamLane0;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  animation-iteration-count: infinite;
 }
 
-@keyframes gustFloatCalm {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  50% {
-    transform: translate3d(var(--wind-drift-x, 22px), var(--wind-drift-y, -14px), 0) rotate(calc(var(--rot-start, 0deg) + 1.2deg)) scale(calc(var(--cloud-scale, 1) * 1.012));
-  }
-}
-
-/* State 2: Exiting on the Wind Gust (Accelerates and exits right off-screen) */
-.memory-cloud-anchor.motion-exiting {
-  animation: gustSweepOut 5.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-  animation-delay: var(--gust-stagger, 0s);
-}
-
-@keyframes gustSweepOut {
+@keyframes cloudStreamLane0 {
   0% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-    opacity: 1;
-  }
-  20% {
-    transform: translate3d(50px, -12px, 0) rotate(calc(var(--rot-start, 0deg) + 2deg)) scale(calc(var(--cloud-scale, 1) * 1.02));
-    opacity: 1;
-  }
-  55% {
-    transform: translate3d(calc(55vw + 120px), 16px, 0) rotate(calc(var(--rot-start, 0deg) + 3deg)) scale(var(--cloud-scale, 1));
-    opacity: 0.95;
-  }
-  100% {
-    /* Exits completely past the right edge with 380px extra buffer */
-    transform: translate3d(calc(105vw + 380px), -24px, 0) rotate(calc(var(--rot-start, 0deg) + 4deg)) scale(calc(var(--cloud-scale, 1) * 0.95));
-    opacity: 0;
-  }
-}
-
-/* State 3: Entering on the Tail of the Gust (Enters from left off-screen into position) */
-.memory-cloud-anchor.motion-entering {
-  animation: gustSweepIn 6.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: var(--gust-stagger, 0s);
-}
-
-@keyframes gustSweepIn {
-  0% {
-    /* Starts completely off-screen past the left edge with 380px buffer */
-    transform: translate3d(calc(-105vw - 380px), 20px, 0) rotate(calc(var(--rot-start, 0deg) - 3deg)) scale(calc(var(--cloud-scale, 1) * 0.95));
-    opacity: 0;
+    transform: translate3d(-380px, 0, 0) rotate(var(--rot-start, -1.5deg)) scale(var(--cloud-scale, 1));
   }
   25% {
-    transform: translate3d(calc(-40vw), -15px, 0) rotate(calc(var(--rot-start, 0deg) + 2deg)) scale(var(--cloud-scale, 1));
-    opacity: 0.9;
+    transform: translate3d(calc(25vw), -12px, 0) rotate(calc(var(--rot-start, -1.5deg) + 1.2deg)) scale(calc(var(--cloud-scale, 1) * 1.01));
+  }
+  50% {
+    transform: translate3d(calc(50vw), 6px, 0) rotate(var(--rot-start, -1.5deg)) scale(var(--cloud-scale, 1));
   }
   75% {
-    transform: translate3d(18px, 6px, 0) rotate(calc(var(--rot-start, 0deg) + 0.8deg)) scale(calc(var(--cloud-scale, 1) * 1.01));
-    opacity: 1;
+    transform: translate3d(calc(75vw), -8px, 0) rotate(calc(var(--rot-start, -1.5deg) - 1.2deg)) scale(calc(var(--cloud-scale, 1) * 0.99));
   }
   100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-    opacity: 1;
+    transform: translate3d(calc(100vw + 380px), 0, 0) rotate(var(--rot-start, -1.5deg)) scale(var(--cloud-scale, 1));
   }
 }
 
+/* Lane 1: Upper Mid Sky (~23% Top) */
+.lane-1 {
+  top: 23%;
+  animation-name: cloudStreamLane1;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  animation-iteration-count: infinite;
+}
+
+@keyframes cloudStreamLane1 {
+  0% {
+    transform: translate3d(-380px, 0, 0) rotate(var(--rot-start, 1.5deg)) scale(var(--cloud-scale, 1));
+  }
+  30% {
+    transform: translate3d(calc(30vw), 14px, 0) rotate(calc(var(--rot-start, 1.5deg) - 1.4deg)) scale(calc(var(--cloud-scale, 1) * 1.015));
+  }
+  65% {
+    transform: translate3d(calc(65vw), -10px, 0) rotate(calc(var(--rot-start, 1.5deg) + 1.4deg)) scale(var(--cloud-scale, 1));
+  }
+  100% {
+    transform: translate3d(calc(100vw + 380px), 0, 0) rotate(var(--rot-start, 1.5deg)) scale(var(--cloud-scale, 1));
+  }
+}
+
+/* Lane 2: Center Sky (~41% Top) */
+.lane-2 {
+  top: 41%;
+  animation-name: cloudStreamLane2;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  animation-iteration-count: infinite;
+}
+
+@keyframes cloudStreamLane2 {
+  0% {
+    transform: translate3d(-380px, 0, 0) rotate(var(--rot-start, -0.8deg)) scale(var(--cloud-scale, 1));
+  }
+  35% {
+    transform: translate3d(calc(35vw), -15px, 0) rotate(calc(var(--rot-start, -0.8deg) + 1.6deg)) scale(calc(var(--cloud-scale, 1) * 1.02));
+  }
+  70% {
+    transform: translate3d(calc(70vw), 10px, 0) rotate(calc(var(--rot-start, -0.8deg) - 1.2deg)) scale(var(--cloud-scale, 1));
+  }
+  100% {
+    transform: translate3d(calc(100vw + 380px), 0, 0) rotate(var(--rot-start, -0.8deg)) scale(var(--cloud-scale, 1));
+  }
+}
+
+/* Lane 3: Lower Mid Sky (~59% Top) */
+.lane-3 {
+  top: 59%;
+  animation-name: cloudStreamLane3;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  animation-iteration-count: infinite;
+}
+
+@keyframes cloudStreamLane3 {
+  0% {
+    transform: translate3d(-380px, 0, 0) rotate(var(--rot-start, 2deg)) scale(var(--cloud-scale, 1));
+  }
+  25% {
+    transform: translate3d(calc(25vw), -12px, 0) rotate(calc(var(--rot-start, 2deg) - 1.5deg)) scale(calc(var(--cloud-scale, 1) * 1.01));
+  }
+  60% {
+    transform: translate3d(calc(60vw), 12px, 0) rotate(calc(var(--rot-start, 2deg) + 1.2deg)) scale(var(--cloud-scale, 1));
+  }
+  100% {
+    transform: translate3d(calc(100vw + 380px), 0, 0) rotate(var(--rot-start, 2deg)) scale(var(--cloud-scale, 1));
+  }
+}
+
+/* Lane 4: Lower Horizon Sky (~75% Top) */
+.lane-4 {
+  top: 75%;
+  animation-name: cloudStreamLane4;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  animation-iteration-count: infinite;
+}
+
+@keyframes cloudStreamLane4 {
+  0% {
+    transform: translate3d(-380px, 0, 0) rotate(var(--rot-start, -1deg)) scale(var(--cloud-scale, 1));
+  }
+  30% {
+    transform: translate3d(calc(30vw), 10px, 0) rotate(calc(var(--rot-start, -1deg) + 1.5deg)) scale(calc(var(--cloud-scale, 1) * 1.015));
+  }
+  65% {
+    transform: translate3d(calc(65vw), -8px, 0) rotate(calc(var(--rot-start, -1deg) - 1.5deg)) scale(var(--cloud-scale, 1));
+  }
+  100% {
+    transform: translate3d(calc(100vw + 380px), 0, 0) rotate(var(--rot-start, -1deg)) scale(var(--cloud-scale, 1));
+  }
+}
+
+/* Hover & Keyboard Focus */
 .memory-cloud-anchor:hover,
 .memory-cloud-anchor:focus-visible {
   z-index: 50 !important;
-  transform: scale(calc(var(--cloud-scale, 1) * 1.08)) rotate(var(--rot-start, 0deg)) !important;
 }
 
 .memory-cloud-anchor:focus-visible {
@@ -1019,7 +1076,7 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE SKY ADAPTATIONS
+   RESPONSIVE SKY ADAPTATIONS (MAINTAINS FIXED ZERO-SCROLL CANVAS)
    ========================================================================== */
 
 /* Mobile viewports (320px to 480px) */
@@ -1027,24 +1084,20 @@
   .nostalgic-sun-container {
     top: 2%;
     right: 5%;
-    transform: scale(0.75);
+    transform: scale(0.72);
   }
 
   .wandering-top-nav {
-    padding: 12px 16px;
+    padding: 10px 14px;
   }
 
   .wandering-hint {
-    font-size: 1.15rem;
-  }
-
-  .wandering-canvas-container {
-    min-height: 82vh;
+    font-size: 1.1rem;
   }
 
   .photo-print-frame {
-    width: 150px;
-    padding: 7px 7px 10px 7px;
+    width: 145px;
+    padding: 6px 6px 9px 6px;
   }
 
   .photo-handwritten-author {
@@ -1057,49 +1110,49 @@
   }
 
   .attached-note-scrap {
-    max-width: 120px;
+    max-width: 115px;
     bottom: -16px;
-    right: -14px;
-    padding: 6px 8px;
+    right: -12px;
+    padding: 5px 7px;
   }
 
   .attached-note-text {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
   }
 
   .photo-inline-caption {
-    font-size: 0.95rem;
-    max-width: 140px;
+    font-size: 0.92rem;
+    max-width: 135px;
   }
 
   .paper-note-scrap {
-    width: 145px;
-    min-height: 105px;
-    padding: 12px 10px 10px 10px;
+    width: 140px;
+    min-height: 100px;
+    padding: 10px 8px 8px 8px;
   }
 
   .note-handwritten-body {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   .note-signature {
-    font-size: 1.05rem;
+    font-size: 1.0rem;
     max-width: 70px;
   }
 
   .note-timestamp {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
   }
 
   .note-quote-mark {
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin-bottom: 2px;
   }
 
   .washi-tape-photo, .note-washi-tape {
-    width: 40px;
-    height: 12px;
-    top: -6px;
+    width: 38px;
+    height: 11px;
+    top: -5px;
   }
 
   /* Expanded Modal on Mobile */
@@ -1132,22 +1185,17 @@
 /* Tablet viewports (481px to 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
   .photo-print-frame {
-    width: 185px;
+    width: 180px;
   }
 
   .paper-note-scrap {
-    width: 180px;
-    min-height: 120px;
+    width: 175px;
+    min-height: 115px;
   }
 }
 
 /* Large Screens (1440px to 1920px+) */
 @media (min-width: 1440px) {
-  .wandering-canvas-container {
-    max-width: 1800px;
-    min-height: 84vh;
-  }
-
   .photo-print-frame {
     width: 245px;
   }
@@ -1171,9 +1219,9 @@
   .wind-particle,
   .sun-light-beams,
   .sun-outer-corona,
-  .gust-wave-front {
+  .wind-travel-wave {
     animation: none !important;
-    transform: rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1)) !important;
+    transform: translate3d(calc(15vw + (var(--lane-index, 0) * 16vw)), 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1)) !important;
   }
 
   .expanded-backdrop,

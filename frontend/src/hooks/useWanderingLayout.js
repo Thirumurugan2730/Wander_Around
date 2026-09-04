@@ -20,108 +20,76 @@ function stringToSeed(str) {
 const PHOTO_COMPOSITIONS = ['photo-rest', 'photo-hang', 'photo-overlap'];
 const TEXT_COMPOSITIONS = ['text-note', 'text-tuck'];
 
-// Sun position in upper-right sky
-const SUN_POS = { x: 78, y: 10 };
+// Staggered initial flight delays for the 5 vertical altitude lanes (initial load distribution)
+const INITIAL_LANE_DELAYS = [-24, -15, -7, -29, -11];
 
 /**
- * Computes organic sky positions, cloud silhouettes, photo/note compositions,
- * depth levels, sunlight proximity, and wind-gust physics for a set of posts.
+ * useWanderingLayout
+ * Computes sequential one-by-one Left → Right cloud stream parameters:
+ * - 5 vertical altitude lanes
+ * - Pure GPU CSS transform keyframe animations
+ * - Staggered entrance timing ensuring no cloud crowding or collisions
+ * - Scale factor dynamically tailored to total memory count
  */
-export function useWanderingLayout(posts = [], cycleIndex = 0) {
+export function useWanderingLayout(posts = []) {
   return useMemo(() => {
     const count = posts.length;
     if (count === 0) return [];
 
-    // Single moment: centered gracefully in the middle sky
-    if (count === 1) {
-      const post = posts[0];
-      const hasPhoto = Boolean(post.hasPhoto || post.has_photo || post.imagePath || post.image_path);
-      return [{
-        post,
-        style: {
-          left: '50%',
-          top: '46%',
-          transform: 'translate(-50%, -50%)',
-          '--rot-start': '-1.5deg',
-          '--rot-delta': '2deg',
-          '--wind-drift-x': '40px',
-          '--wind-drift-y': '18px',
-          '--gust-stagger': '0.1s',
-          '--cloud-scale': '1.08',
-        },
-        cloudVariant: 0,
-        compositionType: hasPhoto ? (post.text ? 'photo-text-combo' : 'photo-rest') : 'text-note',
-        depthClass: 'depth-near',
-        sunlitClass: 'sunlit-warm',
-        isProminent: true,
-      }];
-    }
-
-    // Grid zone partitioning (2 or 3 columns for spacious cloud drifting)
-    const cols = count <= 3 ? 2 : count <= 6 ? 3 : 4;
-    const rows = Math.ceil(count / cols);
-
-    const cellWidth = 84 / cols; // % of canvas width
-    const cellHeight = 76 / rows; // % of canvas height
+    // Scale tier based on memory volume (always fitting the fixed viewport comfortably)
+    const cloudScale = count <= 5 ? 1.15 : count <= 15 ? 1.0 : 0.88;
 
     return posts.map((post, index) => {
       const postKey = String(post.id || index);
-      const seed = stringToSeed(postKey) + (index * 53) + (cycleIndex * 101);
+      const seed = stringToSeed(postKey) + index * 47;
 
-      const col = index % cols;
-      const row = Math.floor(index / cols);
+      // Assign to one of 5 vertical altitude lanes
+      const laneIndex = index % 5;
+      const laneQueueIndex = Math.floor(index / 5);
 
-      // Organic jitter inside assigned sky zone
-      const jitterX = (pseudoRandom(seed + 1) - 0.5) * (cellWidth * 0.52);
-      const jitterY = (pseudoRandom(seed + 2) - 0.5) * (cellHeight * 0.52);
+      const hasPhoto = Boolean(post.hasPhoto || post.has_photo || post.imagePath || post.image_path);
 
-      const baseX = 8 + col * cellWidth + cellWidth / 2 + jitterX;
-      const baseY = 9 + row * cellHeight + cellHeight / 2 + jitterY;
+      // Traversal duration: heavier photo clouds glide majestically (34s-44s), text notes (28s-36s)
+      const baseDuration = hasPhoto
+        ? 34 + Math.floor(pseudoRandom(seed + 1) * 10)
+        : 28 + Math.floor(pseudoRandom(seed + 1) * 8);
 
-      const clampedX = Math.max(6, Math.min(82, baseX));
-      const clampedY = Math.max(7, Math.min(80, baseY));
+      // Staggered delay:
+      // First wave (index < 5) has negative delays to be naturally distributed across screen width on load
+      // Subsequent waves (index >= 5) queue up with positive entrance spacing
+      let animationDelay;
+      if (laneQueueIndex === 0) {
+        animationDelay = `${INITIAL_LANE_DELAYS[laneIndex]}s`;
+      } else {
+        const queuedDelay = (laneQueueIndex * 15 + (pseudoRandom(seed + 2) * 5)).toFixed(1);
+        animationDelay = `${queuedDelay}s`;
+      }
 
-      // Deterministic physical photo tilt: -4.5deg to +4.5deg
-      const baseRot = (pseudoRandom(seed + 3) * 8 - 4).toFixed(1);
-      const rotDelta = (pseudoRandom(seed + 4) * 2.2 + 1.0).toFixed(1);
+      // Deterministic physical photo tilt: -3.5deg to +3.5deg
+      const baseRot = (pseudoRandom(seed + 3) * 7 - 3.5).toFixed(1);
 
       // Depth classification for atmospheric perspective
-      const depthVal = pseudoRandom(seed + 5);
+      const depthVal = pseudoRandom(seed + 4);
       let depthClass = 'depth-mid';
-      let scale = 1.0;
       let zIndex = 15;
 
       if (depthVal < 0.28) {
         depthClass = 'depth-far';
-        scale = 0.86;
         zIndex = 5;
       } else if (depthVal > 0.72) {
         depthClass = 'depth-near';
-        scale = 1.08;
         zIndex = 22;
       }
 
-      // Proximity to the Sun at (78%, 10%)
-      const distToSun = Math.sqrt(
-        Math.pow(clampedX - SUN_POS.x, 2) + Math.pow(clampedY - SUN_POS.y, 2)
-      );
-
+      // Sunlight classification based on altitude lane (upper lanes catch more sunlight)
       let sunlitClass = 'sunlit-neutral';
-      if (distToSun < 46) {
+      if (laneIndex === 0 || laneIndex === 1) {
         sunlitClass = 'sunlit-warm';
-      } else if (distToSun > 74) {
+      } else if (laneIndex === 3 || laneIndex === 4) {
         sunlitClass = 'sunlit-cool';
       }
 
-      // Wind gust stagger: clouds on the left (lower X) feel the gust first
-      const gustStagger = ((clampedX / 100) * 0.9 + pseudoRandom(seed + 6) * 0.35).toFixed(2);
-
-      // Organic hover translations during calm floating
-      const driftX = (pseudoRandom(seed + 7) * 25 + 20).toFixed(0);
-      const driftY = ((pseudoRandom(seed + 8) * 18 + 10) * (pseudoRandom(seed + 9) > 0.45 ? 1 : -1)).toFixed(0);
-
       const cloudVariant = index % 4;
-      const hasPhoto = Boolean(post.hasPhoto || post.has_photo || post.imagePath || post.image_path);
 
       // Composition assignment
       let compositionType = 'photo-rest';
@@ -129,24 +97,22 @@ export function useWanderingLayout(posts = [], cycleIndex = 0) {
         if (post.text && post.text.trim().length > 0) {
           compositionType = 'photo-text-combo';
         } else {
-          compositionType = PHOTO_COMPOSITIONS[Math.floor(pseudoRandom(seed + 10) * PHOTO_COMPOSITIONS.length)];
+          compositionType = PHOTO_COMPOSITIONS[Math.floor(pseudoRandom(seed + 5) * PHOTO_COMPOSITIONS.length)];
         }
       } else {
-        compositionType = TEXT_COMPOSITIONS[Math.floor(pseudoRandom(seed + 11) * TEXT_COMPOSITIONS.length)];
+        compositionType = TEXT_COMPOSITIONS[Math.floor(pseudoRandom(seed + 6) * TEXT_COMPOSITIONS.length)];
       }
 
       return {
         post,
+        laneClass: `lane-${laneIndex}`,
         style: {
-          left: `${clampedX.toFixed(2)}%`,
-          top: `${clampedY.toFixed(2)}%`,
           zIndex,
           '--rot-start': `${baseRot}deg`,
-          '--rot-delta': `${rotDelta}deg`,
-          '--wind-drift-x': `${driftX}px`,
-          '--wind-drift-y': `${driftY}px`,
-          '--gust-stagger': `${gustStagger}s`,
-          '--cloud-scale': `${scale}`,
+          '--cloud-scale': `${cloudScale}`,
+          '--lane-index': `${laneIndex}`,
+          animationDuration: `${baseDuration}s`,
+          animationDelay,
         },
         cloudVariant,
         compositionType,
@@ -155,5 +121,5 @@ export function useWanderingLayout(posts = [], cycleIndex = 0) {
         isProminent: count <= 3,
       };
     });
-  }, [posts, cycleIndex]);
+  }, [posts]);
 }

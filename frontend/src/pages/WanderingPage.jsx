@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { getTodayPosts } from '../api/client';
-import { useWanderCycle } from '../hooks/useWanderCycle';
 import { useWanderingLayout } from '../hooks/useWanderingLayout';
 import WanderingCard from '../components/WanderingCard';
 import ExpandedMoment from '../components/ExpandedMoment';
@@ -15,6 +14,17 @@ export default function WanderingPage() {
   const [error, setError] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
   const isMountedRef = useRef(true);
+
+  // Lock body/html scroll during the Wandering sky session
+  useEffect(() => {
+    document.documentElement.classList.add('wandering-active');
+    document.body.classList.add('wandering-active');
+
+    return () => {
+      document.documentElement.classList.remove('wandering-active');
+      document.body.classList.remove('wandering-active');
+    };
+  }, []);
 
   // Fetch today's posts from GET /api/posts/today
   const fetchPosts = useCallback(async () => {
@@ -58,20 +68,8 @@ export default function WanderingPage() {
     };
   }, [fetchPosts]);
 
-  // Orchestrates the ~10s wind gust & cloud flow lifecycle
-  const { isGusting, cycleIndex, currentPosts, incomingPosts } = useWanderCycle(
-    posts,
-    Boolean(selectedPost)
-  );
-
-  // Current wave of clouds in the sky
-  const currentCards = useWanderingLayout(currentPosts, cycleIndex);
-
-  // Incoming wave of clouds entering from the left during a gust
-  const incomingCards = useWanderingLayout(
-    isGusting ? incomingPosts : [],
-    cycleIndex + 1
-  );
+  // Compute sequential one-by-one Left → Right cloud stream across 5 lanes
+  const positionedCards = useWanderingLayout(posts);
 
   // Handler for opening a moment
   const handleSelectPost = useCallback((post) => {
@@ -93,8 +91,8 @@ export default function WanderingPage() {
       <div className="ambient-sky-cloud ambient-cloud-2" aria-hidden="true" />
       <div className="ambient-sky-cloud ambient-cloud-3" aria-hidden="true" />
 
-      {/* Visible Wind Trails, Breeze Ribbons & Surging Wind Gusts */}
-      <WindLayer isGusting={isGusting} />
+      {/* Visible Wind Trails, Traveling 10s Wind Wave & Floating Motes */}
+      <WindLayer />
 
       {/* Atmospheric Sky Header */}
       <header className="wandering-top-nav" aria-label="Sky information">
@@ -138,48 +136,28 @@ export default function WanderingPage() {
         </div>
       )}
 
-      {/* Living Sky Canvas with all memories carried by wind */}
+      {/* Fixed Living Sky Canvas with sequential one-by-one cloud streams */}
       {!loading && !error && posts.length > 0 && (
         <section
           className={`wandering-canvas-container ${selectedPost ? 'is-paused' : ''}`}
           aria-label="Interactive floating memories"
         >
-          {/* Current Clouds (Floating peacefully or exiting right on the gust) */}
-          {currentCards.map(({ post, style, cloudVariant, compositionType, depthClass, sunlitClass }, index) => {
-            const postKey = `curr-${post.id || index}-${cycleIndex}`;
+          {positionedCards.map(({ post, laneClass, style, cloudVariant, compositionType, depthClass, sunlitClass }, index) => {
+            const postKey = post.id || `moment-${index}`;
             return (
               <WanderingCard
                 key={postKey}
                 post={post}
+                laneClass={laneClass}
                 style={style}
                 cloudVariant={cloudVariant}
                 compositionType={compositionType}
                 depthClass={depthClass}
                 sunlitClass={sunlitClass}
-                motionState={isGusting ? 'exiting' : 'floating'}
                 onSelect={handleSelectPost}
               />
             );
           })}
-
-          {/* Incoming Clouds (Entering smoothly from left on the tail of the gust) */}
-          {isGusting &&
-            incomingCards.map(({ post, style, cloudVariant, compositionType, depthClass, sunlitClass }, index) => {
-              const postKey = `inc-${post.id || index}-${cycleIndex + 1}`;
-              return (
-                <WanderingCard
-                  key={postKey}
-                  post={post}
-                  style={style}
-                  cloudVariant={cloudVariant}
-                  compositionType={compositionType}
-                  depthClass={depthClass}
-                  sunlitClass={sunlitClass}
-                  motionState="entering"
-                  onSelect={handleSelectPost}
-                />
-              );
-            })}
         </section>
       )}
 
