@@ -63,8 +63,8 @@ body.wandering-active {
   position: absolute;
   top: 3%;
   right: 12%;
-  width: 200px;
-  height: 200px;
+  width: 190px;
+  height: 190px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,8 +75,8 @@ body.wandering-active {
 /* Wide Ambient Sunlight Haze */
 .sun-ambient-haze {
   position: absolute;
-  width: 650px;
-  height: 650px;
+  width: 600px;
+  height: 600px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 240, 185, 0.7) 0%, rgba(255, 246, 220, 0.35) 40%, rgba(255, 255, 255, 0) 72%);
   filter: blur(48px);
@@ -85,8 +85,8 @@ body.wandering-active {
 /* Soft Radiant Golden Sunbeams */
 .sun-light-beams {
   position: absolute;
-  width: 500px;
-  height: 500px;
+  width: 480px;
+  height: 480px;
   border-radius: 50%;
   background: conic-gradient(
     from 180deg at 50% 50%,
@@ -113,8 +113,8 @@ body.wandering-active {
 /* Outer Luminous Golden Corona */
 .sun-outer-corona {
   position: absolute;
-  width: 190px;
-  height: 190px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 235, 170, 0.55) 0%, rgba(255, 220, 130, 0.25) 60%, rgba(255, 255, 255, 0) 80%);
   filter: blur(14px);
@@ -124,8 +124,8 @@ body.wandering-active {
 /* Inner Atmospheric Solar Halo */
 .sun-inner-halo {
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 250, 220, 0.9) 0%, rgba(255, 225, 140, 0.6) 65%, rgba(255, 210, 100, 0) 100%);
   filter: blur(8px);
@@ -134,14 +134,14 @@ body.wandering-active {
 /* Radiant Golden Core Sun Disc */
 .sun-core-disc {
   position: absolute;
-  width: 72px;
-  height: 72px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   background: radial-gradient(circle at 40% 35%, #FFFDF5 0%, #FFF4D0 45%, #FFDF85 85%, #F7C85C 100%);
   box-shadow:
-    0 0 28px rgba(255, 235, 150, 0.95),
-    0 0 60px rgba(255, 210, 100, 0.6),
-    0 0 100px rgba(255, 190, 70, 0.35);
+    0 0 26px rgba(255, 235, 150, 0.95),
+    0 0 55px rgba(255, 210, 100, 0.6),
+    0 0 90px rgba(255, 190, 70, 0.35);
 }
 
 @keyframes sunCoronaBreathe {
@@ -150,22 +150,22 @@ body.wandering-active {
 }
 
 /* ==========================================================================
-   AMBIENT DISTANT BACKGROUND CLOUDS
+   AMBIENT DISTANT BACKGROUND CLOUDS (SOFT & SUBTLE)
    ========================================================================== */
 
 .ambient-sky-cloud {
   position: absolute;
   pointer-events: none;
-  opacity: 0.38;
-  filter: blur(5px);
+  opacity: 0.28;
+  filter: blur(8px);
   z-index: 1;
 }
 
 .ambient-cloud-1 {
   top: 10%;
   left: 3%;
-  width: 290px;
-  height: 98px;
+  width: 240px;
+  height: 75px;
   background: #FFFFFF;
   border-radius: 120px;
   animation: ambientDriftSlow 55s ease-in-out infinite alternate;
@@ -174,8 +174,8 @@ body.wandering-active {
 .ambient-cloud-2 {
   top: 58%;
   right: 5%;
-  width: 350px;
-  height: 120px;
+  width: 280px;
+  height: 90px;
   background: #FFFFFF;
   border-radius: 140px;
   animation: ambientDriftSlow 65s ease-in-out 10s infinite alternate-reverse;
@@ -184,8 +184,8 @@ body.wandering-active {
 .ambient-cloud-3 {
   bottom: 14%;
   left: 12%;
-  width: 250px;
-  height: 84px;
+  width: 200px;
+  height: 65px;
   background: #FFFFFF;
   border-radius: 100px;
   animation: ambientDriftSlow 48s ease-in-out 18s infinite alternate;
@@ -193,12 +193,11 @@ body.wandering-active {
 
 @keyframes ambientDriftSlow {
   0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(90px, -24px, 0); }
+  100% { transform: translate3d(80px, -20px, 0); }
 }
 
 /* ==========================================================================
    PHYSICALLY TRAVELING 10-SECOND WIND WAVE & BREEZE STREAKS
-   Wind physically travels LEFT → CENTER → RIGHT across the sky every 10 seconds
    ========================================================================== */
 
 .wind-layer {
@@ -220,7 +219,7 @@ body.wandering-active {
   stroke-dasharray: 220 900;
   stroke-dashoffset: 1120;
   animation: windFlowLoop 10s linear infinite;
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
 .wind-streak-1 { animation-duration: 9.5s; animation-delay: 0s; }
@@ -234,13 +233,13 @@ body.wandering-active {
   100% { stroke-dashoffset: -1120; }
 }
 
-/* Traveling 10-Second Wind Wave (Physically sweeps Left → Center → Right) */
+/* Traveling 10-Second Wind Wave (Sweeps Left → Center → Right) */
 .wind-travel-wave {
   position: absolute;
   top: 0;
   bottom: 0;
   width: 320px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 250, 235, 0.18) 40%, rgba(255, 255, 255, 0.32) 70%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 250, 235, 0.16) 40%, rgba(255, 255, 255, 0.28) 70%, transparent 100%);
   filter: blur(12px);
   animation: windWavePass 10s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
   pointer-events: none;
@@ -252,10 +251,10 @@ body.wandering-active {
     opacity: 0;
   }
   15% {
-    opacity: 0.9;
+    opacity: 0.85;
   }
   65% {
-    opacity: 0.9;
+    opacity: 0.85;
   }
   100% {
     transform: translate3d(calc(100vw + 350px), 0, 0);
@@ -266,24 +265,24 @@ body.wandering-active {
 /* Wispy Cloud Breeze Ribbons */
 .breeze-ribbon {
   position: absolute;
-  height: 18px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.45) 45%, rgba(255, 248, 230, 0.4) 65%, transparent 100%);
+  height: 16px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 45%, rgba(255, 248, 230, 0.35) 65%, transparent 100%);
   border-radius: 20px;
   filter: blur(4px);
   animation: ribbonTravel 10s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
-.breeze-ribbon-1 { top: 20%; width: 380px; animation-delay: 0.2s; }
-.breeze-ribbon-2 { top: 48%; width: 440px; animation-delay: 1.2s; }
-.breeze-ribbon-3 { top: 72%; width: 360px; animation-delay: 2.2s; }
+.breeze-ribbon-1 { top: 20%; width: 340px; animation-delay: 0.2s; }
+.breeze-ribbon-2 { top: 48%; width: 400px; animation-delay: 1.2s; }
+.breeze-ribbon-3 { top: 72%; width: 320px; animation-delay: 2.2s; }
 
 @keyframes ribbonTravel {
   0% {
     transform: translate3d(-450px, 0, 0);
     opacity: 0;
   }
-  20% { opacity: 0.8; }
-  75% { opacity: 0.8; }
+  20% { opacity: 0.75; }
+  75% { opacity: 0.75; }
   100% {
     transform: translate3d(calc(100vw + 450px), -25px, 0);
     opacity: 0;
@@ -302,20 +301,20 @@ body.wandering-active {
 .particle-sun-2 { top: 26%; width: 6px; height: 6px; background: #FFF0B8; box-shadow: 0 0 8px #FFE080; animation-delay: 0.8s; }
 .particle-sun-3 { top: 38%; width: 4px; height: 4px; background: #FFE08A; box-shadow: 0 0 6px #FFD060; animation-delay: 1.6s; }
 .particle-sun-4 { top: 22%; width: 5px; height: 5px; background: #FFF4C8; box-shadow: 0 0 7px #FFE890; animation-delay: 2.4s; }
-.particle-sun-5 { top: 34%; width: 7px; height: 7px; background: #FFEA9F; box-shadow: 0 0 9px #FFDA70; animation-delay: 3.2s; opacity: 0.75; }
+.particle-sun-5 { top: 34%; width: 6px; height: 6px; background: #FFEA9F; box-shadow: 0 0 9px #FFDA70; animation-delay: 3.2s; opacity: 0.75; }
 .particle-sun-6 { top: 44%; width: 4px; height: 4px; background: #FFF1BD; box-shadow: 0 0 6px #FFE585; animation-delay: 4.0s; }
-.particle-sun-7 { top: 18%; width: 6px; height: 6px; background: #FFE694; box-shadow: 0 0 8px #FFD565; animation-delay: 4.8s; }
-.particle-sun-8 { top: 30%; width: 5px; height: 5px; background: #FFF6CE; box-shadow: 0 0 8px #FFEC9E; animation-delay: 5.6s; }
+.particle-sun-7 { top: 18%; width: 5px; height: 5px; background: #FFE694; box-shadow: 0 0 8px #FFD565; animation-delay: 4.8s; }
+.particle-sun-8 { top: 30%; width: 4px; height: 4px; background: #FFF6CE; box-shadow: 0 0 8px #FFEC9E; animation-delay: 5.6s; }
 
 /* Translucent White Cloud Seeds */
-.particle-seed-1 { top: 54%; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-delay: 0.4s; }
-.particle-seed-2 { top: 66%; width: 6px; height: 6px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-delay: 1.2s; }
+.particle-seed-1 { top: 54%; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-delay: 0.4s; }
+.particle-seed-2 { top: 66%; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-delay: 1.2s; }
 .particle-seed-3 { top: 76%; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 5px rgba(255, 255, 255, 0.9); animation-delay: 2.0s; }
 .particle-seed-4 { top: 84%; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.75); box-shadow: 0 0 6px rgba(255, 255, 255, 0.85); animation-delay: 2.8s; }
-.particle-seed-5 { top: 60%; width: 7px; height: 7px; background: rgba(255, 255, 255, 0.7); box-shadow: 0 0 8px rgba(255, 255, 255, 0.85); animation-delay: 3.6s; opacity: 0.65; }
+.particle-seed-5 { top: 60%; width: 6px; height: 6px; background: rgba(255, 255, 255, 0.7); box-shadow: 0 0 8px rgba(255, 255, 255, 0.85); animation-delay: 3.6s; opacity: 0.65; }
 .particle-seed-6 { top: 72%; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 5px rgba(255, 255, 255, 0.9); animation-delay: 4.4s; }
-.particle-seed-7 { top: 80%; width: 6px; height: 6px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 0 7px rgba(255, 255, 255, 0.9); animation-delay: 5.2s; }
-.particle-seed-8 { top: 90%; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-delay: 6.0s; }
+.particle-seed-7 { top: 80%; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 0 7px rgba(255, 255, 255, 0.9); animation-delay: 5.2s; }
+.particle-seed-8 { top: 90%; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-delay: 6.0s; }
 
 @keyframes particleTravel {
   0% {
@@ -354,7 +353,7 @@ body.wandering-active {
 
 .wandering-hint {
   font-family: var(--font-handwritten);
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   color: var(--ink-medium);
   letter-spacing: 0.01em;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
@@ -396,7 +395,7 @@ body.wandering-active {
   outline: none;
   transition: z-index 0.1s ease;
   will-change: transform;
-  transform: translate3d(-380px, 0, 0);
+  transform: translate3d(-320px, 0, 0);
 }
 
 /* Lane 0: High Sky (~8% Top) */
@@ -409,19 +408,19 @@ body.wandering-active {
 
 @keyframes cloudStreamLane0 {
   0% {
-    transform: translate3d(-380px, 0, 0) rotate(var(--rot-start, -1.5deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(-320px, 0, 0) rotate(var(--rot-start, -1.5deg)) scale(var(--cloud-scale, 0.8));
   }
   25% {
-    transform: translate3d(calc(25vw), -12px, 0) rotate(calc(var(--rot-start, -1.5deg) + 1.2deg)) scale(calc(var(--cloud-scale, 1) * 1.01));
+    transform: translate3d(calc(25vw), -10px, 0) rotate(calc(var(--rot-start, -1.5deg) + 1.2deg)) scale(calc(var(--cloud-scale, 0.8) * 1.01));
   }
   50% {
-    transform: translate3d(calc(50vw), 6px, 0) rotate(var(--rot-start, -1.5deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(50vw), 5px, 0) rotate(var(--rot-start, -1.5deg)) scale(var(--cloud-scale, 0.8));
   }
   75% {
-    transform: translate3d(calc(75vw), -8px, 0) rotate(calc(var(--rot-start, -1.5deg) - 1.2deg)) scale(calc(var(--cloud-scale, 1) * 0.99));
+    transform: translate3d(calc(75vw), -6px, 0) rotate(calc(var(--rot-start, -1.5deg) - 1.2deg)) scale(calc(var(--cloud-scale, 0.8) * 0.99));
   }
   100% {
-    transform: translate3d(calc(100vw + 380px), 0, 0) rotate(var(--rot-start, -1.5deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(100vw + 320px), 0, 0) rotate(var(--rot-start, -1.5deg)) scale(var(--cloud-scale, 0.8));
   }
 }
 
@@ -435,16 +434,16 @@ body.wandering-active {
 
 @keyframes cloudStreamLane1 {
   0% {
-    transform: translate3d(-380px, 0, 0) rotate(var(--rot-start, 1.5deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(-320px, 0, 0) rotate(var(--rot-start, 1.5deg)) scale(var(--cloud-scale, 0.8));
   }
   30% {
-    transform: translate3d(calc(30vw), 14px, 0) rotate(calc(var(--rot-start, 1.5deg) - 1.4deg)) scale(calc(var(--cloud-scale, 1) * 1.015));
+    transform: translate3d(calc(30vw), 12px, 0) rotate(calc(var(--rot-start, 1.5deg) - 1.4deg)) scale(calc(var(--cloud-scale, 0.8) * 1.015));
   }
   65% {
-    transform: translate3d(calc(65vw), -10px, 0) rotate(calc(var(--rot-start, 1.5deg) + 1.4deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(65vw), -8px, 0) rotate(calc(var(--rot-start, 1.5deg) + 1.4deg)) scale(var(--cloud-scale, 0.8));
   }
   100% {
-    transform: translate3d(calc(100vw + 380px), 0, 0) rotate(var(--rot-start, 1.5deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(100vw + 320px), 0, 0) rotate(var(--rot-start, 1.5deg)) scale(var(--cloud-scale, 0.8));
   }
 }
 
@@ -458,16 +457,16 @@ body.wandering-active {
 
 @keyframes cloudStreamLane2 {
   0% {
-    transform: translate3d(-380px, 0, 0) rotate(var(--rot-start, -0.8deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(-320px, 0, 0) rotate(var(--rot-start, -0.8deg)) scale(var(--cloud-scale, 0.8));
   }
   35% {
-    transform: translate3d(calc(35vw), -15px, 0) rotate(calc(var(--rot-start, -0.8deg) + 1.6deg)) scale(calc(var(--cloud-scale, 1) * 1.02));
+    transform: translate3d(calc(35vw), -12px, 0) rotate(calc(var(--rot-start, -0.8deg) + 1.6deg)) scale(calc(var(--cloud-scale, 0.8) * 1.02));
   }
   70% {
-    transform: translate3d(calc(70vw), 10px, 0) rotate(calc(var(--rot-start, -0.8deg) - 1.2deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(70vw), 8px, 0) rotate(calc(var(--rot-start, -0.8deg) - 1.2deg)) scale(var(--cloud-scale, 0.8));
   }
   100% {
-    transform: translate3d(calc(100vw + 380px), 0, 0) rotate(var(--rot-start, -0.8deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(100vw + 320px), 0, 0) rotate(var(--rot-start, -0.8deg)) scale(var(--cloud-scale, 0.8));
   }
 }
 
@@ -481,16 +480,16 @@ body.wandering-active {
 
 @keyframes cloudStreamLane3 {
   0% {
-    transform: translate3d(-380px, 0, 0) rotate(var(--rot-start, 2deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(-320px, 0, 0) rotate(var(--rot-start, 2deg)) scale(var(--cloud-scale, 0.8));
   }
   25% {
-    transform: translate3d(calc(25vw), -12px, 0) rotate(calc(var(--rot-start, 2deg) - 1.5deg)) scale(calc(var(--cloud-scale, 1) * 1.01));
+    transform: translate3d(calc(25vw), -10px, 0) rotate(calc(var(--rot-start, 2deg) - 1.5deg)) scale(calc(var(--cloud-scale, 0.8) * 1.01));
   }
   60% {
-    transform: translate3d(calc(60vw), 12px, 0) rotate(calc(var(--rot-start, 2deg) + 1.2deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(60vw), 10px, 0) rotate(calc(var(--rot-start, 2deg) + 1.2deg)) scale(var(--cloud-scale, 0.8));
   }
   100% {
-    transform: translate3d(calc(100vw + 380px), 0, 0) rotate(var(--rot-start, 2deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(100vw + 320px), 0, 0) rotate(var(--rot-start, 2deg)) scale(var(--cloud-scale, 0.8));
   }
 }
 
@@ -504,16 +503,16 @@ body.wandering-active {
 
 @keyframes cloudStreamLane4 {
   0% {
-    transform: translate3d(-380px, 0, 0) rotate(var(--rot-start, -1deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(-320px, 0, 0) rotate(var(--rot-start, -1deg)) scale(var(--cloud-scale, 0.8));
   }
   30% {
-    transform: translate3d(calc(30vw), 10px, 0) rotate(calc(var(--rot-start, -1deg) + 1.5deg)) scale(calc(var(--cloud-scale, 1) * 1.015));
+    transform: translate3d(calc(30vw), 8px, 0) rotate(calc(var(--rot-start, -1deg) + 1.5deg)) scale(calc(var(--cloud-scale, 0.8) * 1.015));
   }
   65% {
-    transform: translate3d(calc(65vw), -8px, 0) rotate(calc(var(--rot-start, -1deg) - 1.5deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(65vw), -6px, 0) rotate(calc(var(--rot-start, -1deg) - 1.5deg)) scale(var(--cloud-scale, 0.8));
   }
   100% {
-    transform: translate3d(calc(100vw + 380px), 0, 0) rotate(var(--rot-start, -1deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(100vw + 320px), 0, 0) rotate(var(--rot-start, -1deg)) scale(var(--cloud-scale, 0.8));
   }
 }
 
@@ -529,23 +528,25 @@ body.wandering-active {
   border-radius: 40px;
 }
 
-/* Depth Levels */
+/* Depth Levels: Background is smaller & softer; Midground is standard focus; Near is clear */
 .depth-near {
-  filter: drop-shadow(0 20px 42px rgba(60, 110, 150, 0.32)) drop-shadow(0 4px 12px rgba(43, 40, 37, 0.08));
+  opacity: 1;
+  filter: drop-shadow(0 14px 30px rgba(60, 110, 150, 0.26)) drop-shadow(0 3px 8px rgba(43, 40, 37, 0.07));
 }
 
 .depth-mid {
-  filter: drop-shadow(0 14px 28px rgba(60, 110, 150, 0.24)) drop-shadow(0 3px 8px rgba(43, 40, 37, 0.06));
+  opacity: 0.94;
+  filter: drop-shadow(0 10px 22px rgba(60, 110, 150, 0.2)) drop-shadow(0 2px 6px rgba(43, 40, 37, 0.05));
 }
 
 .depth-far {
-  opacity: 0.92;
-  filter: drop-shadow(0 8px 18px rgba(60, 110, 150, 0.18));
+  opacity: 0.84;
+  filter: drop-shadow(0 6px 14px rgba(60, 110, 150, 0.14));
 }
 
 /* Directional Sunlight Modifiers */
 .sunlit-warm {
-  filter: drop-shadow(0 18px 36px rgba(185, 125, 55, 0.25)) drop-shadow(0 4px 10px rgba(43, 40, 37, 0.07));
+  filter: drop-shadow(0 14px 28px rgba(185, 125, 55, 0.22)) drop-shadow(0 3px 8px rgba(43, 40, 37, 0.06));
 }
 
 .sunlit-warm .washi-tape-photo,
@@ -554,16 +555,17 @@ body.wandering-active {
 }
 
 .sunlit-cool {
-  filter: drop-shadow(0 10px 22px rgba(50, 95, 135, 0.18));
-  opacity: 0.94;
+  filter: drop-shadow(0 8px 18px rgba(50, 95, 135, 0.16));
+  opacity: 0.92;
 }
 
-/* Organic Fluffy Cloud Silhouette Backdrop */
+/* Organic Fluffy Cloud Silhouette Backdrop (Soft, tighter, framing the memory) */
 .cloud-backdrop-wrapper {
   position: absolute;
-  inset: -28px -36px -28px -36px;
+  inset: -14px -18px -14px -18px;
   z-index: 1;
   pointer-events: none;
+  opacity: 0.92;
 }
 
 .cloud-svg-shape {
@@ -573,7 +575,7 @@ body.wandering-active {
 }
 
 /* ==========================================================================
-   PHOTOGRAPH MEMORIES (NOSTALGIC PRINTS)
+   PHOTOGRAPH MEMORIES (NOSTALGIC PRINTS - CLEAR & MODEST SCALE)
    ========================================================================== */
 
 .photo-memory-item {
@@ -587,12 +589,12 @@ body.wandering-active {
 /* Authentic Printed Photograph Frame */
 .photo-print-frame {
   position: relative;
-  width: 220px;
+  width: 175px;
   background: #FFFDF9;
   border: 1px solid rgba(43, 40, 37, 0.09);
-  border-radius: 6px;
-  padding: 10px 10px 14px 10px;
-  box-shadow: 0 8px 24px rgba(43, 40, 37, 0.12), 0 2px 6px rgba(43, 40, 37, 0.05);
+  border-radius: 5px;
+  padding: 8px 8px 11px 8px;
+  box-shadow: 0 6px 18px rgba(43, 40, 37, 0.1), 0 2px 5px rgba(43, 40, 37, 0.04);
   transform: rotate(var(--rot-start, 0deg));
   transition: transform 0.3s ease;
 }
@@ -601,7 +603,7 @@ body.wandering-active {
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 3px;
   background: #EAF3F8;
   position: relative;
 }
@@ -611,7 +613,7 @@ body.wandering-active {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease, opacity 0.25s ease;
+  transition: transform 0.35s ease, opacity 0.25s ease;
 }
 
 .memory-cloud-anchor:hover .photo-print-img {
@@ -624,13 +626,13 @@ body.wandering-active {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   background: #F1ECE6;
 }
 
 /* Bottom Margin with Handwritten Notes */
 .photo-bottom-margin {
-  margin-top: 8px;
+  margin-top: 6px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -639,29 +641,29 @@ body.wandering-active {
 
 .photo-handwritten-author {
   font-family: var(--font-handwritten);
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: var(--ink-dark);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 120px;
+  max-width: 95px;
 }
 
 .photo-handwritten-time {
   font-family: var(--font-handwritten);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   color: var(--ink-light);
 }
 
 /* Washi Tape Accent */
 .washi-tape-photo {
   position: absolute;
-  top: -8px;
+  top: -7px;
   left: 50%;
   transform: translateX(-50%) rotate(-1.5deg);
-  width: 55px;
-  height: 16px;
+  width: 46px;
+  height: 14px;
   background: rgba(255, 241, 196, 0.92);
   border-left: 2px dashed rgba(204, 169, 92, 0.45);
   border-right: 2px dashed rgba(204, 169, 92, 0.45);
@@ -672,39 +674,39 @@ body.wandering-active {
 
 /* Composition Variants */
 .comp-photo-rest .photo-print-frame {
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .comp-photo-hang .photo-print-frame {
-  margin-top: 18px;
+  margin-top: 14px;
 }
 
 .comp-photo-overlap .photo-print-frame {
-  margin-left: 12px;
+  margin-left: 8px;
 }
 
 /* Attached Handwritten Note for Photo + Text */
 .attached-note-scrap {
   position: absolute;
-  bottom: -22px;
-  right: -24px;
-  max-width: 160px;
+  bottom: -18px;
+  right: -18px;
+  max-width: 135px;
   background: #FFFDEE;
   border: 1px solid rgba(43, 40, 37, 0.1);
   border-radius: 3px;
-  padding: 8px 10px;
-  box-shadow: 0 6px 16px rgba(43, 40, 37, 0.12);
+  padding: 6px 8px;
+  box-shadow: 0 5px 14px rgba(43, 40, 37, 0.11);
   transform: rotate(3deg);
   z-index: 20;
 }
 
 .mini-pin-tape {
   position: absolute;
-  top: -6px;
+  top: -5px;
   left: 50%;
   transform: translateX(-50%);
-  width: 32px;
-  height: 12px;
+  width: 28px;
+  height: 10px;
   background: rgba(255, 216, 204, 0.88);
   border-left: 1px dashed rgba(180, 120, 100, 0.4);
   border-right: 1px dashed rgba(180, 120, 100, 0.4);
@@ -712,7 +714,7 @@ body.wandering-active {
 
 .attached-note-text {
   font-family: var(--font-handwritten);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   color: var(--ink-dark);
   line-height: 1.25;
   display: -webkit-box;
@@ -722,13 +724,13 @@ body.wandering-active {
 }
 
 .photo-inline-caption {
-  margin-top: 6px;
+  margin-top: 5px;
   font-family: var(--font-handwritten);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   color: var(--ink-medium);
   line-height: 1.25;
   text-align: center;
-  max-width: 200px;
+  max-width: 165px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -736,7 +738,7 @@ body.wandering-active {
 }
 
 /* ==========================================================================
-   HANDWRITTEN PAPER NOTES (TEXT-ONLY MEMORIES)
+   HANDWRITTEN PAPER NOTES (TEXT-ONLY MEMORIES - CLEAR & COMPACT)
    ========================================================================== */
 
 .text-note-memory-item {
@@ -749,13 +751,13 @@ body.wandering-active {
 
 .paper-note-scrap {
   position: relative;
-  width: 215px;
-  min-height: 135px;
+  width: 170px;
+  min-height: 110px;
   background: #FFFDF7;
   border: 1px solid rgba(43, 40, 37, 0.1);
   border-radius: 4px;
-  padding: 16px 14px 12px 14px;
-  box-shadow: 0 8px 22px rgba(43, 40, 37, 0.11), 0 2px 6px rgba(43, 40, 37, 0.04);
+  padding: 12px 11px 10px 11px;
+  box-shadow: 0 6px 16px rgba(43, 40, 37, 0.1), 0 2px 5px rgba(43, 40, 37, 0.04);
   transform: rotate(var(--rot-start, 0deg));
   display: flex;
   flex-direction: column;
@@ -764,11 +766,11 @@ body.wandering-active {
 
 .note-washi-tape {
   position: absolute;
-  top: -8px;
+  top: -7px;
   left: 50%;
   transform: translateX(-50%) rotate(1deg);
-  width: 50px;
-  height: 15px;
+  width: 44px;
+  height: 13px;
   background: rgba(217, 238, 248, 0.92);
   border-left: 2px dashed rgba(114, 184, 216, 0.5);
   border-right: 2px dashed rgba(114, 184, 216, 0.5);
@@ -778,16 +780,16 @@ body.wandering-active {
 
 .note-quote-mark {
   font-family: var(--font-handwritten);
-  font-size: 2.8rem;
+  font-size: 2.2rem;
   line-height: 0.4;
   color: var(--ink-light);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   user-select: none;
 }
 
 .note-handwritten-body {
   font-family: var(--font-handwritten);
-  font-size: 1.35rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--ink-dark);
   line-height: 1.35;
@@ -799,8 +801,8 @@ body.wandering-active {
 }
 
 .note-signature-row {
-  margin-top: 10px;
-  padding-top: 6px;
+  margin-top: 8px;
+  padding-top: 5px;
   border-top: 1px dashed rgba(43, 40, 37, 0.12);
   display: flex;
   align-items: baseline;
@@ -809,17 +811,17 @@ body.wandering-active {
 
 .note-signature {
   font-family: var(--font-handwritten);
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   color: var(--ink-dark);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 120px;
+  max-width: 95px;
 }
 
 .note-timestamp {
   font-family: var(--font-handwritten);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   color: var(--ink-light);
 }
 
@@ -1076,15 +1078,15 @@ body.wandering-active {
 }
 
 /* ==========================================================================
-   RESPONSIVE SKY ADAPTATIONS (MAINTAINS FIXED ZERO-SCROLL CANVAS)
+   RESPONSIVE SKY ADAPTATIONS (PROPORTIONAL SIZING ACROSS VIEWPORTS)
    ========================================================================== */
 
-/* Mobile viewports (320px to 480px) */
+/* Mobile viewports (320px to 480px, e.g. 375x667, 430x932) */
 @media (max-width: 480px) {
   .nostalgic-sun-container {
     top: 2%;
     right: 5%;
-    transform: scale(0.72);
+    transform: scale(0.65);
   }
 
   .wandering-top-nav {
@@ -1092,67 +1094,71 @@ body.wandering-active {
   }
 
   .wandering-hint {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   .photo-print-frame {
-    width: 145px;
-    padding: 6px 6px 9px 6px;
+    width: 130px;
+    padding: 6px 6px 8px 6px;
   }
 
   .photo-handwritten-author {
-    font-size: 1.05rem;
-    max-width: 75px;
+    font-size: 0.95rem;
+    max-width: 65px;
   }
 
   .photo-handwritten-time {
-    font-size: 0.95rem;
+    font-size: 0.88rem;
   }
 
   .attached-note-scrap {
-    max-width: 115px;
-    bottom: -16px;
-    right: -12px;
-    padding: 5px 7px;
+    max-width: 100px;
+    bottom: -14px;
+    right: -10px;
+    padding: 4px 6px;
   }
 
   .attached-note-text {
-    font-size: 0.92rem;
+    font-size: 0.85rem;
   }
 
   .photo-inline-caption {
-    font-size: 0.92rem;
-    max-width: 135px;
+    font-size: 0.85rem;
+    max-width: 120px;
   }
 
   .paper-note-scrap {
-    width: 140px;
-    min-height: 100px;
-    padding: 10px 8px 8px 8px;
+    width: 130px;
+    min-height: 90px;
+    padding: 9px 8px 7px 8px;
   }
 
   .note-handwritten-body {
-    font-size: 1.05rem;
+    font-size: 1.0rem;
   }
 
   .note-signature {
-    font-size: 1.0rem;
-    max-width: 70px;
+    font-size: 0.92rem;
+    max-width: 65px;
   }
 
   .note-timestamp {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
   .note-quote-mark {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     margin-bottom: 2px;
   }
 
   .washi-tape-photo, .note-washi-tape {
-    width: 38px;
-    height: 11px;
+    width: 34px;
+    height: 10px;
     top: -5px;
+  }
+
+  .cloud-backdrop-wrapper {
+    inset: -10px -14px -10px -14px;
   }
 
   /* Expanded Modal on Mobile */
@@ -1185,28 +1191,28 @@ body.wandering-active {
 /* Tablet viewports (481px to 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
   .photo-print-frame {
-    width: 180px;
+    width: 155px;
   }
 
   .paper-note-scrap {
-    width: 175px;
-    min-height: 115px;
+    width: 150px;
+    min-height: 100px;
   }
 }
 
-/* Large Screens (1440px to 1920px+) */
+/* Large Screens (1440px to 1920px+, e.g. 1440x900) */
 @media (min-width: 1440px) {
   .photo-print-frame {
-    width: 245px;
+    width: 195px;
   }
 
   .paper-note-scrap {
-    width: 240px;
-    min-height: 155px;
+    width: 190px;
+    min-height: 125px;
   }
 
   .note-handwritten-body {
-    font-size: 1.45rem;
+    font-size: 1.3rem;
   }
 }
 
@@ -1221,7 +1227,7 @@ body.wandering-active {
   .sun-outer-corona,
   .wind-travel-wave {
     animation: none !important;
-    transform: translate3d(calc(15vw + (var(--lane-index, 0) * 16vw)), 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1)) !important;
+    transform: translate3d(calc(15vw + (var(--lane-index, 0) * 16vw)), 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 0.8)) !important;
   }
 
   .expanded-backdrop,

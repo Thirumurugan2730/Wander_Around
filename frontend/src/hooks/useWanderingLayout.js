@@ -29,15 +29,15 @@ const INITIAL_LANE_DELAYS = [-24, -15, -7, -29, -11];
  * - 5 vertical altitude lanes
  * - Pure GPU CSS transform keyframe animations
  * - Staggered entrance timing ensuring no cloud crowding or collisions
- * - Scale factor dynamically tailored to total memory count
+ * - Refined scale factor (25-40% smaller) leaving plenty of open, expansive sky
  */
 export function useWanderingLayout(posts = []) {
   return useMemo(() => {
     const count = posts.length;
     if (count === 0) return [];
 
-    // Scale tier based on memory volume (always fitting the fixed viewport comfortably)
-    const cloudScale = count <= 5 ? 1.15 : count <= 15 ? 1.0 : 0.88;
+    // Refined cloud scale tier: modest, natural clouds with lots of open sky
+    const cloudScale = count <= 5 ? 0.80 : count <= 15 ? 0.72 : 0.65;
 
     return posts.map((post, index) => {
       const postKey = String(post.id || index);
