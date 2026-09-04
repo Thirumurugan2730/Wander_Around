@@ -9,6 +9,7 @@ export default function WanderingCard({
   compositionType = 'photo-rest',
   depthClass = 'depth-mid',
   sunlitClass = 'sunlit-neutral',
+  motionState = 'floating',
   onSelect,
 }) {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -38,7 +39,7 @@ export default function WanderingCard({
     <div
       role="button"
       tabIndex={0}
-      className={`memory-cloud-anchor ${depthClass} ${sunlitClass} comp-${compositionType}`}
+      className={`memory-cloud-anchor ${depthClass} ${sunlitClass} motion-${motionState} comp-${compositionType}`}
       style={style}
       onClick={() => onSelect(post)}
       onKeyDown={handleKeyDown}

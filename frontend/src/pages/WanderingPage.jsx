@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { getTodayPosts } from '../api/client';
+import { useWanderCycle } from '../hooks/useWanderCycle';
 import { useWanderingLayout } from '../hooks/useWanderingLayout';
 import WanderingCard from '../components/WanderingCard';
 import ExpandedMoment from '../components/ExpandedMoment';
@@ -57,8 +58,20 @@ export default function WanderingPage() {
     };
   }, [fetchPosts]);
 
-  // Compute organic, stable positions, cloud silhouettes, compositions, and motion vectors
-  const positionedCards = useWanderingLayout(posts);
+  // Orchestrates the ~10s wind gust & cloud flow lifecycle
+  const { isGusting, cycleIndex, currentPosts, incomingPosts } = useWanderCycle(
+    posts,
+    Boolean(selectedPost)
+  );
+
+  // Current wave of clouds in the sky
+  const currentCards = useWanderingLayout(currentPosts, cycleIndex);
+
+  // Incoming wave of clouds entering from the left during a gust
+  const incomingCards = useWanderingLayout(
+    isGusting ? incomingPosts : [],
+    cycleIndex + 1
+  );
 
   // Handler for opening a moment
   const handleSelectPost = useCallback((post) => {
@@ -80,8 +93,8 @@ export default function WanderingPage() {
       <div className="ambient-sky-cloud ambient-cloud-2" aria-hidden="true" />
       <div className="ambient-sky-cloud ambient-cloud-3" aria-hidden="true" />
 
-      {/* Visible Wind Trails, Breeze Ribbons & Floating Motes */}
-      <WindLayer />
+      {/* Visible Wind Trails, Breeze Ribbons & Surging Wind Gusts */}
+      <WindLayer isGusting={isGusting} />
 
       {/* Atmospheric Sky Header */}
       <header className="wandering-top-nav" aria-label="Sky information">
@@ -131,8 +144,9 @@ export default function WanderingPage() {
           className={`wandering-canvas-container ${selectedPost ? 'is-paused' : ''}`}
           aria-label="Interactive floating memories"
         >
-          {positionedCards.map(({ post, style, cloudVariant, compositionType, depthClass, sunlitClass }, index) => {
-            const postKey = post.id || `moment-${index}`;
+          {/* Current Clouds (Floating peacefully or exiting right on the gust) */}
+          {currentCards.map(({ post, style, cloudVariant, compositionType, depthClass, sunlitClass }, index) => {
+            const postKey = `curr-${post.id || index}-${cycleIndex}`;
             return (
               <WanderingCard
                 key={postKey}
@@ -142,10 +156,30 @@ export default function WanderingPage() {
                 compositionType={compositionType}
                 depthClass={depthClass}
                 sunlitClass={sunlitClass}
+                motionState={isGusting ? 'exiting' : 'floating'}
                 onSelect={handleSelectPost}
               />
             );
           })}
+
+          {/* Incoming Clouds (Entering smoothly from left on the tail of the gust) */}
+          {isGusting &&
+            incomingCards.map(({ post, style, cloudVariant, compositionType, depthClass, sunlitClass }, index) => {
+              const postKey = `inc-${post.id || index}-${cycleIndex + 1}`;
+              return (
+                <WanderingCard
+                  key={postKey}
+                  post={post}
+                  style={style}
+                  cloudVariant={cloudVariant}
+                  compositionType={compositionType}
+                  depthClass={depthClass}
+                  sunlitClass={sunlitClass}
+                  motionState="entering"
+                  onSelect={handleSelectPost}
+                />
+              );
+            })}
         </section>
       )}
 

@@ -17,36 +17,22 @@ function stringToSeed(str) {
   return Math.abs(hash);
 }
 
-/**
- * 6 Continuous, non-teleporting wind trajectories.
- * Every trajectory is a smooth, continuous closed loop or off-screen wrapped path
- * with zero sudden jumps, zero teleportation, and smooth velocity transitions.
- */
-const WIND_TRAJECTORIES = [
-  'windDriftHarmonicA', // Sweeping East-Northeast wave loop
-  'windDriftHarmonicB', // Wide East-Southeast glide loop
-  'windDriftHarmonicC', // Ascending thermal breeze loop
-  'windDriftHarmonicD', // Figure-8 lazy air current
-  'windDriftHarmonicE', // Deep lazy horizontal current
-  'windDriftHarmonicF', // Undulating golden hour air stream
-];
-
 const PHOTO_COMPOSITIONS = ['photo-rest', 'photo-hang', 'photo-overlap'];
 const TEXT_COMPOSITIONS = ['text-note', 'text-tuck'];
 
-// Sun position reference in the upper-right sky
+// Sun position in upper-right sky
 const SUN_POS = { x: 78, y: 10 };
 
 /**
  * Computes organic sky positions, cloud silhouettes, photo/note compositions,
- * depth levels, sunlight proximity, and continuous wind-drift physics for every moment.
+ * depth levels, sunlight proximity, and wind-gust physics for a set of posts.
  */
-export function useWanderingLayout(posts = []) {
+export function useWanderingLayout(posts = [], cycleIndex = 0) {
   return useMemo(() => {
     const count = posts.length;
     if (count === 0) return [];
 
-    // Single moment: centered gracefully in the middle sky with wide lazy drift
+    // Single moment: centered gracefully in the middle sky
     if (count === 1) {
       const post = posts[0];
       const hasPhoto = Boolean(post.hasPhoto || post.has_photo || post.imagePath || post.image_path);
@@ -58,15 +44,10 @@ export function useWanderingLayout(posts = []) {
           transform: 'translate(-50%, -50%)',
           '--rot-start': '-1.5deg',
           '--rot-delta': '2deg',
-          '--wind-drift-x': '65px',
-          '--wind-drift-y': '28px',
-          '--drift-dur': '38s',
-          '--drift-delay': '0s',
+          '--wind-drift-x': '40px',
+          '--wind-drift-y': '18px',
+          '--gust-stagger': '0.1s',
           '--cloud-scale': '1.08',
-          animationName: 'windDriftHarmonicA',
-          animationDuration: '38s',
-          animationTimingFunction: 'ease-in-out',
-          animationIterationCount: 'infinite',
         },
         cloudVariant: 0,
         compositionType: hasPhoto ? (post.text ? 'photo-text-combo' : 'photo-rest') : 'text-note',
@@ -76,16 +57,16 @@ export function useWanderingLayout(posts = []) {
       }];
     }
 
-    // Grid zone partitioning to guarantee wide, balanced dispersion across the sky
-    const cols = count <= 3 ? 2 : count <= 8 ? 3 : count <= 15 ? 4 : count <= 24 ? 5 : 6;
+    // Grid zone partitioning (2 or 3 columns for spacious cloud drifting)
+    const cols = count <= 3 ? 2 : count <= 6 ? 3 : 4;
     const rows = Math.ceil(count / cols);
 
-    const cellWidth = 86 / cols; // % of canvas width
-    const cellHeight = 78 / rows; // % of canvas height
+    const cellWidth = 84 / cols; // % of canvas width
+    const cellHeight = 76 / rows; // % of canvas height
 
     return posts.map((post, index) => {
       const postKey = String(post.id || index);
-      const seed = stringToSeed(postKey) + index * 53;
+      const seed = stringToSeed(postKey) + (index * 53) + (cycleIndex * 101);
 
       const col = index % cols;
       const row = Math.floor(index / cols);
@@ -94,11 +75,11 @@ export function useWanderingLayout(posts = []) {
       const jitterX = (pseudoRandom(seed + 1) - 0.5) * (cellWidth * 0.52);
       const jitterY = (pseudoRandom(seed + 2) - 0.5) * (cellHeight * 0.52);
 
-      const baseX = 7 + col * cellWidth + cellWidth / 2 + jitterX;
-      const baseY = 8 + row * cellHeight + cellHeight / 2 + jitterY;
+      const baseX = 8 + col * cellWidth + cellWidth / 2 + jitterX;
+      const baseY = 9 + row * cellHeight + cellHeight / 2 + jitterY;
 
-      const clampedX = Math.max(5, Math.min(83, baseX));
-      const clampedY = Math.max(6, Math.min(82, baseY));
+      const clampedX = Math.max(6, Math.min(82, baseX));
+      const clampedY = Math.max(7, Math.min(80, baseY));
 
       // Deterministic physical photo tilt: -4.5deg to +4.5deg
       const baseRot = (pseudoRandom(seed + 3) * 8 - 4).toFixed(1);
@@ -132,20 +113,15 @@ export function useWanderingLayout(posts = []) {
         sunlitClass = 'sunlit-cool';
       }
 
-      // Wind drift translation distance (physical noticeable wandering: 50px to 95px)
-      const driftX = (pseudoRandom(seed + 6) * 45 + 50).toFixed(0);
-      const driftY = ((pseudoRandom(seed + 7) * 30 + 18) * (pseudoRandom(seed + 8) > 0.45 ? 1 : -1)).toFixed(0);
+      // Wind gust stagger: clouds on the left (lower X) feel the gust first
+      const gustStagger = ((clampedX / 100) * 0.9 + pseudoRandom(seed + 6) * 0.35).toFixed(2);
 
-      // Durations: 36s, 44s, 52s, 62s, 72s, 84s for gentle, realistic wind movement
-      const hasPhoto = Boolean(post.hasPhoto || post.has_photo || post.imagePath || post.image_path);
-      const baseDurations = hasPhoto ? [45, 54, 64, 75, 86] : [36, 44, 52, 60, 70];
-      const driftDur = baseDurations[Math.floor(pseudoRandom(seed + 9) * baseDurations.length)];
+      // Organic hover translations during calm floating
+      const driftX = (pseudoRandom(seed + 7) * 25 + 20).toFixed(0);
+      const driftY = ((pseudoRandom(seed + 8) * 18 + 10) * (pseudoRandom(seed + 9) > 0.45 ? 1 : -1)).toFixed(0);
 
-      // Negative animation delays: ensures clouds are already in smooth staggered flight upon page load
-      const negativeDelay = -(pseudoRandom(seed + 10) * (driftDur * 0.85)).toFixed(1);
-
-      const trajectory = WIND_TRAJECTORIES[index % WIND_TRAJECTORIES.length];
       const cloudVariant = index % 4;
+      const hasPhoto = Boolean(post.hasPhoto || post.has_photo || post.imagePath || post.image_path);
 
       // Composition assignment
       let compositionType = 'photo-rest';
@@ -153,10 +129,10 @@ export function useWanderingLayout(posts = []) {
         if (post.text && post.text.trim().length > 0) {
           compositionType = 'photo-text-combo';
         } else {
-          compositionType = PHOTO_COMPOSITIONS[Math.floor(pseudoRandom(seed + 11) * PHOTO_COMPOSITIONS.length)];
+          compositionType = PHOTO_COMPOSITIONS[Math.floor(pseudoRandom(seed + 10) * PHOTO_COMPOSITIONS.length)];
         }
       } else {
-        compositionType = TEXT_COMPOSITIONS[Math.floor(pseudoRandom(seed + 12) * TEXT_COMPOSITIONS.length)];
+        compositionType = TEXT_COMPOSITIONS[Math.floor(pseudoRandom(seed + 11) * TEXT_COMPOSITIONS.length)];
       }
 
       return {
@@ -169,14 +145,8 @@ export function useWanderingLayout(posts = []) {
           '--rot-delta': `${rotDelta}deg`,
           '--wind-drift-x': `${driftX}px`,
           '--wind-drift-y': `${driftY}px`,
-          '--drift-dur': `${driftDur}s`,
-          '--drift-delay': `${negativeDelay}s`,
+          '--gust-stagger': `${gustStagger}s`,
           '--cloud-scale': `${scale}`,
-          animationName: trajectory,
-          animationDuration: `${driftDur}s`,
-          animationDelay: `${negativeDelay}s`,
-          animationTimingFunction: 'ease-in-out',
-          animationIterationCount: 'infinite',
         },
         cloudVariant,
         compositionType,
@@ -185,5 +155,5 @@ export function useWanderingLayout(posts = []) {
         isProminent: count <= 3,
       };
     });
-  }, [posts]);
+  }, [posts, cycleIndex]);
 }
