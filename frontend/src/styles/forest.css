@@ -1,0 +1,778 @@
+/* ==========================================================================
+   DAILY WANDER — NOSTALGIC FOREST & MEMORY BIRD DESIGN SYSTEM
+   Cinematic golden-hour living forest, carrier bird flight loop,
+   vintage physical photographs, drifting handwritten leaves, 5s breeze
+   ========================================================================== */
+
+/* Fixed Viewport Canvas for Forest */
+.forest-page {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(
+    180deg,
+    #7CA9C7 0%,
+    #A3CDDE 20%,
+    #E1D8CD 48%,
+    #F6D0A2 75%,
+    #F4BC82 100%
+  );
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+  user-select: none;
+  z-index: 1;
+}
+
+/* Atmospheric Film Grain & Sunlit Dust Overlay */
+.forest-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(55, 42, 28, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.8;
+}
+
+/* Warm Golden Hour Vignette */
+.forest-page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    inset 0 0 120px rgba(195, 130, 65, 0.22),
+    inset 0 0 50px rgba(70, 110, 150, 0.12);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Forest Scene Viewport Container */
+.forest-scene-viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+  z-index: 4;
+}
+
+/* ==========================================================================
+   1. AMBIENT SKY CLOUDS & ROLLING HILLS
+   ========================================================================== */
+
+.forest-ambient-cloud {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 250, 240, 0.65) 0%, rgba(255, 245, 230, 0.25) 60%, transparent 80%);
+  filter: blur(28px);
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform;
+}
+
+.cloud-far-1 {
+  top: 10%;
+  left: -120px;
+  width: 480px;
+  height: 180px;
+  animation: cloudFarDrift 140s linear infinite;
+}
+
+.cloud-far-2 {
+  top: 22%;
+  left: -200px;
+  width: 620px;
+  height: 220px;
+  animation: cloudFarDrift 180s linear infinite 30s;
+}
+
+.cloud-far-3 {
+  top: 6%;
+  left: -160px;
+  width: 520px;
+  height: 190px;
+  animation: cloudFarDrift 160s linear infinite 75s;
+}
+
+@keyframes cloudFarDrift {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(calc(100vw + 650px), 0, 0); }
+}
+
+/* Distant Mountains & Ridge SVG */
+.forest-distant-hills-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(220px, 35vh, 440px);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Secondary Background Tree (Far Left) */
+.forest-secondary-tree {
+  position: absolute;
+  bottom: 0;
+  left: -40px;
+  width: clamp(160px, 20vw, 320px);
+  height: clamp(300px, 50vh, 550px);
+  background: radial-gradient(ellipse at 40% 30%, #516954 0%, #3B4E3E 60%, #28372A 100%);
+  border-radius: 50% 50% 30% 30% / 70% 70% 30% 30%;
+  filter: blur(4px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* ==========================================================================
+   2. THE MAIN ANCIENT TREE & PERCHING BRANCH
+   ========================================================================== */
+
+.forest-main-tree-container {
+  position: absolute;
+  bottom: -20px;
+  right: clamp(-30px, 2vw, 40px);
+  width: clamp(340px, 46vw, 680px);
+  height: clamp(480px, 86vh, 880px);
+  pointer-events: none;
+  z-index: 8;
+  transform-origin: bottom center;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.forest-tree-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Main Perch Branch & Spring Landing Bounce */
+.main-perch-branch-group {
+  transform-origin: 440px 440px;
+  transition: transform 0.25s ease-out;
+}
+
+.branch-bounce-active .main-perch-branch-group {
+  animation: perchBranchBounce 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes perchBranchBounce {
+  0% { transform: rotate(0deg) translateY(0); }
+  25% { transform: rotate(3.4deg) translateY(8px); }
+  50% { transform: rotate(-1.8deg) translateY(-4px); }
+  75% { transform: rotate(0.8deg) translateY(1.5px); }
+  100% { transform: rotate(0deg) translateY(0); }
+}
+
+/* Canopy Foliage Rustle in 5-Second Breeze */
+.leaf-cluster {
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.cluster-sway-1 {
+  animation: foliageRustle 5s ease-in-out infinite;
+}
+
+.cluster-sway-2 {
+  animation: foliageRustle 5s ease-in-out infinite 1.2s;
+}
+
+.cluster-sway-3 {
+  animation: foliageRustle 5s ease-in-out infinite 2.5s;
+}
+
+@keyframes foliageRustle {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  35% { transform: rotate(1.4deg) scale(1.015); }
+  70% { transform: rotate(-1.1deg) scale(0.99); }
+}
+
+/* ==========================================================================
+   3. 5-SECOND BREEZE PARTICLES, MOTES & LEAVES
+   ========================================================================== */
+
+.forest-wind-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.forest-mote {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #FFF7D1;
+  box-shadow: 0 0 10px rgba(255, 235, 140, 0.9);
+  opacity: 0.65;
+  animation: moteFloat 18s ease-in-out infinite alternate;
+}
+
+.mote-1 { top: 35%; left: 15%; animation-duration: 16s; }
+.mote-2 { top: 55%; left: 38%; animation-duration: 22s; animation-delay: -4s; }
+.mote-3 { top: 25%; left: 60%; animation-duration: 19s; animation-delay: -8s; }
+.mote-4 { top: 68%; left: 75%; animation-duration: 24s; animation-delay: -12s; }
+.mote-5 { top: 18%; left: 82%; animation-duration: 20s; animation-delay: -6s; }
+
+@keyframes moteFloat {
+  0% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(45px, -25px, 0); }
+  100% { transform: translate3d(-30px, 35px, 0); }
+}
+
+/* Drifting Golden Leaves in Breeze */
+.breeze-leaf {
+  position: absolute;
+  width: 14px;
+  height: 8px;
+  background: linear-gradient(135deg, #E2B258 0%, #BA772A 100%);
+  border-radius: 12px 2px 12px 2px;
+  opacity: 0.75;
+  will-change: transform;
+}
+
+.leaf-1 { top: 30%; left: -30px; animation: leafDriftFlight 22s linear infinite; }
+.leaf-2 { top: 48%; left: -30px; animation: leafDriftFlight 26s linear infinite 7s; }
+.leaf-3 { top: 65%; left: -30px; animation: leafDriftFlight 20s linear infinite 13s; }
+.leaf-4 { top: 20%; left: -30px; animation: leafDriftFlight 28s linear infinite 18s; }
+
+@keyframes leafDriftFlight {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { transform: translate3d(calc(100vw + 60px), 80px, 0) rotate(720deg); opacity: 0; }
+}
+
+/* ==========================================================================
+   4. MEMORY CARRIER BIRD (MESSENGER BIRD)
+   ========================================================================== */
+
+.memory-bird-carrier {
+  position: absolute;
+  width: 110px;
+  height: 80px;
+  z-index: 18;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  transform-origin: center center;
+}
+
+.bird-body-rig {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 12px rgba(45, 30, 20, 0.25));
+}
+
+.bird-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Wing Flapping Cycle in Flight */
+.is-airborne .flapping-wing {
+  transform-origin: 60px 42px;
+  animation: birdWingBeat 0.26s ease-in-out infinite alternate;
+}
+
+.is-airborne .bird-wing-far {
+  transform-origin: 58px 40px;
+  animation: birdWingBeatFar 0.26s ease-in-out infinite alternate;
+}
+
+@keyframes birdWingBeat {
+  0% { transform: rotate(-22deg) scaleY(1); }
+  100% { transform: rotate(38deg) scaleY(-0.75); }
+}
+
+@keyframes birdWingBeatFar {
+  0% { transform: rotate(32deg) scaleY(-0.7); }
+  100% { transform: rotate(-24deg) scaleY(1); }
+}
+
+/* Perched Subtle Body Breathing & Tail Flutter */
+.is-grounded .bird-body-rig {
+  animation: birdPerchBreath 4.2s ease-in-out infinite alternate;
+}
+
+@keyframes birdPerchBreath {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(1.5px) rotate(0.8deg); }
+  100% { transform: translateY(-0.8px) rotate(-0.5deg); }
+}
+
+.is-grounded .bird-tail-group {
+  transform-origin: 24px 52px;
+  animation: birdTailBob 3.5s ease-in-out infinite;
+}
+
+@keyframes birdTailBob {
+  0%, 100% { transform: rotate(0deg); }
+  45% { transform: rotate(0deg); }
+  50% { transform: rotate(-6deg); }
+  55% { transform: rotate(3deg); }
+  60% { transform: rotate(0deg); }
+}
+
+/* BIRD FLIGHT PHASES & TRAJECTORIES */
+
+/* Phase: Perched comfortably on the tree's main branch */
+.phase-perched {
+  /* Calculated coordinate aligned with main branch perch */
+  top: clamp(38%, 46vh, 52%);
+  right: clamp(140px, 22vw, 360px);
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Phase: Flying-in (Enters from top-left, curves smoothly down to perch) */
+.phase-flying-in {
+  top: clamp(38%, 46vh, 52%);
+  right: clamp(140px, 22vw, 360px);
+  animation: birdFlightIn 4.5s cubic-bezier(0.25, 0.8, 0.35, 1) forwards;
+}
+
+@keyframes birdFlightIn {
+  0% {
+    transform: translate3d(calc(-100vw - 120px), -160px, 0) scale(0.85) rotate(-8deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  50% {
+    transform: translate3d(-320px, -45px, 0) scale(0.95) rotate(4deg);
+  }
+  80% {
+    transform: translate3d(-60px, 15px, 0) scale(1) rotate(-3deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Phase: Landing (Brief touchdown deceleration) */
+.phase-landing {
+  top: clamp(38%, 46vh, 52%);
+  right: clamp(140px, 22vw, 360px);
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+}
+
+/* Phase: Flying-out (Launches from branch and swoops offscreen to top-right) */
+.phase-flying-out {
+  top: clamp(38%, 46vh, 52%);
+  right: clamp(140px, 22vw, 360px);
+  animation: birdFlightOut 3.5s cubic-bezier(0.55, 0, 0.85, 0.65) forwards;
+}
+
+@keyframes birdFlightOut {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  20% {
+    transform: translate3d(40px, -30px, 0) scale(1.02) rotate(-12deg);
+    opacity: 1;
+  }
+  60% {
+    transform: translate3d(240px, -110px, 0) scale(0.92) rotate(-16deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(calc(100vw + 180px), -240px, 0) scale(0.75) rotate(-20deg);
+    opacity: 0;
+  }
+}
+
+/* Phase: Resting (Quiet interval between visits) */
+.phase-resting {
+  top: 48%;
+  right: 200px;
+  transform: translate3d(-1000px, 0, 0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   5. PHYSICAL VINTAGE PHOTOGRAPH MEMORY
+   ========================================================================== */
+
+.bird-payload-anchor {
+  position: absolute;
+  top: 68px;
+  left: 20px;
+  transform-origin: top center;
+  z-index: 19;
+}
+
+.payload-in-flight {
+  animation: payloadFlightSway 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes payloadFlightSway {
+  0% { transform: rotate(-5deg); }
+  100% { transform: rotate(7deg); }
+}
+
+.payload-settled {
+  animation: payloadBranchSway 5s ease-in-out infinite;
+}
+
+@keyframes payloadBranchSway {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(2.2deg); }
+}
+
+/* Physical Photo Card Styling */
+.forest-photo-print {
+  display: block;
+  width: clamp(160px, 18vw, 240px);
+  background: #FCF9F2;
+  border: 7px solid #FFFDF7;
+  border-radius: 4px;
+  box-shadow:
+    0 12px 32px rgba(45, 32, 20, 0.28),
+    0 3px 8px rgba(45, 32, 20, 0.12);
+  padding: 6px 6px 12px 6px;
+  cursor: pointer;
+  outline: none;
+  transform-origin: top center;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.3, 1), box-shadow 0.35s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.forest-photo-print:hover,
+.forest-photo-print:focus-visible {
+  transform: scale(1.05) rotate(0deg);
+  box-shadow:
+    0 18px 42px rgba(45, 32, 20, 0.38),
+    0 0 0 3px rgba(255, 235, 175, 0.85);
+}
+
+/* Twine / Branch Hanging Notch */
+.photo-hanger-notch {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.notch-twine {
+  width: 3px;
+  height: 16px;
+  margin: 0 auto;
+  background: #C4985D;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Image Frame */
+.photo-image-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #E8DECF;
+}
+
+.photo-vintage-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(0.14) contrast(1.04) brightness(0.98);
+  transition: filter 0.3s ease;
+}
+
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-handwriting, 'Caveat', cursive);
+  font-size: 1.2rem;
+  color: #8C7560;
+}
+
+/* Golden Hour Vignette Glaze over photo */
+.photo-sunlight-glaze {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 235, 180, 0.15) 0%, transparent 60%, rgba(180, 110, 50, 0.12) 100%);
+  pointer-events: none;
+}
+
+/* Handwritten Caption & Author Byline */
+.photo-caption-strip {
+  margin-top: 8px;
+  padding: 0 4px;
+  text-align: center;
+}
+
+.photo-handwritten-caption {
+  font-family: var(--font-handwriting, 'Caveat', cursive);
+  font-size: clamp(1.05rem, 1.25vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.25;
+  color: #2E241B;
+  margin: 0 0 4px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.photo-byline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-handwriting, 'Caveat', cursive);
+  font-size: 0.95rem;
+  color: #7A6652;
+}
+
+/* ==========================================================================
+   6. DRIFTING HANDWRITTEN TEXT MEMORIES
+   ========================================================================== */
+
+.drifting-text-leaf {
+  position: absolute;
+  width: clamp(210px, 24vw, 300px);
+  padding: 12px 16px;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  animation-name: textLeafBreezeFlight;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.drifting-text-leaf:hover,
+.drifting-text-leaf:focus-visible {
+  filter: drop-shadow(0 8px 24px rgba(255, 235, 175, 0.8));
+  animation-play-state: paused;
+}
+
+/* Altitude Stream Lanes */
+.alt-stream-0 { top: clamp(12%, 16vh, 22%); }
+.alt-stream-1 { top: clamp(26%, 32vh, 40%); }
+.alt-stream-2 { top: clamp(52%, 60vh, 68%); }
+.alt-stream-3 { top: clamp(68%, 76vh, 84%); }
+
+@keyframes textLeafBreezeFlight {
+  0% {
+    transform: translate3d(-340px, 0, 0) rotate(var(--drift-rot, 0deg));
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.96;
+  }
+  92% {
+    opacity: 0.96;
+  }
+  100% {
+    transform: translate3d(calc(100vw + 340px), 25px, 0) rotate(calc(var(--drift-rot, 0deg) + 6deg));
+    opacity: 0;
+  }
+}
+
+.text-leaf-content {
+  position: relative;
+  width: 100%;
+}
+
+.text-leaf-silhouette {
+  position: absolute;
+  inset: -8px -12px;
+  width: calc(100% + 24px);
+  height: calc(100% + 16px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.text-leaf-silhouette svg {
+  width: 100%;
+  height: 100%;
+}
+
+.drifting-thought-text {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-handwriting, 'Caveat', cursive);
+  font-size: clamp(1.15rem, 1.4vw, 1.4rem);
+  font-weight: 500;
+  line-height: 1.3;
+  color: #2D2216;
+  margin: 0 0 6px 0;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.drifting-thought-byline {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-handwriting, 'Caveat', cursive);
+  font-size: 0.95rem;
+  color: #725D48;
+}
+
+/* ==========================================================================
+   7. FOREST HEADER BADGE & INFO
+   ========================================================================== */
+
+.forest-top-nav {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top, 16px));
+  left: max(20px, env(safe-area-inset-left, 20px));
+  z-index: 30;
+  pointer-events: auto;
+}
+
+.forest-header-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.forest-header-badge .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255, 250, 240, 0.85);
+  border: 1px solid rgba(180, 140, 90, 0.25);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(60, 45, 30, 0.12);
+  font-family: var(--font-heading, 'Fredoka', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #3D2D1E;
+}
+
+.forest-hint {
+  font-family: var(--font-handwriting, 'Caveat', cursive);
+  font-size: 1.15rem;
+  color: #382A1B;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+}
+
+/* ==========================================================================
+   8. RESPONSIVE MOBILE ERGONOMICS
+   ========================================================================== */
+
+@media (max-width: 680px) {
+  /* Mobile Tree Position & Sizing */
+  .forest-main-tree-container {
+    right: -25px;
+    width: clamp(280px, 68vw, 420px);
+    height: clamp(420px, 78vh, 640px);
+  }
+
+  /* Bird Perch on Mobile */
+  .phase-perched,
+  .phase-landing,
+  .phase-flying-in,
+  .phase-flying-out {
+    top: clamp(40%, 48vh, 56%);
+    right: clamp(80px, 20vw, 160px);
+  }
+
+  /* Photo scale on Mobile */
+  .forest-photo-print {
+    width: clamp(140px, 38vw, 175px);
+    border-width: 5px;
+    padding: 4px 4px 8px 4px;
+  }
+
+  .photo-handwritten-caption {
+    font-size: 1.05rem;
+  }
+
+  /* Drifting Text Leaf on Mobile */
+  .drifting-text-leaf {
+    width: clamp(180px, 55vw, 240px);
+    padding: 8px 12px;
+  }
+
+  .drifting-thought-text {
+    font-size: 1.1rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .forest-hint {
+    display: none; /* Keep header clean on small phones */
+  }
+}
+
+/* Very Small Phones (320px - 360px) */
+@media (max-width: 360px) {
+  .forest-main-tree-container {
+    right: -35px;
+    width: 270px;
+    height: 400px;
+  }
+
+  .phase-perched,
+  .phase-landing,
+  .phase-flying-in,
+  .phase-flying-out {
+    right: 70px;
+  }
+
+  .forest-photo-print {
+    width: 130px;
+  }
+}
+
+/* Mobile Landscape Safeguards */
+@media (max-height: 500px) {
+  .forest-main-tree-container {
+    height: 94vh;
+    width: 380px;
+    right: 0;
+  }
+
+  .phase-perched,
+  .phase-landing,
+  .phase-flying-in,
+  .phase-flying-out {
+    top: 42%;
+    right: 120px;
+  }
+
+  .forest-photo-print {
+    width: 135px;
+  }
+}

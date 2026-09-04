@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { getTodayPosts } from '../api/client';
-import { useWanderingLayout } from '../hooks/useWanderingLayout';
-import WanderingCard from '../components/WanderingCard';
+import { useForestSession } from '../hooks/useForestSession';
+import ForestScene from '../components/ForestScene';
+import MemoryBird from '../components/MemoryBird';
+import ForestPhotoMemory from '../components/ForestPhotoMemory';
+import DriftingTextNote from '../components/DriftingTextNote';
 import ExpandedMoment from '../components/ExpandedMoment';
-import WindLayer from '../components/WindLayer';
-import NostalgicSun from '../components/NostalgicSun';
 import LoadingState from '../components/LoadingState';
 import EmptyState from '../components/EmptyState';
 
@@ -15,7 +16,7 @@ export default function WanderingPage() {
   const [selectedPost, setSelectedPost] = useState(null);
   const isMountedRef = useRef(true);
 
-  // Lock body/html scroll during the Wandering sky session
+  // Lock body/html scroll during the Wandering forest session
   useEffect(() => {
     document.documentElement.classList.add('wandering-active');
     document.body.classList.add('wandering-active');
@@ -49,7 +50,7 @@ export default function WanderingPage() {
       console.error('Failed to load today posts:', err);
       setError(
         err.message?.includes('HTTP error') || err.message?.includes('JSON')
-          ? "The wind got in the way. We couldn't reach today's sky."
+          ? "The forest breeze got in the way. We couldn't reach today's memories."
           : (err.message || "We couldn't find today's moments. Please try again.")
       );
     } finally {
@@ -68,8 +69,14 @@ export default function WanderingPage() {
     };
   }, [fetchPosts]);
 
-  // Compute sequential one-by-one Left → Right cloud stream across 5 lanes
-  const positionedCards = useWanderingLayout(posts);
+  // Hook driving bird carrier flight loop and drifting notes
+  const {
+    photoPosts,
+    currentPhotoPost,
+    flightPhase,
+    isBranchBouncing,
+    textNoteItems,
+  } = useForestSession(posts, Boolean(selectedPost));
 
   // Handler for opening a moment
   const handleSelectPost = useCallback((post) => {
@@ -82,84 +89,95 @@ export default function WanderingPage() {
   }, []);
 
   return (
-    <main className="wandering-page" aria-label="Wandering Sky Canvas">
-      {/* Nostalgic Golden Hour Sun & Solar Aura */}
-      <NostalgicSun />
-
-      {/* Ambient Distant Clouds */}
-      <div className="ambient-sky-cloud ambient-cloud-1" aria-hidden="true" />
-      <div className="ambient-sky-cloud ambient-cloud-2" aria-hidden="true" />
-      <div className="ambient-sky-cloud ambient-cloud-3" aria-hidden="true" />
-
-      {/* Visible Wind Trails, Traveling 10s Wind Wave & Floating Motes */}
-      <WindLayer />
-
-      {/* Atmospheric Sky Header */}
-      <header className="wandering-top-nav" aria-label="Sky information">
-        <div className="wandering-header-badge">
-          <div className="pill">
-            <span>✦ today's sky</span>
+    <main className="forest-page wandering-page" aria-label="Wandering Forest Canvas">
+      {/* Living Nostalgic Forest Environment */}
+      <ForestScene isBranchBouncing={isBranchBouncing}>
+        {/* Top Navigation Badge */}
+        <header className="forest-top-nav wandering-top-nav" aria-label="Forest information">
+          <div className="forest-header-badge wandering-header-badge">
+            <div className="pill">
+              <span>✦ today's forest</span>
+            </div>
+            {!loading && !error && posts.length > 0 && (
+              <span className="forest-hint wandering-hint">
+                {posts.length} {posts.length === 1 ? 'memory' : 'memories'} living in today's breeze
+              </span>
+            )}
           </div>
-          {!loading && !error && posts.length > 0 && (
-            <span className="wandering-hint">
-              {posts.length} {posts.length === 1 ? 'cloud' : 'clouds'} drifting through today
-            </span>
-          )}
-        </div>
-      </header>
+        </header>
 
-      {/* Loading State: Only shown while actively pending */}
-      {loading && (
-        <div className="container wandering-status-container">
-          <LoadingState message="Gathering today's drifting clouds..." />
-        </div>
-      )}
-
-      {/* Error State with clear Retry */}
-      {error && !loading && (
-        <div className="container wandering-status-container">
-          <div className="error-state card-enter">
-            <div className="error-icon" aria-hidden="true">💨</div>
-            <h2 className="error-title">The wind got in the way.</h2>
-            <p className="error-message">{error}</p>
-            <button onClick={fetchPosts} className="btn btn-primary btn-sm">
-              Try again
-            </button>
+        {/* Loading State */}
+        {loading && (
+          <div className="container wandering-status-container">
+            <LoadingState message="Listening to the forest breeze..." />
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Empty State: Only when posts are genuinely 0 and loading has finished */}
-      {!loading && !error && posts.length === 0 && (
-        <div className="container wandering-status-container">
-          <EmptyState />
-        </div>
-      )}
+        {/* Error State with clear Retry */}
+        {error && !loading && (
+          <div className="container wandering-status-container">
+            <div className="error-state card-enter">
+              <div className="error-icon" aria-hidden="true">🍃</div>
+              <h2 className="error-title">The wind got in the way.</h2>
+              <p className="error-message">{error}</p>
+              <button onClick={fetchPosts} className="btn btn-primary btn-sm">
+                Try again
+              </button>
+            </div>
+          </div>
+        )}
 
-      {/* Fixed Living Sky Canvas with sequential one-by-one cloud streams */}
-      {!loading && !error && posts.length > 0 && (
-        <section
-          className={`wandering-canvas-container ${selectedPost ? 'is-paused' : ''}`}
-          aria-label="Interactive floating memories"
-        >
-          {positionedCards.map(({ post, laneClass, style, cloudVariant, compositionType, depthClass, sunlitClass }, index) => {
-            const postKey = post.id || `moment-${index}`;
-            return (
-              <WanderingCard
-                key={postKey}
-                post={post}
-                laneClass={laneClass}
-                style={style}
-                cloudVariant={cloudVariant}
-                compositionType={compositionType}
-                depthClass={depthClass}
-                sunlitClass={sunlitClass}
-                onSelect={handleSelectPost}
-              />
-            );
-          })}
-        </section>
-      )}
+        {/* Empty State: Only when posts are genuinely 0 and loading has finished */}
+        {!loading && !error && posts.length === 0 && (
+          <>
+            {/* Peaceful Resting Bird in Empty Forest */}
+            <MemoryBird flightPhase="perched" hasPhoto={false} />
+            <div className="container wandering-status-container">
+              <EmptyState />
+            </div>
+          </>
+        )}
+
+        {/* Living Forest Memories when posts exist */}
+        {!loading && !error && posts.length > 0 && (
+          <section
+            className={`forest-canvas-container wandering-canvas-container ${selectedPost ? 'is-paused' : ''}`}
+            aria-label="Interactive forest memories"
+          >
+            {/* 1. Messenger Bird carrying and perching with Photo Memories */}
+            {photoPosts.length > 0 && (
+              <MemoryBird flightPhase={flightPhase} hasPhoto={Boolean(currentPhotoPost)}>
+                {currentPhotoPost && (
+                  <ForestPhotoMemory
+                    post={currentPhotoPost}
+                    onSelect={handleSelectPost}
+                    isPerched={flightPhase === 'perched'}
+                  />
+                )}
+              </MemoryBird>
+            )}
+
+            {/* If no photo posts exist, bird perches peacefully in the background */}
+            {photoPosts.length === 0 && (
+              <MemoryBird flightPhase="perched" hasPhoto={false} />
+            )}
+
+            {/* 2. Handwritten Text Memories Drifting on Forest Breeze */}
+            {textNoteItems.map(({ post, altitudeClass, style }, index) => {
+              const postKey = post.id || `text-note-${index}`;
+              return (
+                <DriftingTextNote
+                  key={postKey}
+                  post={post}
+                  altitudeClass={altitudeClass}
+                  style={style}
+                  onSelect={handleSelectPost}
+                />
+              );
+            })}
+          </section>
+        )}
+      </ForestScene>
 
       {/* Same-Screen Expanded Modal Focus View */}
       {selectedPost && (
@@ -175,6 +193,8 @@ export default function WanderingPage() {
           justify-content: center;
           align-items: center;
           min-height: 60vh;
+          position: relative;
+          z-index: 25;
         }
 
         .error-state {
@@ -187,7 +207,7 @@ export default function WanderingPage() {
           text-align: center;
           border: 1px solid rgba(43, 40, 37, 0.08);
           position: relative;
-          z-index: 20;
+          z-index: 30;
         }
 
         .error-icon {
@@ -198,13 +218,14 @@ export default function WanderingPage() {
         .error-title {
           font-size: 1.6rem;
           color: var(--ink-dark);
+          font-family: var(--font-heading);
           margin-bottom: 8px;
         }
 
         .error-message {
-          font-size: 1rem;
           color: var(--ink-medium);
-          margin-bottom: 22px;
+          font-size: 0.98rem;
+          margin-bottom: 24px;
           line-height: 1.5;
         }
       `}</style>

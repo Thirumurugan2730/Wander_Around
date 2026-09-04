@@ -4,6 +4,7 @@ import './styles/index.css'
 import './styles/cards.css'
 import './styles/animations.css'
 import './styles/wandering.css'
+import './styles/forest.css'
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(

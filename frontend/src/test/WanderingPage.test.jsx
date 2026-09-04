@@ -5,12 +5,12 @@ import { MemoryRouter } from 'react-router-dom';
 import WanderingPage from '../pages/WanderingPage';
 import * as apiClient from '../api/client';
 
-describe('WanderingPage Wandering Through Clouds', () => {
+describe('WanderingPage Nostalgic Forest & Memory Bird Experience', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders loading state then all moments together on one living sky canvas', async () => {
+  it('renders loading state then living forest canvas with carrier bird and drifting notes', async () => {
     const mockPosts = [
       { id: 1, text: 'Morning reflections', username: 'Thiru', hasPhoto: false },
       { id: 2, text: 'Sunset glow', username: 'Elena', hasPhoto: false },
@@ -25,21 +25,20 @@ describe('WanderingPage Wandering Through Clouds', () => {
     );
 
     // Initial loading indicator
-    expect(screen.getByText(/Gathering today's drifting clouds\.\.\./i)).toBeInTheDocument();
+    expect(screen.getByText(/Listening to the forest breeze\.\.\./i)).toBeInTheDocument();
 
-    // After loading finishes, canvas should be present with all 3 moments rendered simultaneously
+    // After loading finishes, canvas should show living memories badge
     await waitFor(() => {
-      expect(screen.getByText(/3 clouds drifting through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/3 memories living in today's breeze/i)).toBeInTheDocument();
     });
 
-    const articles = screen.getAllByRole('article');
-    expect(articles).toHaveLength(3);
+    // Verify memories exist: 2 drifting text notes + 1 bird photo print
     expect(screen.getByText('Morning reflections')).toBeInTheDocument();
     expect(screen.getByText('Sunset glow')).toBeInTheDocument();
     expect(screen.getByText('Coffee with rain')).toBeInTheDocument();
   });
 
-  it('expands selected cloud on the same screen when clicked without extra API calls', async () => {
+  it('expands selected memory on the same screen when clicked without extra API calls', async () => {
     const mockPosts = [
       { id: 'POST_A', text: 'First moment A', username: 'UserA', hasPhoto: false },
       { id: 'POST_B', text: 'Second moment B', username: 'UserB', hasPhoto: false },
@@ -53,13 +52,13 @@ describe('WanderingPage Wandering Through Clouds', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/2 clouds drifting through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/2 memories living in today's breeze/i)).toBeInTheDocument();
     });
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
 
-    // Click on First moment card
-    const firstCard = screen.getByRole('button', { name: /Handwritten memory drifting in cloud by UserA/i });
+    // Click on First moment note
+    const firstCard = screen.getByRole('button', { name: /Handwritten memory drifting through forest by UserA/i });
     fireEvent.click(firstCard);
 
     // Dialog / Expanded modal appears on same screen
@@ -113,7 +112,7 @@ describe('WanderingPage Wandering Through Clouds', () => {
     });
   });
 
-  it('renders the nostalgic sun and visible wind layer elements', async () => {
+  it('renders the nostalgic sun and living forest tree elements', async () => {
     vi.spyOn(apiClient, 'getTodayPosts').mockResolvedValue([
       { id: 101, text: 'Golden afternoon', username: 'Sol', hasPhoto: false },
     ]);
@@ -133,9 +132,9 @@ describe('WanderingPage Wandering Through Clouds', () => {
     expect(container.querySelector('.sun-core-disc')).toBeInTheDocument();
     expect(container.querySelector('.sun-outer-corona')).toBeInTheDocument();
 
-    // Verify Wind Layer and breeze particles
-    expect(container.querySelector('.wind-layer')).toBeInTheDocument();
-    expect(container.querySelector('.wind-streak')).toBeInTheDocument();
-    expect(container.querySelector('.breeze-ribbon')).toBeInTheDocument();
+    // Verify Forest Scene & Tree
+    expect(container.querySelector('.forest-main-tree-container')).toBeInTheDocument();
+    expect(container.querySelector('.forest-tree-svg')).toBeInTheDocument();
+    expect(container.querySelector('.forest-wind-particles')).toBeInTheDocument();
   });
 });

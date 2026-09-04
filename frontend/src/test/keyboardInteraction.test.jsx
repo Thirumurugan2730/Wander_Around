@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import WanderingPage from '../pages/WanderingPage';
 import * as apiClient from '../api/client';
 
-describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => {
+describe('Nostalgic Forest & Memory Bird Keyboard Accessibility & Interaction', () => {
   const mockPosts = [
     { id: 101, text: 'Morning coffee', username: 'Thiru', hasPhoto: false },
     { id: 102, text: 'Quiet train ride', username: 'Maya', hasPhoto: false },
@@ -17,7 +17,7 @@ describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => 
     vi.spyOn(apiClient, 'getTodayPosts').mockResolvedValue(mockPosts);
   });
 
-  it('allows opening moments via Enter key on focused cloud', async () => {
+  it('allows opening moments via Enter key on focused note', async () => {
     render(
       <MemoryRouter>
         <WanderingPage />
@@ -25,10 +25,10 @@ describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => 
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/living in today's breeze/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Handwritten memory drifting in cloud by Thiru/i });
+    const card = screen.getByRole('button', { name: /Handwritten memory drifting through forest by Thiru/i });
     fireEvent.keyDown(card, { key: 'Enter', code: 'Enter' });
 
     await waitFor(() => {
@@ -36,7 +36,7 @@ describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => 
     });
   });
 
-  it('allows opening moments via Space key on focused cloud', async () => {
+  it('allows opening moments via Space key on focused note', async () => {
     render(
       <MemoryRouter>
         <WanderingPage />
@@ -44,10 +44,10 @@ describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => 
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/living in today's breeze/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Handwritten memory drifting in cloud by Maya/i });
+    const card = screen.getByRole('button', { name: /Handwritten memory drifting through forest by Maya/i });
     fireEvent.keyDown(card, { key: ' ', code: 'Space' });
 
     await waitFor(() => {
@@ -63,10 +63,10 @@ describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => 
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/living in today's breeze/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Photo memory drifting in cloud by Sam/i });
+    const card = screen.getByRole('button', { name: /Photo memory carried by bird by Sam/i });
     fireEvent.click(card);
 
     await waitFor(() => {
@@ -89,16 +89,16 @@ describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => 
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/living in today's breeze/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Handwritten memory drifting in cloud by Thiru/i });
+    const card = screen.getByRole('button', { name: /Handwritten memory drifting through forest by Thiru/i });
     fireEvent.click(card);
 
     const dialog = await screen.findByRole('dialog');
     expect(dialog).toBeInTheDocument();
 
-    // Click backdrop (the dialog container itself)
+    // Click backdrop
     fireEvent.click(dialog);
 
     await waitFor(() => {

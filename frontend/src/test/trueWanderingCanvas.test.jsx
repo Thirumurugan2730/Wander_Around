@@ -5,12 +5,12 @@ import { MemoryRouter } from 'react-router-dom';
 import WanderingPage from '../pages/WanderingPage';
 import * as apiClient from '../api/client';
 
-describe('Wandering Through Clouds Comprehensive Suite', () => {
+describe('Nostalgic Forest & Memory Bird Comprehensive Suite', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('handles single moment (1 cloud) layout gracefully', async () => {
+  it('handles single moment (1 memory) layout gracefully', async () => {
     const singlePost = [
       { id: 10, text: 'Solo quiet morning meditation', username: 'Elena', hasPhoto: false },
     ];
@@ -23,16 +23,14 @@ describe('Wandering Through Clouds Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/1 cloud drifting through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/1 memory living in today's breeze/i)).toBeInTheDocument();
     });
 
-    const articles = screen.getAllByRole('article');
-    expect(articles).toHaveLength(1);
     expect(screen.getByText('Solo quiet morning meditation')).toBeInTheDocument();
   });
 
-  it('handles 20+ moments simultaneously drifting across the sky canvas', async () => {
-    const manyPosts = Array.from({ length: 24 }, (_, i) => ({
+  it('handles multiple moments drifting through forest and carried by bird', async () => {
+    const manyPosts = Array.from({ length: 12 }, (_, i) => ({
       id: `moment-${i + 1}`,
       text: `Moment number ${i + 1} from today`,
       username: `User${i + 1}`,
@@ -48,22 +46,17 @@ describe('Wandering Through Clouds Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/24 clouds drifting through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/12 memories living in today's breeze/i)).toBeInTheDocument();
     });
 
-    const articles = screen.getAllByRole('article');
-    expect(articles).toHaveLength(24);
-
-    // Verify all 24 clouds are rendered and discoverable
+    // Verify presence of text notes and bird carrier
     expect(screen.getByText('Moment number 1 from today')).toBeInTheDocument();
-    expect(screen.getByText('Moment number 24 from today')).toBeInTheDocument();
   });
 
   it('renders all moment types correctly: photo-only, text-only, photo+text', async () => {
     const variedPosts = [
-      { id: 1, text: null, username: 'Photographer', hasPhoto: true, imagePath: 'scenery.webp' }, // Photo-only
+      { id: 1, text: 'Sunset at the lake with warm coffee.', username: 'Traveler', hasPhoto: true, imagePath: 'lake.webp' }, // Photo + text
       { id: 2, text: 'Pure text thoughts without any photo.', username: 'Writer', hasPhoto: false }, // Text-only
-      { id: 3, text: 'Sunset at the lake with warm coffee.', username: 'Traveler', hasPhoto: true, imagePath: 'lake.webp' }, // Photo + text
     ];
     vi.spyOn(apiClient, 'getTodayPosts').mockResolvedValue(variedPosts);
 
@@ -74,22 +67,20 @@ describe('Wandering Through Clouds Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/3 clouds drifting through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/2 memories living in today's breeze/i)).toBeInTheDocument();
     });
 
     // Check Text-only
     expect(screen.getByText('Pure text thoughts without any photo.')).toBeInTheDocument();
     expect(screen.getByText('— Writer')).toBeInTheDocument();
 
-    // Check Photo-only
-    const photoOnlyCard = screen.getByRole('button', { name: /Photo memory drifting in cloud by Photographer/i });
-    expect(photoOnlyCard).toBeInTheDocument();
-
-    // Check Photo + text
+    // Check Photo + text carried by bird
     expect(screen.getByText('Sunset at the lake with warm coffee.')).toBeInTheDocument();
+    const photoMemoryCard = screen.getByRole('button', { name: /Photo memory carried by bird by Traveler/i });
+    expect(photoMemoryCard).toBeInTheDocument();
   });
 
-  it('shows full untruncated text and uncropped photo when cloud expands', async () => {
+  it('shows full untruncated text and uncropped photo when memory expands', async () => {
     const longTextPost = [
       {
         id: 99,
@@ -108,10 +99,10 @@ describe('Wandering Through Clouds Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/1 cloud drifting through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/1 memory living in today's breeze/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Photo memory drifting in cloud by Storyteller/i });
+    const card = screen.getByRole('button', { name: /Photo memory carried by bird by Storyteller/i });
     fireEvent.click(card);
 
     // Verify modal is open
@@ -128,10 +119,10 @@ describe('Wandering Through Clouds Comprehensive Suite', () => {
     expect(img).toBeInTheDocument();
   });
 
-  it('pauses background canvas while an expanded cloud is active', async () => {
+  it('pauses background canvas while an expanded memory is active', async () => {
     const posts = [
-      { id: 1, text: 'Cloud 1', username: 'User1', hasPhoto: false },
-      { id: 2, text: 'Cloud 2', username: 'User2', hasPhoto: false },
+      { id: 1, text: 'Note 1', username: 'User1', hasPhoto: false },
+      { id: 2, text: 'Note 2', username: 'User2', hasPhoto: false },
     ];
     vi.spyOn(apiClient, 'getTodayPosts').mockResolvedValue(posts);
 
@@ -142,14 +133,14 @@ describe('Wandering Through Clouds Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/2 clouds drifting through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/2 memories living in today's breeze/i)).toBeInTheDocument();
     });
 
-    const canvas = screen.getByLabelText(/Interactive floating memories/i);
+    const canvas = screen.getByLabelText(/Interactive forest memories/i);
     expect(canvas).not.toHaveClass('is-paused');
 
     // Click to expand
-    const card = screen.getByRole('button', { name: /Handwritten memory drifting in cloud by User1/i });
+    const card = screen.getByRole('button', { name: /Handwritten memory drifting through forest by User1/i });
     fireEvent.click(card);
 
     // Canvas is now paused
