@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import WanderingPage from '../pages/WanderingPage';
 import * as apiClient from '../api/client';
 
-describe('True Wandering Canvas Keyboard Accessibility & Interaction', () => {
+describe('Wandering Through Clouds Keyboard Accessibility & Interaction', () => {
   const mockPosts = [
     { id: 101, text: 'Morning coffee', username: 'Thiru', hasPhoto: false },
     { id: 102, text: 'Quiet train ride', username: 'Maya', hasPhoto: false },
@@ -17,7 +17,7 @@ describe('True Wandering Canvas Keyboard Accessibility & Interaction', () => {
     vi.spyOn(apiClient, 'getTodayPosts').mockResolvedValue(mockPosts);
   });
 
-  it('allows opening moments via Enter key on focused card', async () => {
+  it('allows opening moments via Enter key on focused cloud', async () => {
     render(
       <MemoryRouter>
         <WanderingPage />
@@ -25,10 +25,10 @@ describe('True Wandering Canvas Keyboard Accessibility & Interaction', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Text memory by Thiru/i });
+    const card = screen.getByRole('button', { name: /Text cloud memory by Thiru/i });
     fireEvent.keyDown(card, { key: 'Enter', code: 'Enter' });
 
     await waitFor(() => {
@@ -36,7 +36,7 @@ describe('True Wandering Canvas Keyboard Accessibility & Interaction', () => {
     });
   });
 
-  it('allows opening moments via Space key on focused card', async () => {
+  it('allows opening moments via Space key on focused cloud', async () => {
     render(
       <MemoryRouter>
         <WanderingPage />
@@ -44,10 +44,10 @@ describe('True Wandering Canvas Keyboard Accessibility & Interaction', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Text memory by Maya/i });
+    const card = screen.getByRole('button', { name: /Text cloud memory by Maya/i });
     fireEvent.keyDown(card, { key: ' ', code: 'Space' });
 
     await waitFor(() => {
@@ -63,10 +63,10 @@ describe('True Wandering Canvas Keyboard Accessibility & Interaction', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Photo memory by Sam/i });
+    const card = screen.getByRole('button', { name: /Photo cloud memory by Sam/i });
     fireEvent.click(card);
 
     await waitFor(() => {
@@ -89,10 +89,10 @@ describe('True Wandering Canvas Keyboard Accessibility & Interaction', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/drifting through today/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Text memory by Thiru/i });
+    const card = screen.getByRole('button', { name: /Text cloud memory by Thiru/i });
     fireEvent.click(card);
 
     const dialog = await screen.findByRole('dialog');

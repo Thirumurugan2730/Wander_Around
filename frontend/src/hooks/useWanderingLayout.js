@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 
 /**
- * Simple deterministic hash function for generating stable pseudo-random properties
- * based on post ID and index.
+ * Deterministic pseudo-random generator seeded from string/index.
  */
 function pseudoRandom(seed) {
   const x = Math.sin(seed) * 10000;
@@ -19,102 +18,141 @@ function stringToSeed(str) {
 }
 
 /**
- * Computes organic, distributed, non-overlapping canvas positions for a list of posts.
- * Generates deterministic coordinates, drift vectors, rotation, duration, and delay.
+ * 8 distinct, visible continuous cloud wandering animation trajectories.
+ */
+const CLOUD_TRAJECTORIES = [
+  'cloudDriftLoopA', // left -> up -> right -> down
+  'cloudDriftLoopB', // right -> down -> left -> up
+  'cloudDriftDiagonal', // diagonal sway
+  'cloudDriftWave', // wide horizontal floating wave
+  'cloudDriftCircle', // slow circular eddy
+  'cloudDriftSway', // gentle vertical floating swing
+  'cloudDriftInfinity', // smooth figure-8 drift
+  'cloudDriftBreeze', // gentle angled drift
+];
+
+const CLOUD_TINTS = [
+  'cloud-tint-pure',
+  'cloud-tint-sun',
+  'cloud-tint-sky',
+  'cloud-tint-peach',
+  'cloud-tint-lavender',
+  'cloud-tint-mint',
+];
+
+/**
+ * Computes organic, distributed, non-overlapping canvas cloud coordinates for all moments.
+ * Generates stable positions, scales, depths, and independent drifting physics.
  */
 export function useWanderingLayout(posts = []) {
   return useMemo(() => {
     const count = posts.length;
     if (count === 0) return [];
 
-    // Animation trajectory variants
-    const animVariants = ['wanderFloatA', 'wanderFloatB', 'wanderFloatC', 'wanderFloatD'];
-
-    // If only 1 post, center it gracefully
+    // Single moment: centered gracefully in the middle sky
     if (count === 1) {
       const post = posts[0];
       return [{
         post,
         style: {
           left: '50%',
-          top: '48%',
-          transform: 'translate(-50%, -50%) rotate(-1deg)',
-          '--rot-start': '-1deg',
-          '--rot-delta': '1.2deg',
-          '--drift-x': '12px',
-          '--drift-y': '10px',
-          '--drift-dur': '18s',
+          top: '46%',
+          transform: 'translate(-50%, -50%)',
+          '--rot-start': '-1.5deg',
+          '--rot-delta': '2deg',
+          '--drift-x': '28px',
+          '--drift-y': '20px',
+          '--drift-dur': '20s',
           '--drift-delay': '0s',
-          animationName: 'wanderFloatA',
-          animationDuration: '18s',
+          '--cloud-scale': '1.08',
+          animationName: 'cloudDriftLoopA',
+          animationDuration: '20s',
           animationTimingFunction: 'ease-in-out',
           animationIterationCount: 'infinite',
         },
-        tint: 'tint-sun',
+        tint: 'cloud-tint-sun',
+        depthClass: 'cloud-depth-near',
         isProminent: true,
       }];
     }
 
-    // Determine grid/zone partition parameters based on count
-    // We create zones across the canvas (width x height) to guarantee good dispersion
-    const cols = count <= 4 ? 2 : count <= 9 ? 3 : count <= 16 ? 4 : 5;
+    // Grid zone partitioning to guarantee even dispersion without clumping
+    const cols = count <= 3 ? 2 : count <= 8 ? 3 : count <= 15 ? 4 : count <= 24 ? 5 : 6;
     const rows = Math.ceil(count / cols);
 
-    const cellWidth = 84 / cols; // % of canvas width (leaving margins)
-    const cellHeight = 78 / rows; // % of canvas height (leaving header/footer margin)
+    const cellWidth = 86 / cols; // % of canvas width
+    const cellHeight = 80 / rows; // % of canvas height
 
-    const tints = ['tint-sun', 'tint-sky', 'tint-peach', 'tint-sage', 'tint-lavender'];
-
-    // Map each post to a jittered zone
     return posts.map((post, index) => {
       const postKey = String(post.id || index);
-      const seed = stringToSeed(postKey) + index * 37;
+      const seed = stringToSeed(postKey) + index * 43;
 
       const col = index % cols;
       const row = Math.floor(index / cols);
 
-      // Add deterministic jitter within its assigned cell
-      const jitterX = (pseudoRandom(seed + 1) - 0.5) * (cellWidth * 0.55);
-      const jitterY = (pseudoRandom(seed + 2) - 0.5) * (cellHeight * 0.55);
+      // Deterministic organic jitter inside assigned zone
+      const jitterX = (pseudoRandom(seed + 1) - 0.5) * (cellWidth * 0.52);
+      const jitterY = (pseudoRandom(seed + 2) - 0.5) * (cellHeight * 0.52);
 
-      // Safe base bounds (left: 6% to 88%, top: 8% to 84%)
-      const baseX = 8 + col * cellWidth + cellWidth / 2 + jitterX;
-      const baseY = 10 + row * cellHeight + cellHeight / 2 + jitterY;
+      const baseX = 7 + col * cellWidth + cellWidth / 2 + jitterX;
+      const baseY = 8 + row * cellHeight + cellHeight / 2 + jitterY;
 
-      const clampedX = Math.max(5, Math.min(85, baseX));
-      const clampedY = Math.max(6, Math.min(84, baseY));
+      const clampedX = Math.max(4, Math.min(84, baseX));
+      const clampedY = Math.max(6, Math.min(82, baseY));
 
-      // Deterministic rotation: -4.5deg to +4.5deg
-      const baseRot = (pseudoRandom(seed + 3) * 9 - 4.5).toFixed(1);
-      const rotDelta = (pseudoRandom(seed + 4) * 1.6 + 0.6).toFixed(1);
+      // Deterministic rotation: -4deg to +4deg
+      const baseRot = (pseudoRandom(seed + 3) * 8 - 4).toFixed(1);
+      const rotDelta = (pseudoRandom(seed + 4) * 2.2 + 1.0).toFixed(1);
 
-      // Drift ranges (calm, subtle, slow)
-      const driftX = (pseudoRandom(seed + 5) * 20 - 10).toFixed(0);
-      const driftY = (pseudoRandom(seed + 6) * 18 - 9).toFixed(0);
-      const driftDur = (14 + pseudoRandom(seed + 7) * 10).toFixed(1); // 14s - 24s
-      const driftDelay = (pseudoRandom(seed + 8) * 4).toFixed(1); // 0s - 4s
-      const animVariant = animVariants[Math.floor(pseudoRandom(seed + 9) * animVariants.length)];
+      // Depth classification for natural sky perspective
+      const depthVal = pseudoRandom(seed + 5);
+      let depthClass = 'cloud-depth-mid';
+      let scale = 1.0;
+      let zIndex = 15;
 
-      const tint = tints[index % tints.length];
+      if (depthVal < 0.28) {
+        depthClass = 'cloud-depth-far';
+        scale = 0.88;
+        zIndex = 5;
+      } else if (depthVal > 0.72) {
+        depthClass = 'cloud-depth-near';
+        scale = 1.08;
+        zIndex = 20;
+      }
+
+      // Continuous visible drift ranges (20px to 45px)
+      const driftX = ((pseudoRandom(seed + 6) * 30 + 15) * (pseudoRandom(seed + 7) > 0.5 ? 1 : -1)).toFixed(0);
+      const driftY = ((pseudoRandom(seed + 8) * 26 + 12) * (pseudoRandom(seed + 9) > 0.5 ? 1 : -1)).toFixed(0);
+
+      // Duration: 14s to 26s (calm but clearly moving continuously)
+      const driftDur = (15 + pseudoRandom(seed + 10) * 11).toFixed(1);
+      const driftDelay = (pseudoRandom(seed + 11) * 6).toFixed(1);
+
+      // Unique trajectory variant
+      const trajectory = CLOUD_TRAJECTORIES[index % CLOUD_TRAJECTORIES.length];
+      const tint = CLOUD_TINTS[index % CLOUD_TINTS.length];
 
       return {
         post,
         style: {
           left: `${clampedX.toFixed(2)}%`,
           top: `${clampedY.toFixed(2)}%`,
+          zIndex,
           '--rot-start': `${baseRot}deg`,
           '--rot-delta': `${rotDelta}deg`,
           '--drift-x': `${driftX}px`,
           '--drift-y': `${driftY}px`,
           '--drift-dur': `${driftDur}s`,
           '--drift-delay': `${driftDelay}s`,
-          animationName: animVariant,
+          '--cloud-scale': `${scale}`,
+          animationName: trajectory,
           animationDuration: `${driftDur}s`,
           animationDelay: `${driftDelay}s`,
           animationTimingFunction: 'ease-in-out',
           animationIterationCount: 'infinite',
         },
         tint,
+        depthClass,
         isProminent: count <= 3,
       };
     });

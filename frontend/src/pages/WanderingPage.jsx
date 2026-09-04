@@ -36,7 +36,7 @@ export default function WanderingPage() {
       console.error('Failed to load today posts:', err);
       setError(
         err.message?.includes('HTTP error') || err.message?.includes('JSON')
-          ? "The wind got in the way. We couldn't reach today's moments."
+          ? "The wind got in the way. We couldn't reach today's sky."
           : (err.message || "We couldn't find today's moments. Please try again.")
       );
     } finally {
@@ -73,21 +73,26 @@ export default function WanderingPage() {
     : 0;
 
   return (
-    <main className="wandering-page" aria-label="Wandering Canvas">
+    <main className="wandering-page" aria-label="Wandering Sky Canvas">
+      {/* Ambient Parallax Silhouettes */}
+      <div className="ambient-sky-cloud ambient-cloud-1" aria-hidden="true" />
+      <div className="ambient-sky-cloud ambient-cloud-2" aria-hidden="true" />
+      <div className="ambient-sky-cloud ambient-cloud-3" aria-hidden="true" />
+
       {/* Atmospheric Ambient Glows */}
       <div className="ambient-glow-sun" aria-hidden="true" />
       <div className="ambient-glow-sky" aria-hidden="true" />
       <div className="ambient-glow-lavender" aria-hidden="true" />
 
       {/* Atmospheric Header Info */}
-      <header className="wandering-top-nav" aria-label="Canvas information">
+      <header className="wandering-top-nav" aria-label="Sky information">
         <div className="wandering-header-badge">
           <div className="pill">
-            <span>✦ today's wander</span>
+            <span>✦ today's sky</span>
           </div>
           {!loading && !error && posts.length > 0 && (
             <span className="wandering-hint">
-              {posts.length} {posts.length === 1 ? 'moment' : 'moments'} floating through today
+              {posts.length} {posts.length === 1 ? 'cloud' : 'clouds'} drifting through today
             </span>
           )}
         </div>
@@ -96,7 +101,7 @@ export default function WanderingPage() {
       {/* Loading State: Only shown while actively pending */}
       {loading && (
         <div className="container wandering-status-container">
-          <LoadingState message="Finding today's little moments..." />
+          <LoadingState message="Gathering today's drifting clouds..." />
         </div>
       )}
 
@@ -121,13 +126,13 @@ export default function WanderingPage() {
         </div>
       )}
 
-      {/* Living Wandering Canvas with all moments simultaneously */}
+      {/* Living Sky Canvas with all cloud moments wandering simultaneously */}
       {!loading && !error && posts.length > 0 && (
         <section
           className={`wandering-canvas-container ${selectedPost ? 'is-paused' : ''}`}
           aria-label="Interactive floating memories"
         >
-          {positionedCards.map(({ post, style, tint }, index) => {
+          {positionedCards.map(({ post, style, tint, depthClass }, index) => {
             const postKey = post.id || `moment-${index}`;
             return (
               <WanderingCard
@@ -135,6 +140,7 @@ export default function WanderingPage() {
                 post={post}
                 style={style}
                 tint={tint}
+                depthClass={depthClass}
                 onSelect={handleSelectPost}
               />
             );

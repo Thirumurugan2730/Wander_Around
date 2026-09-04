@@ -1,7 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { resolveImageUrl, formatTimeAgo } from '../utils/image';
 
-const TINT_CLASSES = ['tint-sun', 'tint-sky', 'tint-peach', 'tint-sage', 'tint-lavender'];
+const CLOUD_TINTS = [
+  'cloud-tint-pure',
+  'cloud-tint-sun',
+  'cloud-tint-sky',
+  'cloud-tint-peach',
+  'cloud-tint-lavender',
+  'cloud-tint-mint',
+];
 
 export default function ExpandedMoment({ post, index = 0, onClose }) {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -17,7 +24,7 @@ export default function ExpandedMoment({ post, index = 0, onClose }) {
   const formattedTime = formatTimeAgo(createdAt);
   const fullImageUrl = hasPhoto && imagePath ? resolveImageUrl(imagePath) : null;
 
-  const tint = TINT_CLASSES[index % TINT_CLASSES.length];
+  const tint = CLOUD_TINTS[index % CLOUD_TINTS.length];
 
   // Focus close button on mount & listen to Escape key
   useEffect(() => {
@@ -53,23 +60,21 @@ export default function ExpandedMoment({ post, index = 0, onClose }) {
       aria-label={`Expanded memory by ${username}`}
     >
       <div className="expanded-modal-wrapper">
-        {/* Subtle Close Button */}
+        {/* Return to Sky Close Button */}
         <button
           ref={closeBtnRef}
           type="button"
           className="expanded-close-btn"
           onClick={onClose}
-          aria-label="Return to wandering canvas"
+          aria-label="Return to the sky"
         >
           <span className="close-icon" aria-hidden="true">✕</span>
-          <span className="close-text">Return to canvas</span>
+          <span className="close-text">Return to the sky</span>
         </button>
 
         {hasPhoto ? (
-          /* Expanded Photo + optional caption */
-          <article className="expanded-card expanded-photo-card">
-            <div className="washi-tape" aria-hidden="true" />
-
+          /* Expanded Photo Cloud Focus */
+          <article className={`expanded-cloud-frame expanded-photo-view ${tint}`}>
             <div className="expanded-photo-viewport">
               {fullImageUrl && !imageError ? (
                 <img
@@ -81,13 +86,13 @@ export default function ExpandedMoment({ post, index = 0, onClose }) {
                   style={{ opacity: imageLoaded ? 1 : 0.6 }}
                 />
               ) : (
-                <div className="expanded-photo-placeholder">
+                <div className="cloud-photo-placeholder">
                   <span>{imageError ? '☁️ photo faded' : 'Gathering light...'}</span>
                 </div>
               )}
             </div>
 
-            <div className="expanded-card-details">
+            <div className="expanded-details-bar">
               <div className="expanded-meta-bar">
                 <span className="expanded-author">{username}</span>
                 <span className="expanded-time">{formattedTime}</span>
@@ -101,12 +106,12 @@ export default function ExpandedMoment({ post, index = 0, onClose }) {
             </div>
           </article>
         ) : (
-          /* Expanded Text-only Moment */
-          <article className={`expanded-card expanded-text-card ${tint}`}>
+          /* Expanded Text Cloud Focus */
+          <article className={`expanded-cloud-frame expanded-text-view ${tint}`}>
             <div className="expanded-quote-mark" aria-hidden="true">“</div>
 
             <div className="expanded-text-content">
-              <p className="expanded-body-text">{text || 'A quiet moment recorded today.'}</p>
+              <p className="expanded-body-text">{text || 'A quiet thought recorded today.'}</p>
             </div>
 
             <div className="expanded-text-footer">

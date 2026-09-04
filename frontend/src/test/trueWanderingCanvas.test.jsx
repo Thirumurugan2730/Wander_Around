@@ -5,12 +5,12 @@ import { MemoryRouter } from 'react-router-dom';
 import WanderingPage from '../pages/WanderingPage';
 import * as apiClient from '../api/client';
 
-describe('True Wandering Canvas Comprehensive Suite', () => {
+describe('Wandering Through Clouds Comprehensive Suite', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('handles single moment (1 moment) layout gracefully', async () => {
+  it('handles single moment (1 cloud) layout gracefully', async () => {
     const singlePost = [
       { id: 10, text: 'Solo quiet morning meditation', username: 'Elena', hasPhoto: false },
     ];
@@ -23,7 +23,7 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/1 cloud drifting through today/i)).toBeInTheDocument();
     });
 
     const articles = screen.getAllByRole('article');
@@ -31,7 +31,7 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     expect(screen.getByText('Solo quiet morning meditation')).toBeInTheDocument();
   });
 
-  it('handles 20+ moments simultaneously on the living canvas', async () => {
+  it('handles 20+ moments simultaneously drifting across the sky canvas', async () => {
     const manyPosts = Array.from({ length: 24 }, (_, i) => ({
       id: `moment-${i + 1}`,
       text: `Moment number ${i + 1} from today`,
@@ -48,13 +48,13 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/24 clouds drifting through today/i)).toBeInTheDocument();
     });
 
     const articles = screen.getAllByRole('article');
     expect(articles).toHaveLength(24);
 
-    // Verify all 24 cards are rendered and discoverable
+    // Verify all 24 clouds are rendered and discoverable
     expect(screen.getByText('Moment number 1 from today')).toBeInTheDocument();
     expect(screen.getByText('Moment number 24 from today')).toBeInTheDocument();
   });
@@ -74,7 +74,7 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/3 clouds drifting through today/i)).toBeInTheDocument();
     });
 
     // Check Text-only
@@ -82,14 +82,14 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     expect(screen.getByText('— Writer')).toBeInTheDocument();
 
     // Check Photo-only
-    const photoOnlyCard = screen.getByRole('button', { name: /Photo memory by Photographer/i });
+    const photoOnlyCard = screen.getByRole('button', { name: /Photo cloud memory by Photographer/i });
     expect(photoOnlyCard).toBeInTheDocument();
 
     // Check Photo + text
     expect(screen.getByText('Sunset at the lake with warm coffee.')).toBeInTheDocument();
   });
 
-  it('shows full untruncated text and uncropped photo when moment expands', async () => {
+  it('shows full untruncated text and uncropped photo when cloud expands', async () => {
     const longTextPost = [
       {
         id: 99,
@@ -108,10 +108,10 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/1 cloud drifting through today/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Photo memory by Storyteller/i });
+    const card = screen.getByRole('button', { name: /Photo cloud memory by Storyteller/i });
     fireEvent.click(card);
 
     // Verify modal is open
@@ -128,10 +128,10 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     expect(img).toBeInTheDocument();
   });
 
-  it('pauses background canvas while an expanded moment is active', async () => {
+  it('pauses background canvas while an expanded cloud is active', async () => {
     const posts = [
-      { id: 1, text: 'Card 1', username: 'User1', hasPhoto: false },
-      { id: 2, text: 'Card 2', username: 'User2', hasPhoto: false },
+      { id: 1, text: 'Cloud 1', username: 'User1', hasPhoto: false },
+      { id: 2, text: 'Cloud 2', username: 'User2', hasPhoto: false },
     ];
     vi.spyOn(apiClient, 'getTodayPosts').mockResolvedValue(posts);
 
@@ -142,21 +142,21 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/2 clouds drifting through today/i)).toBeInTheDocument();
     });
 
     const canvas = screen.getByLabelText(/Interactive floating memories/i);
     expect(canvas).not.toHaveClass('is-paused');
 
     // Click to expand
-    const card = screen.getByRole('button', { name: /Text memory by User1/i });
+    const card = screen.getByRole('button', { name: /Text cloud memory by User1/i });
     fireEvent.click(card);
 
     // Canvas is now paused
     expect(canvas).toHaveClass('is-paused');
 
     // Close
-    const closeBtn = screen.getByRole('button', { name: /Return to wandering canvas/i });
+    const closeBtn = screen.getByRole('button', { name: /Return to the sky/i });
     fireEvent.click(closeBtn);
 
     // Canvas is unpaused

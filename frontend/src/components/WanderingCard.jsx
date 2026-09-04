@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { resolveImageUrl, formatTimeAgo } from '../utils/image';
 
-export default function WanderingCard({ post, style, tint = 'tint-sun', onSelect }) {
+export default function WanderingCard({ post, style, tint = 'cloud-tint-pure', depthClass = 'cloud-depth-mid', onSelect }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -22,63 +22,61 @@ export default function WanderingCard({ post, style, tint = 'tint-sun', onSelect
   };
 
   const cardAriaLabel = hasPhoto
-    ? `Photo memory by ${username}${text ? `: ${text}` : ''}. Click to expand.`
-    : `Text memory by ${username}: "${text || ''}". Click to expand.`;
+    ? `Photo cloud memory by ${username}${text ? `: ${text}` : ''}. Click to open.`
+    : `Text cloud memory by ${username}: "${text || ''}". Click to open.`;
 
   return (
     <div
       role="button"
       tabIndex={0}
-      className="wandering-card-anchor"
+      className={`wandering-cloud-anchor ${depthClass}`}
       style={style}
       onClick={() => onSelect(post)}
       onKeyDown={handleKeyDown}
       aria-label={cardAriaLabel}
     >
       {hasPhoto ? (
-        /* Photo Card */
-        <article className="wandering-card wandering-photo-card">
-          <div className="washi-tape-mini" aria-hidden="true" />
-
-          <div className="wandering-photo-frame">
+        /* Photo Cloud Moment */
+        <article className={`cloud-card cloud-photo-card ${tint}`}>
+          <div className="cloud-photo-frame">
             {fullImageUrl && !imageError ? (
               <img
                 src={fullImageUrl}
                 alt={text || `Photo by ${username}`}
-                className="wandering-photo"
+                className="cloud-photo-img"
                 loading="lazy"
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageError(true)}
                 style={{ opacity: imageLoaded ? 1 : 0.4 }}
               />
             ) : (
-              <div className="wandering-photo-placeholder">
+              <div className="cloud-photo-placeholder">
                 <span>{imageError ? '☁️' : '☀️'}</span>
               </div>
             )}
           </div>
 
-          <div className="wandering-card-meta">
-            <span className="wandering-author">{username}</span>
-            <span className="wandering-time">{formattedTime}</span>
+          <div className="cloud-meta-row">
+            <span className="cloud-author">{username}</span>
+            <span className="cloud-time">{formattedTime}</span>
           </div>
 
           {text && (
-            <p className="wandering-caption-preview">
+            <p className="cloud-caption-preview">
               {text}
             </p>
           )}
         </article>
       ) : (
-        /* Text-Only Card */
-        <article className={`wandering-card wandering-text-card ${tint}`}>
-          <div className="wandering-quote-mark" aria-hidden="true">“</div>
+        /* Text-Only Cloud Moment */
+        <article className={`cloud-card cloud-text-card ${tint}`}>
+          <div className="cloud-quote-mark" aria-hidden="true">“</div>
 
-          <p className="wandering-body-text">{text || 'A quiet moment recorded today.'}</p>
+          <p className="cloud-body-text">{text || 'A quiet thought drifting through the sky.'}</p>
 
-          <div className="wandering-text-footer">
-            <span className="wandering-signature">— {username}</span>
-            <span className="wandering-time">{formattedTime}</span>
+          <div className="cloud-text-footer">
+            <span className="cloud-signature">— {username}</span>
+            <span className="cloud-time">{formattedTime}</span>
           </div>
         </article>
       )}

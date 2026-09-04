@@ -5,12 +5,12 @@ import { MemoryRouter } from 'react-router-dom';
 import WanderingPage from '../pages/WanderingPage';
 import * as apiClient from '../api/client';
 
-describe('WanderingPage True Wandering Canvas', () => {
+describe('WanderingPage Wandering Through Clouds', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders loading state then all moments together on one living canvas', async () => {
+  it('renders loading state then all moments together on one living sky canvas', async () => {
     const mockPosts = [
       { id: 1, text: 'Morning reflections', username: 'Thiru', hasPhoto: false },
       { id: 2, text: 'Sunset glow', username: 'Elena', hasPhoto: false },
@@ -25,11 +25,11 @@ describe('WanderingPage True Wandering Canvas', () => {
     );
 
     // Initial loading indicator
-    expect(screen.getByText(/Finding today's little moments.../i)).toBeInTheDocument();
+    expect(screen.getByText(/Gathering today's drifting clouds\.\.\./i)).toBeInTheDocument();
 
     // After loading finishes, canvas should be present with all 3 moments rendered simultaneously
     await waitFor(() => {
-      expect(screen.getByText(/3 moments floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/3 clouds drifting through today/i)).toBeInTheDocument();
     });
 
     const articles = screen.getAllByRole('article');
@@ -39,7 +39,7 @@ describe('WanderingPage True Wandering Canvas', () => {
     expect(screen.getByText('Coffee with rain')).toBeInTheDocument();
   });
 
-  it('expands selected moment on the same screen when clicked without extra API calls', async () => {
+  it('expands selected cloud on the same screen when clicked without extra API calls', async () => {
     const mockPosts = [
       { id: 'POST_A', text: 'First moment A', username: 'UserA', hasPhoto: false },
       { id: 'POST_B', text: 'Second moment B', username: 'UserB', hasPhoto: false },
@@ -53,23 +53,23 @@ describe('WanderingPage True Wandering Canvas', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/2 moments floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/2 clouds drifting through today/i)).toBeInTheDocument();
     });
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
 
     // Click on First moment card
-    const firstCard = screen.getByRole('button', { name: /Text memory by UserA/i });
+    const firstCard = screen.getByRole('button', { name: /Text cloud memory by UserA/i });
     fireEvent.click(firstCard);
 
     // Dialog / Expanded modal appears on same screen
     await waitFor(() => {
       expect(screen.getByRole('dialog', { name: /Expanded memory by UserA/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Return to wandering canvas/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Return to the sky/i })).toBeInTheDocument();
     });
 
     // Close expanded view
-    const closeBtn = screen.getByRole('button', { name: /Return to wandering canvas/i });
+    const closeBtn = screen.getByRole('button', { name: /Return to the sky/i });
     fireEvent.click(closeBtn);
 
     // Modal is removed, still on canvas

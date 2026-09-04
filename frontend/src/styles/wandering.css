@@ -1,25 +1,70 @@
 /* ==========================================================================
-   DAILY WANDER — TRUE WANDERING CANVAS STYLES
+   DAILY WANDER — "WANDERING THROUGH CLOUDS" SKY ENVIRONMENT
    ========================================================================== */
 
-/* Wandering Page Layout */
+/* Sky Canvas Page */
 .wandering-page {
   position: relative;
   min-height: calc(100vh - 70px);
   display: flex;
   flex-direction: column;
+  background: linear-gradient(180deg, #CEEAF7 0%, #DFECF7 28%, #F4EEF9 58%, #FFF5EB 82%, #FEF8F2 100%);
   overflow-x: hidden;
   user-select: none;
 }
 
-/* Minimal Wandering Canvas Header */
+/* Ambient Sky Clouds (Distant Parallax Silhouettes) */
+.ambient-sky-cloud {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.35;
+  filter: blur(8px);
+  z-index: 1;
+}
+
+.ambient-cloud-1 {
+  top: 12%;
+  left: 6%;
+  width: 260px;
+  height: 90px;
+  background: #FFFFFF;
+  border-radius: 100px;
+  animation: ambientFloatSlow 48s ease-in-out infinite alternate;
+}
+
+.ambient-cloud-2 {
+  top: 65%;
+  right: 8%;
+  width: 320px;
+  height: 110px;
+  background: #FFFFFF;
+  border-radius: 120px;
+  animation: ambientFloatSlow 56s ease-in-out 6s infinite alternate-reverse;
+}
+
+.ambient-cloud-3 {
+  bottom: 15%;
+  left: 18%;
+  width: 220px;
+  height: 75px;
+  background: #FFFFFF;
+  border-radius: 90px;
+  animation: ambientFloatSlow 42s ease-in-out 12s infinite alternate;
+}
+
+@keyframes ambientFloatSlow {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(60px, -24px, 0); }
+}
+
+/* Minimal Sky Header */
 .wandering-top-nav {
   position: relative;
-  z-index: 20;
+  z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
+  padding: 16px 28px;
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
@@ -33,106 +78,151 @@
 
 .wandering-hint {
   font-family: var(--font-handwritten);
-  font-size: 1.25rem;
-  color: var(--ink-light);
+  font-size: 1.35rem;
+  color: var(--ink-medium);
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
-.wandering-nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* Wandering Canvas Viewport */
+/* Sky Wandering Canvas Viewport */
 .wandering-canvas-container {
   position: relative;
   flex: 1;
   width: 100%;
-  min-height: 78vh;
+  min-height: 80vh;
   max-width: 1600px;
   margin: 0 auto;
   overflow: visible;
-  transition: filter 0.38s ease, opacity 0.38s ease;
+  transition: filter 0.4s ease, opacity 0.4s ease;
+  z-index: 10;
 }
 
 .wandering-canvas-container.is-paused {
-  filter: blur(5px);
-  opacity: 0.25;
+  filter: blur(8px);
+  opacity: 0.28;
   pointer-events: none;
 }
 
-.wandering-canvas-container.is-paused .wandering-card-anchor {
+.wandering-canvas-container.is-paused .wandering-cloud-anchor {
   animation-play-state: paused !important;
 }
 
-/* Floating Card Anchors & Coordinates */
-.wandering-card-anchor {
+/* ==========================================================================
+   FLOATING CLOUD MOMENT CARDS
+   ========================================================================== */
+
+.wandering-cloud-anchor {
   position: absolute;
   cursor: pointer;
   outline: none;
-  border-radius: var(--radius-sm);
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, z-index 0.1s ease;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.1s ease;
   will-change: transform;
 }
 
-.wandering-card-anchor:hover,
-.wandering-card-anchor:focus-visible {
-  z-index: 30 !important;
-  transform: scale(1.06) rotate(var(--rot-start, 0deg)) !important;
+.wandering-cloud-anchor:hover,
+.wandering-cloud-anchor:focus-visible {
+  z-index: 50 !important;
+  transform: scale(calc(var(--cloud-scale, 1) * 1.08)) rotate(var(--rot-start, 0deg)) !important;
 }
 
-.wandering-card-anchor:focus-visible {
+.wandering-cloud-anchor:focus-visible {
   outline: 3px solid var(--coral-accent);
-  outline-offset: 4px;
+  outline-offset: 6px;
+  border-radius: 40px;
 }
 
-/* Wandering Card Base Aesthetic */
-.wandering-card {
+/* Depth Tiers */
+.cloud-depth-near {
+  filter: drop-shadow(0 18px 36px rgba(100, 150, 190, 0.28)) drop-shadow(0 4px 10px rgba(43, 40, 37, 0.06));
+}
+
+.cloud-depth-mid {
+  filter: drop-shadow(0 14px 28px rgba(100, 150, 190, 0.22)) drop-shadow(0 3px 8px rgba(43, 40, 37, 0.05));
+}
+
+.cloud-depth-far {
+  opacity: 0.94;
+  filter: drop-shadow(0 8px 18px rgba(100, 150, 190, 0.16));
+}
+
+/* Organic Fluffy Cloud Container */
+.cloud-card {
   position: relative;
-  background-color: var(--paper-white);
-  border-radius: var(--radius-sm);
-  box-shadow: 0 8px 24px rgba(43, 40, 37, 0.09), 0 2px 6px rgba(43, 40, 37, 0.04);
-  border: 1px solid rgba(43, 40, 37, 0.08);
-  transition: box-shadow 0.25s ease;
+  background: #FFFFFF;
+  border-radius: 42px 48px 40px 46px;
+  padding: 14px 16px 18px 16px;
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.9), inset 0 -3px 8px rgba(180, 210, 235, 0.25);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  transition: box-shadow 0.25s ease, background-color 0.25s ease;
   pointer-events: auto;
 }
 
-.wandering-card-anchor:hover .wandering-card {
-  box-shadow: 0 16px 36px rgba(43, 40, 37, 0.15), 0 4px 10px rgba(43, 40, 37, 0.06);
-}
-
-/* Mini Washi Tape */
-.washi-tape-mini {
+/* Cloud Puffs (Billowing Silhouettes) */
+.cloud-card::before,
+.cloud-card::after {
+  content: '';
   position: absolute;
-  top: -9px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-1deg);
-  width: 60px;
-  height: 18px;
-  background: rgba(255, 241, 196, 0.9);
-  border-left: 2px dashed rgba(204, 169, 92, 0.45);
-  border-right: 2px dashed rgba(204, 169, 92, 0.45);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  background: inherit;
+  border-radius: 50%;
+  z-index: -1;
   pointer-events: none;
-  z-index: 4;
 }
 
-/* Photo Cards */
-.wandering-photo-card {
-  width: 220px;
-  padding: 10px 10px 14px 10px;
+.cloud-card::before {
+  width: 58px;
+  height: 58px;
+  top: -18px;
+  left: 22px;
 }
 
-.wandering-photo-frame {
+.cloud-card::after {
+  width: 72px;
+  height: 72px;
+  top: -24px;
+  right: 28px;
+}
+
+/* Soft Cloud Tints */
+.cloud-tint-pure {
+  background: #FFFFFF;
+}
+
+.cloud-tint-sun {
+  background: #FFFDF0;
+}
+
+.cloud-tint-sky {
+  background: #F4FAFD;
+}
+
+.cloud-tint-peach {
+  background: #FFF8F4;
+}
+
+.cloud-tint-lavender {
+  background: #FAF7FE;
+}
+
+.cloud-tint-mint {
+  background: #F5FAF5;
+}
+
+/* Photo Cloud Moments */
+.cloud-photo-card {
+  width: 230px;
+}
+
+.cloud-photo-frame {
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  border-radius: 6px;
-  background-color: var(--bg-canvas-subtle);
+  border-radius: 24px;
+  background: #EAF4FA;
   position: relative;
+  box-shadow: 0 4px 14px rgba(43, 40, 37, 0.08);
 }
 
-.wandering-photo {
+.cloud-photo-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -140,104 +230,83 @@
   transition: transform 0.4s ease, opacity 0.25s ease;
 }
 
-.wandering-card-anchor:hover .wandering-photo {
-  transform: scale(1.03);
+.wandering-cloud-anchor:hover .cloud-photo-img {
+  transform: scale(1.04);
 }
 
-.wandering-photo-placeholder {
+.cloud-photo-placeholder {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
-  background: #f4eee7;
+  font-size: 1.8rem;
+  background: #F2EEEC;
 }
 
-.wandering-card-meta {
-  margin-top: 8px;
+.cloud-meta-row {
+  margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 4px;
 }
 
-.wandering-author {
+.cloud-author {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--ink-dark);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 120px;
+  max-width: 125px;
 }
 
-.wandering-time {
+.cloud-time {
   font-family: var(--font-handwritten);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--ink-light);
 }
 
-.wandering-caption-preview {
-  margin-top: 5px;
-  font-size: 0.85rem;
+.cloud-caption-preview {
+  margin-top: 6px;
+  padding: 0 4px;
+  font-size: 0.86rem;
   color: var(--ink-medium);
-  line-height: 1.35;
+  line-height: 1.38;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Text-Only Cards */
-.wandering-text-card {
-  width: 210px;
-  min-height: 130px;
-  padding: 18px 16px 14px 16px;
+/* Text-Only Cloud Moments */
+.cloud-text-card {
+  width: 220px;
+  min-height: 140px;
+  padding: 22px 18px 16px 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.wandering-text-card.tint-sun {
-  background-color: #FFFDF2;
-  border-top: 4px solid var(--sun-yellow);
-}
-
-.wandering-text-card.tint-sky {
-  background-color: #F6FAFD;
-  border-top: 4px solid var(--sky-blue);
-}
-
-.wandering-text-card.tint-peach {
-  background-color: #FFF9F6;
-  border-top: 4px solid var(--peach-pink);
-}
-
-.wandering-text-card.tint-sage {
-  background-color: #F8FAF5;
-  border-top: 4px solid var(--sage-green);
-}
-
-.wandering-text-card.tint-lavender {
-  background-color: #FAF8FE;
-  border-top: 4px solid var(--lavender);
-}
-
-.wandering-quote-mark {
+.cloud-quote-mark {
   font-family: var(--font-heading);
-  font-size: 2.2rem;
-  line-height: 0.6;
-  color: var(--ink-faint);
-  margin-bottom: 6px;
+  font-size: 2.6rem;
+  line-height: 0.5;
+  color: var(--sky-blue);
+  opacity: 0.65;
+  margin-bottom: 8px;
   user-select: none;
 }
 
-.wandering-body-text {
-  font-size: 0.95rem;
+.cloud-body-text {
+  font-family: var(--font-body);
+  font-size: 0.98rem;
   font-weight: 500;
   color: var(--ink-dark);
-  line-height: 1.45;
+  line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -245,18 +314,18 @@
   flex-grow: 1;
 }
 
-.wandering-text-footer {
-  margin-top: 10px;
-  padding-top: 6px;
-  border-top: 1px dashed rgba(43, 40, 37, 0.12);
+.cloud-text-footer {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(114, 184, 216, 0.35);
   display: flex;
   align-items: baseline;
   justify-content: space-between;
 }
 
-.wandering-signature {
+.cloud-signature {
   font-family: var(--font-handwritten);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   color: var(--ink-dark);
   white-space: nowrap;
   overflow: hidden;
@@ -265,25 +334,25 @@
 }
 
 /* ==========================================================================
-   EXPANDED SAME-SCREEN MODAL FOCUS
+   EXPANDED SAME-SCREEN CLOUD FOCUS MODAL
    ========================================================================== */
 
 .expanded-backdrop {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(43, 40, 37, 0.45);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(35, 55, 75, 0.42);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
-  animation: backdropFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: cloudBackdropFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   cursor: pointer;
 }
 
-@keyframes backdropFadeIn {
+@keyframes cloudBackdropFade {
   from { opacity: 0; }
   to { opacity: 1; }
 }
@@ -293,17 +362,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 680px;
+  max-width: 720px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 92vh;
   cursor: default;
-  animation: modalScaleUp 0.36s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: cloudModalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-@keyframes modalScaleUp {
+@keyframes cloudModalPop {
   from {
     opacity: 0;
-    transform: scale(0.88) translateY(16px);
+    transform: scale(0.84) translateY(20px);
   }
   to {
     opacity: 1;
@@ -311,23 +380,23 @@
   }
 }
 
-/* Close button */
+/* Close Control */
 .expanded-close-btn {
   align-self: flex-end;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--paper-white);
-  border: 1.5px solid rgba(43, 40, 37, 0.16);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(114, 184, 216, 0.35);
   border-radius: var(--radius-full);
-  padding: 8px 16px;
-  margin-bottom: 12px;
+  padding: 9px 18px;
+  margin-bottom: 14px;
   font-family: var(--font-heading);
-  font-size: 0.95rem;
+  font-size: 0.96rem;
   font-weight: 500;
   color: var(--ink-dark);
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(43, 40, 37, 0.12);
+  box-shadow: 0 6px 18px rgba(43, 40, 37, 0.12);
   transition: all 0.2s ease;
 }
 
@@ -335,7 +404,7 @@
   background-color: var(--sun-yellow);
   border-color: var(--ink-dark);
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(43, 40, 37, 0.18);
+  box-shadow: 0 8px 22px rgba(43, 40, 37, 0.18);
 }
 
 .expanded-close-btn:focus-visible {
@@ -343,38 +412,33 @@
   outline-offset: 2px;
 }
 
-.close-icon {
-  font-weight: 700;
-  font-size: 0.9rem;
-}
-
-/* Expanded Card Aesthetics */
-.expanded-card {
+/* Expanded Cloud Card Frame */
+.expanded-cloud-frame {
   position: relative;
   width: 100%;
-  background: var(--paper-white);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-hero);
-  border: 1px solid rgba(43, 40, 37, 0.1);
+  background: #FFFFFF;
+  border-radius: 40px;
+  box-shadow: 0 24px 60px rgba(40, 80, 120, 0.25), 0 4px 16px rgba(43, 40, 37, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.95);
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-/* Expanded Photo Postcard */
-.expanded-photo-card {
-  padding: 20px 20px 24px 20px;
-  max-height: 82vh;
+/* Expanded Photo Presentation */
+.expanded-photo-view {
+  padding: 24px 24px 28px 24px;
+  max-height: 84vh;
   display: flex;
   flex-direction: column;
 }
 
 .expanded-photo-viewport {
   width: 100%;
-  max-height: 58vh;
-  min-height: 220px;
-  border-radius: var(--radius-sm);
-  background: var(--bg-canvas-subtle);
+  max-height: 60vh;
+  min-height: 240px;
+  border-radius: 28px;
+  background: #EBF3F8;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -383,26 +447,20 @@
 
 .expanded-full-photo {
   max-width: 100%;
-  max-height: 58vh;
+  max-height: 60vh;
   width: auto;
   height: auto;
   object-fit: contain;
   display: block;
-  border-radius: 8px;
+  border-radius: 20px;
   transition: opacity 0.3s ease;
 }
 
-.expanded-photo-placeholder {
-  font-family: var(--font-handwritten);
-  font-size: 1.5rem;
-  color: var(--ink-light);
-}
-
-.expanded-card-details {
-  margin-top: 16px;
+.expanded-details-bar {
+  margin-top: 18px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   overflow-y: auto;
 }
 
@@ -415,80 +473,55 @@
 .expanded-author {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   color: var(--ink-dark);
 }
 
 .expanded-time {
   font-family: var(--font-handwritten);
-  font-size: 1.45rem;
+  font-size: 1.55rem;
   color: var(--ink-light);
 }
 
 .expanded-caption-wrapper {
-  margin-top: 4px;
-  padding-top: 8px;
-  border-top: 1px dashed rgba(43, 40, 37, 0.12);
+  padding-top: 10px;
+  border-top: 1px dashed rgba(114, 184, 216, 0.3);
 }
 
 .expanded-caption-text {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--ink-dark);
-  line-height: 1.6;
+  line-height: 1.65;
   word-break: break-word;
 }
 
-/* Expanded Text-Only Card */
-.expanded-text-card {
-  padding: 44px 36px 36px 36px;
-  min-height: 280px;
-}
-
-.expanded-text-card.tint-sun {
-  background-color: #FFFDF4;
-  border-top: 6px solid var(--sun-yellow);
-}
-
-.expanded-text-card.tint-sky {
-  background-color: #F7FAFD;
-  border-top: 6px solid var(--sky-blue);
-}
-
-.expanded-text-card.tint-peach {
-  background-color: #FFF9F7;
-  border-top: 6px solid var(--peach-pink);
-}
-
-.expanded-text-card.tint-sage {
-  background-color: #F8FAF6;
-  border-top: 6px solid var(--sage-green);
-}
-
-.expanded-text-card.tint-lavender {
-  background-color: #FAF8FE;
-  border-top: 6px solid var(--lavender);
+/* Expanded Text Presentation */
+.expanded-text-view {
+  padding: 50px 42px 42px 42px;
+  min-height: 300px;
 }
 
 .expanded-quote-mark {
   font-family: var(--font-heading);
-  font-size: 4rem;
-  line-height: 0.6;
-  color: var(--ink-faint);
-  margin-bottom: 12px;
+  font-size: 4.8rem;
+  line-height: 0.4;
+  color: var(--sky-blue);
+  opacity: 0.6;
+  margin-bottom: 16px;
   user-select: none;
 }
 
 .expanded-text-content {
-  margin: 10px 0 20px 0;
-  max-height: 52vh;
+  margin: 12px 0 24px 0;
+  max-height: 54vh;
   overflow-y: auto;
 }
 
 .expanded-body-text {
-  font-size: 1.4rem;
+  font-size: 1.48rem;
   font-weight: 500;
   color: var(--ink-dark);
-  line-height: 1.65;
+  line-height: 1.7;
   letter-spacing: -0.01em;
   white-space: pre-wrap;
   word-break: break-word;
@@ -496,8 +529,8 @@
 
 .expanded-text-footer {
   margin-top: auto;
-  padding-top: 16px;
-  border-top: 1px dashed rgba(43, 40, 37, 0.15);
+  padding-top: 18px;
+  border-top: 1px dashed rgba(114, 184, 216, 0.35);
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -505,73 +538,138 @@
 
 .expanded-signature {
   font-family: var(--font-handwritten);
-  font-size: 1.7rem;
+  font-size: 1.85rem;
   color: var(--ink-dark);
 }
 
 /* ==========================================================================
-   WANDERING DRIFT KEYFRAME ANIMATIONS (CALM, ORGANIC & GPU ACCELERATED)
+   8 DISTINCT VISIBLE CONTINUOUS WANDERING DRIFT KEYFRAMES
    ========================================================================== */
 
-@keyframes wanderFloatA {
+/* Trajectory 1: left -> up -> right -> down -> repeat */
+@keyframes cloudDriftLoopA {
   0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg));
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
   25% {
-    transform: translate3d(var(--drift-x, 10px), calc(var(--drift-y, 8px) * -0.6), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1deg)));
+    transform: translate3d(calc(var(--drift-x, 24px) * -1), calc(var(--drift-y, 18px) * -1), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
   }
   50% {
-    transform: translate3d(calc(var(--drift-x, 10px) * 0.4), var(--drift-y, 8px), 0) rotate(var(--rot-start, 0deg));
+    transform: translate3d(var(--drift-x, 24px), calc(var(--drift-y, 18px) * -0.5), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
   75% {
-    transform: translate3d(calc(var(--drift-x, 10px) * -0.7), calc(var(--drift-y, 8px) * 0.5), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1deg)));
+    transform: translate3d(calc(var(--drift-x, 24px) * 0.4), var(--drift-y, 18px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
   }
 }
 
-@keyframes wanderFloatB {
+/* Trajectory 2: right -> down -> left -> up -> repeat */
+@keyframes cloudDriftLoopB {
   0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg));
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
-  30% {
-    transform: translate3d(calc(var(--drift-x, 10px) * -0.8), var(--drift-y, 8px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1deg)));
-  }
-  60% {
-    transform: translate3d(var(--drift-x, 10px), calc(var(--drift-y, 8px) * 0.3), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1deg)));
-  }
-  85% {
-    transform: translate3d(calc(var(--drift-x, 10px) * 0.3), calc(var(--drift-y, 8px) * -0.8), 0) rotate(var(--rot-start, 0deg));
-  }
-}
-
-@keyframes wanderFloatC {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg));
-  }
-  20% {
-    transform: translate3d(calc(var(--drift-x, 10px) * 0.6), calc(var(--drift-y, 8px) * 0.7), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1deg)));
+  25% {
+    transform: translate3d(var(--drift-x, 24px), var(--drift-y, 18px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
   }
   50% {
-    transform: translate3d(calc(var(--drift-x, 10px) * -0.5), calc(var(--drift-y, 8px) * -0.6), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1deg)));
+    transform: translate3d(calc(var(--drift-x, 24px) * -0.8), calc(var(--drift-y, 18px) * 0.6), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
-  80% {
-    transform: translate3d(var(--drift-x, 10px), calc(var(--drift-y, 8px) * -0.2), 0) rotate(var(--rot-start, 0deg));
+  75% {
+    transform: translate3d(calc(var(--drift-x, 24px) * -0.5), calc(var(--drift-y, 18px) * -0.9), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
   }
 }
 
-@keyframes wanderFloatD {
+/* Trajectory 3: diagonal sway */
+@keyframes cloudDriftDiagonal {
   0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg));
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
   35% {
-    transform: translate3d(calc(var(--drift-x, 10px) * -0.7), calc(var(--drift-y, 8px) * -0.7), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1deg)));
+    transform: translate3d(var(--drift-x, 24px), calc(var(--drift-y, 18px) * -1), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
   }
   70% {
-    transform: translate3d(var(--drift-x, 10px), calc(var(--drift-y, 8px) * 0.6), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1deg)));
+    transform: translate3d(calc(var(--drift-x, 24px) * -0.7), var(--drift-y, 18px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(var(--cloud-scale, 1));
+  }
+}
+
+/* Trajectory 4: wide horizontal wave */
+@keyframes cloudDriftWave {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  20% {
+    transform: translate3d(calc(var(--drift-x, 24px) * 0.7), calc(var(--drift-y, 18px) * -0.6), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.01));
+  }
+  50% {
+    transform: translate3d(calc(var(--drift-x, 24px) * 1.2), calc(var(--drift-y, 18px) * 0.4), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  80% {
+    transform: translate3d(calc(var(--drift-x, 24px) * -0.6), calc(var(--drift-y, 18px) * -0.4), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
+  }
+}
+
+/* Trajectory 5: slow circular eddy */
+@keyframes cloudDriftCircle {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  25% {
+    transform: translate3d(var(--drift-x, 24px), calc(var(--drift-y, 18px) * 0.5), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
+  }
+  50% {
+    transform: translate3d(0, var(--drift-y, 18px), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  75% {
+    transform: translate3d(calc(var(--drift-x, 24px) * -1), calc(var(--drift-y, 18px) * 0.5), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+}
+
+/* Trajectory 6: vertical breathing float */
+@keyframes cloudDriftSway {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  40% {
+    transform: translate3d(calc(var(--drift-x, 24px) * -0.4), calc(var(--drift-y, 18px) * -1.2), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.03));
+  }
+  80% {
+    transform: translate3d(calc(var(--drift-x, 24px) * 0.5), calc(var(--drift-y, 18px) * 0.8), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.98));
+  }
+}
+
+/* Trajectory 7: smooth figure-8 drift */
+@keyframes cloudDriftInfinity {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  25% {
+    transform: translate3d(var(--drift-x, 24px), calc(var(--drift-y, 18px) * -0.8), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.01));
+  }
+  50% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  75% {
+    transform: translate3d(calc(var(--drift-x, 24px) * -1), calc(var(--drift-y, 18px) * 0.8), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
+  }
+}
+
+/* Trajectory 8: gentle breeze path */
+@keyframes cloudDriftBreeze {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  30% {
+    transform: translate3d(calc(var(--drift-x, 24px) * 1.1), calc(var(--drift-y, 18px) * 0.4), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
+  }
+  65% {
+    transform: translate3d(calc(var(--drift-x, 24px) * -0.8), calc(var(--drift-y, 18px) * -0.7), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
   }
 }
 
 /* ==========================================================================
-   RESPONSIVE CANVAS ADAPTATIONS
+   RESPONSIVE SKY ADAPTATIONS
    ========================================================================== */
 
 /* Mobile viewports (320px to 480px) */
@@ -580,97 +678,102 @@
     padding: 12px 16px;
   }
 
+  .wandering-hint {
+    font-size: 1.15rem;
+  }
+
   .wandering-canvas-container {
-    min-height: 80vh;
+    min-height: 82vh;
   }
 
-  .wandering-photo-card {
+  .cloud-photo-card {
     width: 155px;
-    padding: 7px 7px 10px 7px;
+    padding: 10px 10px 12px 10px;
+    border-radius: 30px;
   }
 
-  .wandering-photo-frame {
-    aspect-ratio: 4 / 3;
-    border-radius: 4px;
+  .cloud-photo-frame {
+    border-radius: 18px;
   }
 
-  .wandering-author {
-    font-size: 0.75rem;
+  .cloud-author {
+    font-size: 0.78rem;
     max-width: 80px;
   }
 
-  .wandering-time {
-    font-size: 0.95rem;
+  .cloud-time {
+    font-size: 0.98rem;
   }
 
-  .wandering-caption-preview {
-    font-size: 0.75rem;
+  .cloud-caption-preview {
+    font-size: 0.76rem;
     -webkit-line-clamp: 1;
   }
 
-  .wandering-text-card {
-    width: 150px;
-    min-height: 100px;
-    padding: 12px 10px 10px 10px;
+  .cloud-text-card {
+    width: 148px;
+    min-height: 105px;
+    padding: 14px 12px 10px 12px;
+    border-radius: 28px;
   }
 
-  .wandering-body-text {
-    font-size: 0.82rem;
+  .cloud-body-text {
+    font-size: 0.84rem;
     -webkit-line-clamp: 2;
   }
 
-  .wandering-signature {
-    font-size: 1.05rem;
+  .cloud-signature {
+    font-size: 1.1rem;
     max-width: 75px;
   }
 
-  .wandering-quote-mark {
-    font-size: 1.6rem;
-    margin-bottom: 2px;
-  }
-
-  .washi-tape-mini {
-    width: 44px;
-    height: 14px;
-    top: -7px;
+  .cloud-quote-mark {
+    font-size: 1.8rem;
+    margin-bottom: 4px;
   }
 
   /* Expanded Modal on Mobile */
   .expanded-modal-wrapper {
-    max-width: 95vw;
+    max-width: 94vw;
   }
 
-  .expanded-photo-card {
-    padding: 14px 14px 18px 14px;
+  .expanded-cloud-frame {
+    border-radius: 32px;
+  }
+
+  .expanded-photo-view {
+    padding: 16px 16px 20px 16px;
   }
 
   .expanded-photo-viewport {
     max-height: 48vh;
+    border-radius: 20px;
   }
 
   .expanded-full-photo {
     max-height: 48vh;
+    border-radius: 16px;
   }
 
-  .expanded-text-card {
-    padding: 28px 20px 22px 20px;
-    min-height: 220px;
+  .expanded-text-view {
+    padding: 32px 22px 24px 22px;
+    min-height: 240px;
   }
 
   .expanded-body-text {
-    font-size: 1.15rem;
+    font-size: 1.18rem;
   }
 }
 
 /* Tablet viewports (481px to 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
-  .wandering-photo-card {
-    width: 185px;
+  .cloud-photo-card {
+    width: 190px;
   }
 
-  .wandering-text-card {
-    width: 180px;
-    min-height: 115px;
+  .cloud-text-card {
+    width: 185px;
+    min-height: 120px;
   }
 }
 
@@ -678,28 +781,29 @@
 @media (min-width: 1440px) {
   .wandering-canvas-container {
     max-width: 1800px;
-    min-height: 82vh;
+    min-height: 84vh;
   }
 
-  .wandering-photo-card {
+  .cloud-photo-card {
+    width: 260px;
+  }
+
+  .cloud-text-card {
     width: 250px;
+    min-height: 160px;
   }
 
-  .wandering-text-card {
-    width: 240px;
-    min-height: 150px;
-  }
-
-  .wandering-body-text {
-    font-size: 1.05rem;
+  .cloud-body-text {
+    font-size: 1.08rem;
   }
 }
 
-/* Reduced Motion Accessibility */
+/* Reduced Motion Safety */
 @media (prefers-reduced-motion: reduce) {
-  .wandering-card-anchor {
+  .wandering-cloud-anchor,
+  .ambient-sky-cloud {
     animation: none !important;
-    transform: rotate(var(--rot-start, 0deg)) !important;
+    transform: rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1)) !important;
   }
   
   .expanded-backdrop,
