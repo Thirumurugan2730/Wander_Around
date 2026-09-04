@@ -9,7 +9,7 @@ export default function ExpandedMoment({ post, index = 0, onClose }) {
   const containerRef = useRef(null);
   const closeBtnRef = useRef(null);
 
-  const hasPhoto = Boolean(post.hasPhoto || post.has_photo);
+  const hasPhoto = Boolean(post.hasPhoto || post.has_photo || post.imagePath || post.image_path);
   const imagePath = post.imagePath || post.image_path;
   const username = post.username || 'Anonymous';
   const text = post.text;

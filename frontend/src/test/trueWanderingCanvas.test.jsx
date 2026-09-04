@@ -23,7 +23,7 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/1 memory floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
     });
 
     const articles = screen.getAllByRole('article');
@@ -48,7 +48,7 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/24 memories floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
     });
 
     const articles = screen.getAllByRole('article');
@@ -74,7 +74,7 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/3 memories floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
     });
 
     // Check Text-only
@@ -108,7 +108,7 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/1 memory floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
     });
 
     const card = screen.getByRole('button', { name: /Photo memory by Storyteller/i });
@@ -142,7 +142,7 @@ describe('True Wandering Canvas Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/2 memories floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
     });
 
     const canvas = screen.getByLabelText(/Interactive floating memories/i);

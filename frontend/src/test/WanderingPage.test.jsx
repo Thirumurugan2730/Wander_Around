@@ -29,7 +29,7 @@ describe('WanderingPage True Wandering Canvas', () => {
 
     // After loading finishes, canvas should be present with all 3 moments rendered simultaneously
     await waitFor(() => {
-      expect(screen.getByText(/3 memories floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/3 moments floating through today/i)).toBeInTheDocument();
     });
 
     const articles = screen.getAllByRole('article');
@@ -53,7 +53,7 @@ describe('WanderingPage True Wandering Canvas', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/2 memories floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/2 moments floating through today/i)).toBeInTheDocument();
     });
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);

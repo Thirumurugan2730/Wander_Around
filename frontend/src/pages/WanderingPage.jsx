@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { getTodayPosts } from '../api/client';
 import { useWanderingLayout } from '../hooks/useWanderingLayout';
 import WanderingCard from '../components/WanderingCard';
@@ -12,24 +11,48 @@ export default function WanderingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
+  const isMountedRef = useRef(true);
 
-  // Fetch today's posts once on mount (or on explicit retry/refresh)
+  // Fetch today's posts from GET /api/posts/today
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const data = await getTodayPosts();
-      setPosts(Array.isArray(data) ? data : []);
+      if (!isMountedRef.current) return;
+
+      let normalized = [];
+      if (Array.isArray(data)) {
+        normalized = data;
+      } else if (data && Array.isArray(data.posts)) {
+        normalized = data.posts;
+      } else if (data && Array.isArray(data.data)) {
+        normalized = data.data;
+      }
+
+      setPosts(normalized);
     } catch (err) {
+      if (!isMountedRef.current) return;
       console.error('Failed to load today posts:', err);
-      setError("The wind got in the way. We couldn't find today's moments.");
+      setError(
+        err.message?.includes('HTTP error') || err.message?.includes('JSON')
+          ? "The wind got in the way. We couldn't reach today's moments."
+          : (err.message || "We couldn't find today's moments. Please try again.")
+      );
     } finally {
-      setLoading(false);
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
     }
   }, []);
 
   useEffect(() => {
+    isMountedRef.current = true;
     fetchPosts();
+
+    return () => {
+      isMountedRef.current = false;
+    };
   }, [fetchPosts]);
 
   // Compute organic, stable positions and motion vectors for all posts
@@ -56,36 +79,30 @@ export default function WanderingPage() {
       <div className="ambient-glow-sky" aria-hidden="true" />
       <div className="ambient-glow-lavender" aria-hidden="true" />
 
-      {/* Minimal Top Navigation */}
-      <nav className="wandering-top-nav" aria-label="Canvas actions">
+      {/* Atmospheric Header Info */}
+      <header className="wandering-top-nav" aria-label="Canvas information">
         <div className="wandering-header-badge">
           <div className="pill">
             <span>✦ today's wander</span>
           </div>
           {!loading && !error && posts.length > 0 && (
             <span className="wandering-hint">
-              {posts.length} {posts.length === 1 ? 'memory' : 'memories'} floating through today
+              {posts.length} {posts.length === 1 ? 'moment' : 'moments'} floating through today
             </span>
           )}
         </div>
+      </header>
 
-        <div className="wandering-nav-actions">
-          <Link to="/share" className="btn btn-sun btn-sm">
-            Share your day
-          </Link>
-        </div>
-      </nav>
-
-      {/* Loading State */}
+      {/* Loading State: Only shown while actively pending */}
       {loading && (
-        <div className="container">
+        <div className="container wandering-status-container">
           <LoadingState message="Finding today's little moments..." />
         </div>
       )}
 
-      {/* Error State */}
+      {/* Error State with clear Retry */}
       {error && !loading && (
-        <div className="container">
+        <div className="container wandering-status-container">
           <div className="error-state card-enter">
             <div className="error-icon" aria-hidden="true">💨</div>
             <h2 className="error-title">The wind got in the way.</h2>
@@ -97,14 +114,14 @@ export default function WanderingPage() {
         </div>
       )}
 
-      {/* Empty State */}
+      {/* Empty State: Only when posts are genuinely 0 and loading has finished */}
       {!loading && !error && posts.length === 0 && (
-        <div className="container">
+        <div className="container wandering-status-container">
           <EmptyState />
         </div>
       )}
 
-      {/* Living Wandering Canvas with all moments */}
+      {/* Living Wandering Canvas with all moments simultaneously */}
       {!loading && !error && posts.length > 0 && (
         <section
           className={`wandering-canvas-container ${selectedPost ? 'is-paused' : ''}`}
@@ -135,9 +152,16 @@ export default function WanderingPage() {
       )}
 
       <style>{`
+        .wandering-status-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 60vh;
+        }
+
         .error-state {
           max-width: 460px;
-          margin: 60px auto;
+          margin: 40px auto;
           padding: 40px 30px;
           background: var(--paper-white);
           border-radius: var(--radius-md);
@@ -161,6 +185,7 @@ export default function WanderingPage() {
           font-size: 1rem;
           color: var(--ink-medium);
           margin-bottom: 22px;
+          line-height: 1.5;
         }
       `}</style>
     </main>

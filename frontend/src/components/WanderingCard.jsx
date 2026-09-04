@@ -5,7 +5,7 @@ export default function WanderingCard({ post, style, tint = 'tint-sun', onSelect
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  const hasPhoto = Boolean(post.hasPhoto || post.has_photo);
+  const hasPhoto = Boolean(post.hasPhoto || post.has_photo || post.imagePath || post.image_path);
   const imagePath = post.imagePath || post.image_path;
   const username = post.username || 'Anonymous';
   const text = post.text;

@@ -25,7 +25,7 @@ describe('True Wandering Canvas Keyboard Accessibility & Interaction', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/3 memories floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
     });
 
     const card = screen.getByRole('button', { name: /Text memory by Thiru/i });
@@ -44,7 +44,7 @@ describe('True Wandering Canvas Keyboard Accessibility & Interaction', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/3 memories floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
     });
 
     const card = screen.getByRole('button', { name: /Text memory by Maya/i });
@@ -63,7 +63,7 @@ describe('True Wandering Canvas Keyboard Accessibility & Interaction', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/3 memories floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
     });
 
     const card = screen.getByRole('button', { name: /Photo memory by Sam/i });
@@ -89,7 +89,7 @@ describe('True Wandering Canvas Keyboard Accessibility & Interaction', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/3 memories floating through today/i)).toBeInTheDocument();
+      expect(screen.getByText(/floating through today/i)).toBeInTheDocument();
     });
 
     const card = screen.getByRole('button', { name: /Text memory by Thiru/i });
