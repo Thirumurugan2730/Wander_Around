@@ -26,18 +26,18 @@ const INITIAL_LANE_DELAYS = [-24, -15, -7, -29, -11];
 /**
  * useWanderingLayout
  * Computes sequential one-by-one Left → Right cloud stream parameters:
- * - 5 vertical altitude lanes
+ * - 5 vertical altitude lanes with safe margins (no vertical cropping)
  * - Pure GPU CSS transform keyframe animations
  * - Staggered entrance timing ensuring no cloud crowding or collisions
- * - Refined scale factor (25-40% smaller) leaving plenty of open, expansive sky
+ * - Balanced cloud scale (15-25% increase to reach ideal middle ground)
  */
 export function useWanderingLayout(posts = []) {
   return useMemo(() => {
     const count = posts.length;
     if (count === 0) return [];
 
-    // Refined cloud scale tier: modest, natural clouds with lots of open sky
-    const cloudScale = count <= 5 ? 0.80 : count <= 15 ? 0.72 : 0.65;
+    // Ideal balanced cloud scale tier: noticeable, fluffy, charming, leaving plenty of sky
+    const cloudScale = count <= 5 ? 0.98 : count <= 15 ? 0.90 : 0.82;
 
     return posts.map((post, index) => {
       const postKey = String(post.id || index);
