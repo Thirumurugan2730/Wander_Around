@@ -45,72 +45,79 @@ export default function WanderingCard({
       onKeyDown={handleKeyDown}
       aria-label={cardAriaLabel}
     >
-      {/* Real Organic Fluffy Cloud Silhouette */}
+      {/* 1. Cloud Background Cumulus Body */}
       <div className="cloud-backdrop-wrapper">
-        <CloudSilhouette variant={cloudVariant} sunlitClass={sunlitClass} className="cloud-silhouette-svg" />
+        <CloudSilhouette
+          variant={cloudVariant}
+          layer="back"
+          sunlitClass={sunlitClass}
+          className="cloud-silhouette-svg"
+        />
       </div>
 
-      {hasPhoto ? (
-        /* Photograph Memory Carried by Cloud */
-        <article className="photo-memory-item">
-          <div className="photo-print-frame">
-            <div className="washi-tape-photo" aria-hidden="true" />
-
-            <div className="photo-image-wrapper">
+      {/* 2. Memory Integrated Directly Inside the Cloud (NO RECTANGULAR CARDS, NO BORDERS, NO SEPARATE CONTAINERS) */}
+      <article className="cloud-memory-article">
+        {hasPhoto ? (
+          <div className="cloud-photo-ensemble">
+            {/* The photo gently emerges from the cloud with soft feathered edges */}
+            <div className="cloud-photo-wrapper">
               {fullImageUrl && !imageError ? (
                 <img
                   src={fullImageUrl}
                   alt={text || `Memory by ${username}`}
-                  className="photo-print-img"
+                  className="cloud-embedded-photo"
                   loading="lazy"
                   onLoad={() => setImageLoaded(true)}
                   onError={() => setImageError(true)}
                   style={{ opacity: imageLoaded ? 1 : 0.4 }}
                 />
               ) : (
-                <div className="photo-placeholder-box">
+                <div className="cloud-photo-placeholder">
                   <span>{imageError ? '☁️' : '☀️'}</span>
                 </div>
               )}
             </div>
 
-            {/* Quiet Photo Caption Margin */}
-            <div className="photo-bottom-margin">
-              <span className="photo-handwritten-author">{username}</span>
-              <span className="photo-handwritten-time">{formattedTime}</span>
+            {/* If post includes handwritten thoughts, it flows below in natural ink */}
+            {text && (
+              <p className="cloud-photo-caption">
+                {text}
+              </p>
+            )}
+
+            {/* Soft handwritten author & time etched directly into the cloud atmosphere */}
+            <div className="cloud-memory-byline">
+              <span className="cloud-byline-author">{username}</span>
+              <span className="cloud-byline-dot">•</span>
+              <span className="cloud-byline-time">{formattedTime}</span>
             </div>
           </div>
-
-          {/* Attached Handwritten Note for Photo + Text */}
-          {text && compositionType === 'photo-text-combo' && (
-            <div className="attached-note-scrap">
-              <div className="mini-pin-tape" aria-hidden="true" />
-              <p className="attached-note-text">{text}</p>
-            </div>
-          )}
-
-          {text && compositionType !== 'photo-text-combo' && (
-            <p className="photo-inline-caption">{text}</p>
-          )}
-        </article>
-      ) : (
-        /* Handwritten Paper Note Carried by Cloud */
-        <article className="text-note-memory-item">
-          <div className="paper-note-scrap">
-            <div className="note-washi-tape" aria-hidden="true" />
-            <div className="note-quote-mark" aria-hidden="true">“</div>
-
-            <p className="note-handwritten-body">
+        ) : (
+          <div className="cloud-text-ensemble">
+            {/* Handwritten thought floating directly in the billowy cloud */}
+            <p className="cloud-handwritten-thought">
               {text || 'A quiet thought recorded today.'}
             </p>
 
-            <div className="note-signature-row">
-              <span className="note-signature">— {username}</span>
-              <span className="note-timestamp">{formattedTime}</span>
+            {/* Author and timestamp signature written into the sky */}
+            <div className="cloud-memory-byline">
+              <span className="cloud-byline-author">— {username}</span>
+              <span className="cloud-byline-dot">•</span>
+              <span className="cloud-byline-time">{formattedTime}</span>
             </div>
           </div>
-        </article>
-      )}
+        )}
+      </article>
+
+      {/* 3. Cloud Foreground Wisps Layer (laps over bottom/edges so memory is nestled inside) */}
+      <div className="cloud-foreground-wrapper">
+        <CloudSilhouette
+          variant={cloudVariant}
+          layer="front"
+          sunlitClass={sunlitClass}
+          className="cloud-foreground-svg"
+        />
+      </div>
     </div>
   );
 }
