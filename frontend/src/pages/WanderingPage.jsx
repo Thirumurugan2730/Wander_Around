@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { getTodayPosts } from '../api/client';
-import { useForestSession } from '../hooks/useForestSession';
+import { useThreeBirdsSession } from '../hooks/useThreeBirdsSession';
 import ForestScene from '../components/ForestScene';
-import MemoryBird from '../components/MemoryBird';
-import ForestPhotoMemory from '../components/ForestPhotoMemory';
-import DriftingTextNote from '../components/DriftingTextNote';
-import ExpandedMoment from '../components/ExpandedMoment';
+import RealisticBird from '../components/RealisticBird';
+import PouchRevealModal from '../components/PouchRevealModal';
 import LoadingState from '../components/LoadingState';
 import EmptyState from '../components/EmptyState';
 
@@ -69,30 +67,24 @@ export default function WanderingPage() {
     };
   }, [fetchPosts]);
 
-  // Hook driving bird carrier flight loop and drifting notes
-  const {
-    photoPosts,
-    currentPhotoPost,
-    flightPhase,
-    isBranchBouncing,
-    textNoteItems,
-  } = useForestSession(posts, Boolean(selectedPost));
+  // Hook managing the 3 independent messenger birds across 3 trees
+  const { birds, bouncingTrees } = useThreeBirdsSession(posts, Boolean(selectedPost));
 
-  // Handler for opening a moment
+  // Handler for opening a memory pouch
   const handleSelectPost = useCallback((post) => {
     setSelectedPost(post);
   }, []);
 
-  // Handler for closing the expanded moment
+  // Handler for closing the revealed memory
   const handleCloseExpanded = useCallback(() => {
     setSelectedPost(null);
   }, []);
 
   return (
     <main className="forest-page wandering-page" aria-label="Wandering Forest Canvas">
-      {/* Living Nostalgic Forest Environment */}
-      <ForestScene isBranchBouncing={isBranchBouncing}>
-        {/* Top Navigation Badge */}
+      {/* Living Realistic Forest with Three Trees and Top-Only Clouds */}
+      <ForestScene bouncingTrees={bouncingTrees}>
+        {/* Forest Top Navigation Badge */}
         <header className="forest-top-nav wandering-top-nav" aria-label="Forest information">
           <div className="forest-header-badge wandering-header-badge">
             <div className="pill">
@@ -100,7 +92,7 @@ export default function WanderingPage() {
             </div>
             {!loading && !error && posts.length > 0 && (
               <span className="forest-hint wandering-hint">
-                {posts.length} {posts.length === 1 ? 'memory' : 'memories'} living in today's breeze
+                {posts.length} {posts.length === 1 ? 'memory' : 'memories'} traveling through the trees
               </span>
             )}
           </div>
@@ -127,61 +119,40 @@ export default function WanderingPage() {
           </div>
         )}
 
-        {/* Empty State: Only when posts are genuinely 0 and loading has finished */}
+        {/* Empty State: 0 memories today */}
         {!loading && !error && posts.length === 0 && (
           <>
-            {/* Peaceful Resting Bird in Empty Forest */}
-            <MemoryBird flightPhase="perched" hasPhoto={false} />
+            {/* Peaceful Birds Resting on Trees */}
+            <RealisticBird birdIndex={0} flightPhase="perched" post={null} />
+            <RealisticBird birdIndex={1} flightPhase="perched" post={null} />
             <div className="container wandering-status-container">
               <EmptyState />
             </div>
           </>
         )}
 
-        {/* Living Forest Memories when posts exist */}
+        {/* Interactive Three Messenger Birds & Hidden Memory Pouches */}
         {!loading && !error && posts.length > 0 && (
           <section
             className={`forest-canvas-container wandering-canvas-container ${selectedPost ? 'is-paused' : ''}`}
             aria-label="Interactive forest memories"
           >
-            {/* 1. Messenger Bird carrying and perching with Photo Memories */}
-            {photoPosts.length > 0 && (
-              <MemoryBird flightPhase={flightPhase} hasPhoto={Boolean(currentPhotoPost)}>
-                {currentPhotoPost && (
-                  <ForestPhotoMemory
-                    post={currentPhotoPost}
-                    onSelect={handleSelectPost}
-                    isPerched={flightPhase === 'perched'}
-                  />
-                )}
-              </MemoryBird>
-            )}
-
-            {/* If no photo posts exist, bird perches peacefully in the background */}
-            {photoPosts.length === 0 && (
-              <MemoryBird flightPhase="perched" hasPhoto={false} />
-            )}
-
-            {/* 2. Handwritten Text Memories Drifting on Forest Breeze */}
-            {textNoteItems.map(({ post, altitudeClass, style }, index) => {
-              const postKey = post.id || `text-note-${index}`;
-              return (
-                <DriftingTextNote
-                  key={postKey}
-                  post={post}
-                  altitudeClass={altitudeClass}
-                  style={style}
-                  onSelect={handleSelectPost}
-                />
-              );
-            })}
+            {birds.map(({ birdIndex, flightPhase, post }) => (
+              <RealisticBird
+                key={birdIndex}
+                birdIndex={birdIndex}
+                flightPhase={flightPhase}
+                post={post}
+                onSelectPouch={handleSelectPost}
+              />
+            ))}
           </section>
         )}
       </ForestScene>
 
-      {/* Same-Screen Expanded Modal Focus View */}
+      {/* Intimate Same-Screen Memory Reveal Modal (Opened on Pouch Click) */}
       {selectedPost && (
-        <ExpandedMoment
+        <PouchRevealModal
           post={selectedPost}
           onClose={handleCloseExpanded}
         />

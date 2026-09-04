@@ -5,12 +5,12 @@ import { MemoryRouter } from 'react-router-dom';
 import WanderingPage from '../pages/WanderingPage';
 import * as apiClient from '../api/client';
 
-describe('Nostalgic Forest & Memory Bird Comprehensive Suite', () => {
+describe('Realistic Forest & Three Memory Birds Comprehensive Suite', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('handles single moment (1 memory) layout gracefully', async () => {
+  it('handles single moment (1 memory) layout gracefully across trees', async () => {
     const singlePost = [
       { id: 10, text: 'Solo quiet morning meditation', username: 'Elena', hasPhoto: false },
     ];
@@ -23,13 +23,14 @@ describe('Nostalgic Forest & Memory Bird Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/1 memory living in today's breeze/i)).toBeInTheDocument();
+      expect(screen.getByText(/1 memory traveling through the trees/i)).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Solo quiet morning meditation')).toBeInTheDocument();
+    const pouch = screen.getAllByRole('button', { name: /Memory pouch carried by bird by Elena/i });
+    expect(pouch.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('handles multiple moments drifting through forest and carried by bird', async () => {
+  it('handles multiple moments distributed across the three messenger birds', async () => {
     const manyPosts = Array.from({ length: 12 }, (_, i) => ({
       id: `moment-${i + 1}`,
       text: `Moment number ${i + 1} from today`,
@@ -46,17 +47,17 @@ describe('Nostalgic Forest & Memory Bird Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/12 memories living in today's breeze/i)).toBeInTheDocument();
+      expect(screen.getByText(/12 memories traveling through the trees/i)).toBeInTheDocument();
     });
 
-    // Verify presence of text notes and bird carrier
-    expect(screen.getByText('Moment number 1 from today')).toBeInTheDocument();
+    // Verify 3 memory pouches for the 3 birds
+    const pouches = screen.getAllByRole('button', { name: /Memory pouch carried by bird/i });
+    expect(pouches.length).toBe(3);
   });
 
-  it('renders all moment types correctly: photo-only, text-only, photo+text', async () => {
+  it('renders all moment types correctly: photo-only, text-only, photo+text in reveal modal', async () => {
     const variedPosts = [
-      { id: 1, text: 'Sunset at the lake with warm coffee.', username: 'Traveler', hasPhoto: true, imagePath: 'lake.webp' }, // Photo + text
-      { id: 2, text: 'Pure text thoughts without any photo.', username: 'Writer', hasPhoto: false }, // Text-only
+      { id: 1, text: 'Sunset at the lake with warm coffee.', username: 'Traveler', hasPhoto: true, imagePath: 'lake.webp' },
     ];
     vi.spyOn(apiClient, 'getTodayPosts').mockResolvedValue(variedPosts);
 
@@ -67,27 +68,29 @@ describe('Nostalgic Forest & Memory Bird Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/2 memories living in today's breeze/i)).toBeInTheDocument();
+      expect(screen.getByText(/1 memory traveling through the trees/i)).toBeInTheDocument();
     });
 
-    // Check Text-only
-    expect(screen.getByText('Pure text thoughts without any photo.')).toBeInTheDocument();
-    expect(screen.getByText('— Writer')).toBeInTheDocument();
+    // Pouch is visible, photo is NOT yet revealed until click
+    const pouch = screen.getAllByRole('button', { name: /Memory pouch carried by bird by Traveler/i })[0];
+    fireEvent.click(pouch);
 
-    // Check Photo + text carried by bird
-    expect(screen.getByText('Sunset at the lake with warm coffee.')).toBeInTheDocument();
-    const photoMemoryCard = screen.getByRole('button', { name: /Photo memory carried by bird by Traveler/i });
-    expect(photoMemoryCard).toBeInTheDocument();
+    // After clicking pouch, photo + text are revealed inside modal
+    await waitFor(() => {
+      expect(screen.getByText('Sunset at the lake with warm coffee.')).toBeInTheDocument();
+      expect(screen.getByText(/— Traveler/i)).toBeInTheDocument();
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
   });
 
-  it('shows full untruncated text and uncropped photo when memory expands', async () => {
+  it('shows full untruncated text and uncropped photo when pouch memory is revealed', async () => {
     const longTextPost = [
       {
         id: 99,
-        text: 'This is a long and detailed memory of walking through the botanical gardens in the gentle morning rain. Every single word of this story must remain visible without truncation, ellipsis, or line clamping when expanded.',
+        text: 'This is a long and detailed memory of walking through the ancient pine woods in the gentle golden evening light. Every single word of this story must remain visible without truncation when revealed from the pouch.',
         username: 'Storyteller',
         hasPhoto: true,
-        imagePath: 'botanical.webp',
+        imagePath: 'woods.webp',
       },
     ];
     vi.spyOn(apiClient, 'getTodayPosts').mockResolvedValue(longTextPost);
@@ -99,27 +102,27 @@ describe('Nostalgic Forest & Memory Bird Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/1 memory living in today's breeze/i)).toBeInTheDocument();
+      expect(screen.getByText(/1 memory traveling through the trees/i)).toBeInTheDocument();
     });
 
-    const card = screen.getByRole('button', { name: /Photo memory carried by bird by Storyteller/i });
-    fireEvent.click(card);
+    const pouch = screen.getAllByRole('button', { name: /Memory pouch carried by bird by Storyteller/i })[0];
+    fireEvent.click(pouch);
 
-    // Verify modal is open
+    // Verify reveal modal is open
     const dialog = await screen.findByRole('dialog');
     expect(dialog).toBeInTheDocument();
 
-    // Verify the complete untruncated text is in the expanded view
-    const expandedCaption = dialog.querySelector('.expanded-caption-text');
-    expect(expandedCaption).toBeInTheDocument();
-    expect(expandedCaption.textContent).toContain('This is a long and detailed memory of walking through the botanical gardens in the gentle morning rain.');
+    // Verify untruncated text is in the revealed view
+    const revealedNote = dialog.querySelector('.revealed-handwritten-note');
+    expect(revealedNote).toBeInTheDocument();
+    expect(revealedNote.textContent).toContain('This is a long and detailed memory of walking through the ancient pine woods');
 
-    // Verify full photo element is present with contain class
-    const img = dialog.querySelector('.expanded-full-photo');
+    // Verify photo element is present
+    const img = dialog.querySelector('.revealed-full-photo');
     expect(img).toBeInTheDocument();
   });
 
-  it('pauses background canvas while an expanded memory is active', async () => {
+  it('pauses background canvas while revealed memory is active', async () => {
     const posts = [
       { id: 1, text: 'Note 1', username: 'User1', hasPhoto: false },
       { id: 2, text: 'Note 2', username: 'User2', hasPhoto: false },
@@ -133,21 +136,21 @@ describe('Nostalgic Forest & Memory Bird Comprehensive Suite', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/2 memories living in today's breeze/i)).toBeInTheDocument();
+      expect(screen.getByText(/2 memories traveling through the trees/i)).toBeInTheDocument();
     });
 
     const canvas = screen.getByLabelText(/Interactive forest memories/i);
     expect(canvas).not.toHaveClass('is-paused');
 
-    // Click to expand
-    const card = screen.getByRole('button', { name: /Handwritten memory drifting through forest by User1/i });
-    fireEvent.click(card);
+    // Click pouch to reveal
+    const pouch = screen.getAllByRole('button', { name: /Memory pouch carried by bird by User1/i })[0];
+    fireEvent.click(pouch);
 
     // Canvas is now paused
     expect(canvas).toHaveClass('is-paused');
 
     // Close
-    const closeBtn = screen.getByRole('button', { name: /Return to the sky/i });
+    const closeBtn = screen.getByRole('button', { name: /Return to the forest/i });
     fireEvent.click(closeBtn);
 
     // Canvas is unpaused

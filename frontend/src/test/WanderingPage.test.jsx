@@ -5,12 +5,12 @@ import { MemoryRouter } from 'react-router-dom';
 import WanderingPage from '../pages/WanderingPage';
 import * as apiClient from '../api/client';
 
-describe('WanderingPage Nostalgic Forest & Memory Bird Experience', () => {
+describe('WanderingPage Realistic Forest & Three Memory Birds Experience', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders loading state then living forest canvas with carrier bird and drifting notes', async () => {
+  it('renders loading state then living forest canvas with three trees and memory pouches', async () => {
     const mockPosts = [
       { id: 1, text: 'Morning reflections', username: 'Thiru', hasPhoto: false },
       { id: 2, text: 'Sunset glow', username: 'Elena', hasPhoto: false },
@@ -27,18 +27,17 @@ describe('WanderingPage Nostalgic Forest & Memory Bird Experience', () => {
     // Initial loading indicator
     expect(screen.getByText(/Listening to the forest breeze\.\.\./i)).toBeInTheDocument();
 
-    // After loading finishes, canvas should show living memories badge
+    // After loading finishes, canvas should show memories traveling through the trees badge
     await waitFor(() => {
-      expect(screen.getByText(/3 memories living in today's breeze/i)).toBeInTheDocument();
+      expect(screen.getByText(/3 memories traveling through the trees/i)).toBeInTheDocument();
     });
 
-    // Verify memories exist: 2 drifting text notes + 1 bird photo print
-    expect(screen.getByText('Morning reflections')).toBeInTheDocument();
-    expect(screen.getByText('Sunset glow')).toBeInTheDocument();
-    expect(screen.getByText('Coffee with rain')).toBeInTheDocument();
+    // Verify pouches exist for the posts carried by the 3 birds
+    const pouchButtons = screen.getAllByRole('button', { name: /Memory pouch carried by bird/i });
+    expect(pouchButtons.length).toBeGreaterThanOrEqual(2);
   });
 
-  it('expands selected memory on the same screen when clicked without extra API calls', async () => {
+  it('reveals hidden memory on the same screen when pouch is clicked', async () => {
     const mockPosts = [
       { id: 'POST_A', text: 'First moment A', username: 'UserA', hasPhoto: false },
       { id: 'POST_B', text: 'Second moment B', username: 'UserB', hasPhoto: false },
@@ -52,23 +51,24 @@ describe('WanderingPage Nostalgic Forest & Memory Bird Experience', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/2 memories living in today's breeze/i)).toBeInTheDocument();
+      expect(screen.getByText(/2 memories traveling through the trees/i)).toBeInTheDocument();
     });
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
 
-    // Click on First moment note
-    const firstCard = screen.getByRole('button', { name: /Handwritten memory drifting through forest by UserA/i });
-    fireEvent.click(firstCard);
+    // Click on UserA's memory pouch
+    const pouchA = screen.getAllByRole('button', { name: /Memory pouch carried by bird by UserA/i })[0];
+    fireEvent.click(pouchA);
 
-    // Dialog / Expanded modal appears on same screen
+    // Dialog / Reveal modal appears on same screen
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: /Expanded memory by UserA/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Return to the sky/i })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: /Revealed memory carried by bird from UserA/i })).toBeInTheDocument();
+      expect(screen.getByText('First moment A')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Return to the forest/i })).toBeInTheDocument();
     });
 
     // Close expanded view
-    const closeBtn = screen.getByRole('button', { name: /Return to the sky/i });
+    const closeBtn = screen.getByRole('button', { name: /Return to the forest/i });
     fireEvent.click(closeBtn);
 
     // Modal is removed, still on canvas
@@ -112,7 +112,7 @@ describe('WanderingPage Nostalgic Forest & Memory Bird Experience', () => {
     });
   });
 
-  it('renders the nostalgic sun and living forest tree elements', async () => {
+  it('renders the nostalgic sun and three distinct forest trees', async () => {
     vi.spyOn(apiClient, 'getTodayPosts').mockResolvedValue([
       { id: 101, text: 'Golden afternoon', username: 'Sol', hasPhoto: false },
     ]);
@@ -124,17 +124,19 @@ describe('WanderingPage Nostalgic Forest & Memory Bird Experience', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Golden afternoon')).toBeInTheDocument();
+      expect(screen.getByText(/1 memory traveling through the trees/i)).toBeInTheDocument();
     });
 
     // Verify Nostalgic Sun elements
     expect(container.querySelector('.nostalgic-sun-container')).toBeInTheDocument();
     expect(container.querySelector('.sun-core-disc')).toBeInTheDocument();
-    expect(container.querySelector('.sun-outer-corona')).toBeInTheDocument();
 
-    // Verify Forest Scene & Tree
-    expect(container.querySelector('.forest-main-tree-container')).toBeInTheDocument();
-    expect(container.querySelector('.forest-tree-svg')).toBeInTheDocument();
-    expect(container.querySelector('.forest-wind-particles')).toBeInTheDocument();
+    // Verify 3 distinct trees
+    expect(container.querySelector('.tree-left-container')).toBeInTheDocument();
+    expect(container.querySelector('.tree-center-container')).toBeInTheDocument();
+    expect(container.querySelector('.tree-right-container')).toBeInTheDocument();
+
+    // Verify top-only clouds container
+    expect(container.querySelector('.top-sky-clouds-container')).toBeInTheDocument();
   });
 });
