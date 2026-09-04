@@ -1,7 +1,7 @@
 /* ==========================================================================
    DAILY WANDER — REALISTIC CINEMATIC FOREST & THREE MEMORY BIRDS
-   Realistic natural world, exactly three mature trees, three distinct realistic birds,
-   tiny physical memory pouches (hidden photo until tapped), top-only clouds
+   Realistic mature trees, natural bark detail, organic multi-tier branching,
+   three realistic birds carrying tiny memory pouches, top-only clouds
    ========================================================================== */
 
 /* Fixed Viewport Canvas for Living Forest */
@@ -64,7 +64,7 @@
 }
 
 /* ==========================================================================
-   1. TOP-ONLY DISTANT REALISTIC CLOUDS (Restricted to upper 2%–12% sky band)
+   1. TOP-ONLY DISTANT REALISTIC CLOUDS (Strictly restricted to top 2%–12% sky band)
    ========================================================================== */
 
 .top-sky-clouds-container {
@@ -133,7 +133,7 @@
   inset: 0;
   pointer-events: none;
   z-index: 5;
-  opacity: 0.45;
+  opacity: 0.42;
 }
 
 .sun-shaft {
@@ -141,7 +141,7 @@
   top: -10%;
   width: 140px;
   height: 120%;
-  background: linear-gradient(135deg, rgba(255, 245, 205, 0.18) 0%, rgba(255, 235, 175, 0.04) 50%, transparent 80%);
+  background: linear-gradient(135deg, rgba(255, 245, 205, 0.16) 0%, rgba(255, 235, 175, 0.03) 50%, transparent 80%);
   transform: rotate(24deg);
   filter: blur(14px);
 }
@@ -151,12 +151,12 @@
 .shaft-3 { left: 74%; }
 
 /* ==========================================================================
-   2. THREE DISTINCT REALISTIC MATURE TREES
+   2. THREE BOTANICALLY REALISTIC MATURE TREES
    ========================================================================== */
 
 .forest-tree-container {
   position: absolute;
-  bottom: -20px;
+  bottom: -15px;
   pointer-events: none;
   transform-origin: bottom center;
 }
@@ -167,29 +167,45 @@
   overflow: visible;
 }
 
-/* Left Tree: Graceful Elm/Birch */
+/* Left Tree: Ancient Gnarled Broadleaf (Massive & Textured) */
 .tree-left-container {
-  left: clamp(-20px, 2vw, 40px);
-  width: clamp(260px, 32vw, 480px);
-  height: clamp(400px, 78vh, 780px);
+  left: clamp(-30px, 1vw, 30px);
+  width: clamp(280px, 35vw, 540px);
+  height: clamp(440px, 84vh, 850px);
   z-index: 6;
 }
 
-/* Center Tree: Midground Spreading Oak */
+/* Center Tree: Tall Mature Forest Tree in Midground */
 .tree-center-container {
   left: clamp(34%, 44vw, 56%);
   transform: translateX(-50%);
-  width: clamp(300px, 40vw, 580px);
-  height: clamp(420px, 80vh, 800px);
+  width: clamp(320px, 42vw, 620px);
+  height: clamp(450px, 84vh, 850px);
   z-index: 7;
 }
 
-/* Right Tree: Ancient Mature Tree */
+/* Right Tree: Older Asymmetrical Leaning Tree */
 .tree-right-container {
-  right: clamp(-30px, 1vw, 30px);
-  width: clamp(320px, 42vw, 620px);
-  height: clamp(440px, 82vh, 840px);
+  right: clamp(-35px, 0.5vw, 25px);
+  width: clamp(330px, 43vw, 640px);
+  height: clamp(460px, 86vh, 880px);
   z-index: 8;
+}
+
+/* Forest Floor Terrain Base */
+.forest-floor-terrain {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  pointer-events: none;
+  z-index: 9;
+}
+
+.forest-floor-svg {
+  width: 100%;
+  height: 100%;
 }
 
 /* Branch Spring Landing Bounce Keyframes */
@@ -206,9 +222,9 @@
 
 @keyframes branchLandingBounce {
   0% { transform: rotate(0deg) translateY(0); }
-  25% { transform: rotate(2.8deg) translateY(6px); }
-  50% { transform: rotate(-1.4deg) translateY(-3px); }
-  75% { transform: rotate(0.6deg) translateY(1px); }
+  25% { transform: rotate(2.4deg) translateY(5px); }
+  50% { transform: rotate(-1.2deg) translateY(-2.5px); }
+  75% { transform: rotate(0.5deg) translateY(1px); }
   100% { transform: rotate(0deg) translateY(0); }
 }
 
@@ -224,8 +240,8 @@
 
 @keyframes foliageSway {
   0%, 100% { transform: rotate(0deg) scale(1); }
-  35% { transform: rotate(1.2deg) scale(1.012); }
-  70% { transform: rotate(-0.9deg) scale(0.992); }
+  35% { transform: rotate(1.1deg) scale(1.01); }
+  70% { transform: rotate(-0.8deg) scale(0.993); }
 }
 
 /* Floating Golden Motes in Breeze */
@@ -336,15 +352,15 @@
 
 .bird-species-0.phase-perched,
 .bird-species-0.phase-landing {
-  top: clamp(42%, 49vh, 56%);
-  left: clamp(120px, 19vw, 300px);
+  top: clamp(40%, 48vh, 54%);
+  left: clamp(130px, 20vw, 320px);
   transform: translate3d(0, 0, 0) scale(0.96);
   opacity: 1;
 }
 
 .bird-species-0.phase-flying-in {
-  top: clamp(42%, 49vh, 56%);
-  left: clamp(120px, 19vw, 300px);
+  top: clamp(40%, 48vh, 54%);
+  left: clamp(130px, 20vw, 320px);
   animation: bird0FlightIn 4.2s cubic-bezier(0.25, 0.8, 0.35, 1) forwards;
 }
 
@@ -360,8 +376,8 @@
 }
 
 .bird-species-0.phase-flying-out {
-  top: clamp(42%, 49vh, 56%);
-  left: clamp(120px, 19vw, 300px);
+  top: clamp(40%, 48vh, 54%);
+  left: clamp(130px, 20vw, 320px);
   animation: bird0FlightOut 3.4s cubic-bezier(0.55, 0, 0.85, 0.65) forwards;
 }
 
@@ -384,15 +400,15 @@
 
 .bird-species-1.phase-perched,
 .bird-species-1.phase-landing {
-  top: clamp(40%, 46vh, 52%);
-  left: clamp(38%, 46vw, 54%);
+  top: clamp(38%, 45vh, 50%);
+  left: clamp(36%, 45vw, 52%);
   transform: translate3d(-50%, 0, 0) scale(0.94);
   opacity: 1;
 }
 
 .bird-species-1.phase-flying-in {
-  top: clamp(40%, 46vh, 52%);
-  left: clamp(38%, 46vw, 54%);
+  top: clamp(38%, 45vh, 50%);
+  left: clamp(36%, 45vw, 52%);
   animation: bird1FlightIn 4.5s cubic-bezier(0.25, 0.8, 0.35, 1) forwards;
 }
 
@@ -408,8 +424,8 @@
 }
 
 .bird-species-1.phase-flying-out {
-  top: clamp(40%, 46vh, 52%);
-  left: clamp(38%, 46vw, 54%);
+  top: clamp(38%, 45vh, 50%);
+  left: clamp(36%, 45vw, 52%);
   animation: bird1FlightOut 3.6s cubic-bezier(0.55, 0, 0.85, 0.65) forwards;
 }
 
@@ -432,15 +448,15 @@
 
 .bird-species-2.phase-perched,
 .bird-species-2.phase-landing {
-  top: clamp(44%, 51vh, 58%);
-  right: clamp(120px, 18vw, 290px);
+  top: clamp(42%, 49vh, 55%);
+  right: clamp(140px, 20vw, 320px);
   transform: translate3d(0, 0, 0) scale(0.98);
   opacity: 1;
 }
 
 .bird-species-2.phase-flying-in {
-  top: clamp(44%, 51vh, 58%);
-  right: clamp(120px, 18vw, 290px);
+  top: clamp(42%, 49vh, 55%);
+  right: clamp(140px, 20vw, 320px);
   animation: bird2FlightIn 4.0s cubic-bezier(0.25, 0.8, 0.35, 1) forwards;
 }
 
@@ -456,8 +472,8 @@
 }
 
 .bird-species-2.phase-flying-out {
-  top: clamp(44%, 51vh, 58%);
-  right: clamp(120px, 18vw, 290px);
+  top: clamp(42%, 49vh, 55%);
+  right: clamp(140px, 20vw, 320px);
   animation: bird2FlightOut 3.2s cubic-bezier(0.55, 0, 0.85, 0.65) forwards;
 }
 
@@ -808,27 +824,27 @@
   /* Scale & reposition the 3 trees on mobile screens */
   .tree-left-container {
     left: -20px;
-    width: 200px;
-    height: 520px;
+    width: 220px;
+    height: 540px;
   }
 
   .tree-center-container {
     left: 48%;
-    width: 230px;
-    height: 540px;
+    width: 250px;
+    height: 560px;
   }
 
   .tree-right-container {
     right: -25px;
-    width: 240px;
-    height: 560px;
+    width: 260px;
+    height: 580px;
   }
 
   /* Bird species coordinates on small screens */
   .bird-species-0.phase-perched,
   .bird-species-0.phase-landing {
     top: 48%;
-    left: 55px;
+    left: 65px;
   }
 
   .bird-species-1.phase-perched,
@@ -840,7 +856,7 @@
   .bird-species-2.phase-perched,
   .bird-species-2.phase-landing {
     top: 50%;
-    right: 55px;
+    right: 65px;
   }
 
   .forest-hint {
@@ -850,15 +866,15 @@
 
 /* Very Small Phones (320px - 360px) */
 @media (max-width: 360px) {
-  .tree-left-container { width: 170px; }
-  .tree-center-container { width: 190px; }
-  .tree-right-container { width: 200px; }
+  .tree-left-container { width: 190px; }
+  .tree-center-container { width: 210px; }
+  .tree-right-container { width: 220px; }
 
   .bird-species-0.phase-perched,
-  .bird-species-0.phase-landing { left: 35px; }
+  .bird-species-0.phase-landing { left: 45px; }
 
   .bird-species-2.phase-perched,
-  .bird-species-2.phase-landing { right: 35px; }
+  .bird-species-2.phase-landing { right: 45px; }
 }
 
 /* Mobile Landscape Safeguards */
