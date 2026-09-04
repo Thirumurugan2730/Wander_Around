@@ -6,6 +6,27 @@ describe('API Client', () => {
     vi.restoreAllMocks();
   });
 
+  it('fetches today posts successfully from /api/posts/today', async () => {
+    const fakePosts = [{ id: 1, text: 'Hello' }];
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: true,
+      json: async () => fakePosts,
+    });
+
+    const result = await getTodayPosts();
+    expect(result).toEqual(fakePosts);
+  });
+
+  it('fetches today count successfully from /api/posts/today/count', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: true,
+      json: async () => ({ count: 5, remaining: 95 }),
+    });
+
+    const result = await getTodayCount();
+    expect(result).toEqual({ count: 5, remaining: 95 });
+  });
+
   it('constructs correct FormData for photo + text post and sends to /api/posts', async () => {
     const fakeResponse = {
       id: 101,

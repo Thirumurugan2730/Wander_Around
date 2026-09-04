@@ -5,15 +5,16 @@ import { MemoryRouter } from 'react-router-dom';
 import WanderingPage from '../pages/WanderingPage';
 import * as apiClient from '../api/client';
 
-describe('WanderingPage Single-Focus Discovery', () => {
+describe('WanderingPage True Wandering Canvas', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders loading state then single-focus moment card', async () => {
+  it('renders loading state then all moments together on one living canvas', async () => {
     const mockPosts = [
       { id: 1, text: 'Morning reflections', username: 'Thiru', hasPhoto: false },
       { id: 2, text: 'Sunset glow', username: 'Elena', hasPhoto: false },
+      { id: 3, text: 'Coffee with rain', username: 'Sam', hasPhoto: true, imagePath: 'coffee.webp' },
     ];
     vi.spyOn(apiClient, 'getTodayPosts').mockResolvedValue(mockPosts);
 
@@ -26,19 +27,19 @@ describe('WanderingPage Single-Focus Discovery', () => {
     // Initial loading indicator
     expect(screen.getByText(/Finding today's little moments.../i)).toBeInTheDocument();
 
-    // After loading finishes
+    // After loading finishes, canvas should be present with all 3 moments rendered simultaneously
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: /Somewhere, today\.\.\./i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Wander to the next moment/i })).toBeInTheDocument();
+      expect(screen.getByText(/3 memories floating through today/i)).toBeInTheDocument();
     });
 
-    // Verify exactly ONE moment card article is rendered in the DOM (Single Focus!)
     const articles = screen.getAllByRole('article');
-    expect(articles).toHaveLength(1);
-    expect(screen.getByText(/Moment 1 of 2/i)).toBeInTheDocument();
+    expect(articles).toHaveLength(3);
+    expect(screen.getByText('Morning reflections')).toBeInTheDocument();
+    expect(screen.getByText('Sunset glow')).toBeInTheDocument();
+    expect(screen.getByText('Coffee with rain')).toBeInTheDocument();
   });
 
-  it('advances to next moment on Wander button click without calling API', async () => {
+  it('expands selected moment on the same screen when clicked without extra API calls', async () => {
     const mockPosts = [
       { id: 'POST_A', text: 'First moment A', username: 'UserA', hasPhoto: false },
       { id: 'POST_B', text: 'Second moment B', username: 'UserB', hasPhoto: false },
@@ -52,20 +53,31 @@ describe('WanderingPage Single-Focus Discovery', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/Moment 1 of 2/i)).toBeInTheDocument();
+      expect(screen.getByText(/2 memories floating through today/i)).toBeInTheDocument();
     });
 
-    // Exactly 1 fetch occurred on page load
     expect(fetchSpy).toHaveBeenCalledTimes(1);
 
-    const wanderBtn = screen.getByRole('button', { name: /Wander to the next moment/i });
-    fireEvent.click(wanderBtn);
+    // Click on First moment card
+    const firstCard = screen.getByRole('button', { name: /Text memory by UserA/i });
+    fireEvent.click(firstCard);
 
+    // Dialog / Expanded modal appears on same screen
     await waitFor(() => {
-      expect(screen.getByText(/Moment 2 of 2/i)).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: /Expanded memory by UserA/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Return to wandering canvas/i })).toBeInTheDocument();
     });
 
-    // Still exactly 1 fetch call: ZERO API requests occurred on Wander click!
+    // Close expanded view
+    const closeBtn = screen.getByRole('button', { name: /Return to wandering canvas/i });
+    fireEvent.click(closeBtn);
+
+    // Modal is removed, still on canvas
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+
+    // No extra API call happened!
     expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -79,8 +91,10 @@ describe('WanderingPage Single-Focus Discovery', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/It's quiet here\./i)).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /Leave today's first moment/i })).toBeInTheDocument();
+      expect(screen.getByText(/Nothing here yet\.\.\./i)).toBeInTheDocument();
+      expect(screen.getByText(/Be the first person to leave a little piece of today\./i)).toBeInTheDocument();
+      const shareLinks = screen.getAllByRole('link', { name: /Share your day/i });
+      expect(shareLinks.length).toBeGreaterThanOrEqual(1);
     });
   });
 

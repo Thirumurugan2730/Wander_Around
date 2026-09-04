@@ -8,17 +8,15 @@ export default function EmptyState() {
         ☀️
       </div>
       
-      <h2 className="empty-title">It's quiet here.</h2>
+      <h2 className="empty-title">Nothing here yet...</h2>
       
       <p className="empty-body">
-        The day hasn't filled up with memories yet.
-        <br />
-        Be the first to leave a little piece of yours.
+        Be the first person to leave a little piece of today.
       </p>
 
       <div className="empty-action">
         <Link to="/share" className="btn btn-sun">
-          Leave today's first moment
+          Share your day
         </Link>
       </div>
 
