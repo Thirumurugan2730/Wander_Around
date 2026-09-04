@@ -8,83 +8,182 @@
   min-height: calc(100vh - 70px);
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #9AC8E2 0%, #BDDFEF 22%, #DFEBF2 48%, #F7EDE2 78%, #FAF2E8 100%);
+  background: linear-gradient(180deg, #72A9CE 0%, #A2D0E7 22%, #DDE8EE 48%, #FCECD7 78%, #FAF2E8 100%);
   overflow-x: hidden;
   user-select: none;
 }
 
-/* Subtle Film Grain / Atmospheric Texture */
+/* Subtle Film Grain Texture Overlay */
 .wandering-page::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(43, 40, 37, 0.035) 1px, transparent 0);
-  background-size: 24px 24px;
+  background-image: radial-gradient(rgba(43, 40, 37, 0.04) 1px, transparent 0);
+  background-size: 20px 20px;
   pointer-events: none;
   z-index: 2;
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
-/* Atmospheric Sun Haze */
-.ambient-sun-haze {
+/* Soft Nostalgic Vignette Frame */
+.wandering-page::after {
+  content: '';
   position: absolute;
-  top: -120px;
-  right: -80px;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 238, 180, 0.6) 0%, rgba(255, 246, 225, 0.25) 45%, rgba(255, 255, 255, 0) 70%);
-  filter: blur(40px);
+  inset: 0;
+  box-shadow: inset 0 0 100px rgba(180, 140, 100, 0.12), inset 0 0 40px rgba(70, 110, 150, 0.08);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ==========================================================================
+   NOSTALGIC SUN & ATMOSPHERIC SOLAR AURA
+   ========================================================================== */
+
+.nostalgic-sun-container {
+  position: absolute;
+  top: 4%;
+  right: 12%;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
   z-index: 1;
 }
 
-/* Distant Ambient Clouds */
+/* Wide Ambient Sunlight Haze */
+.sun-ambient-haze {
+  position: absolute;
+  width: 650px;
+  height: 650px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 240, 185, 0.7) 0%, rgba(255, 246, 220, 0.35) 40%, rgba(255, 255, 255, 0) 72%);
+  filter: blur(48px);
+}
+
+/* Soft Radiant Golden Sunbeams */
+.sun-light-beams {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    rgba(255, 235, 175, 0.22) 0deg,
+    rgba(255, 255, 255, 0) 25deg,
+    rgba(255, 235, 175, 0.28) 60deg,
+    rgba(255, 255, 255, 0) 90deg,
+    rgba(255, 235, 175, 0.22) 130deg,
+    rgba(255, 255, 255, 0) 170deg,
+    rgba(255, 235, 175, 0.3) 220deg,
+    rgba(255, 255, 255, 0) 270deg,
+    rgba(255, 235, 175, 0.25) 320deg,
+    rgba(255, 255, 255, 0) 360deg
+  );
+  filter: blur(20px);
+  animation: sunBeamSlowRotate 120s linear infinite;
+}
+
+@keyframes sunBeamSlowRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Outer Luminous Golden Corona */
+.sun-outer-corona {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 235, 170, 0.55) 0%, rgba(255, 220, 130, 0.25) 60%, rgba(255, 255, 255, 0) 80%);
+  filter: blur(14px);
+  animation: sunCoronaBreathe 22s ease-in-out infinite alternate;
+}
+
+/* Inner Atmospheric Solar Halo */
+.sun-inner-halo {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 250, 220, 0.9) 0%, rgba(255, 225, 140, 0.6) 65%, rgba(255, 210, 100, 0) 100%);
+  filter: blur(8px);
+}
+
+/* Radiant Golden Core Sun Disc */
+.sun-core-disc {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #FFFDF5 0%, #FFF4D0 45%, #FFDF85 85%, #F7C85C 100%);
+  box-shadow:
+    0 0 28px rgba(255, 235, 150, 0.95),
+    0 0 60px rgba(255, 210, 100, 0.6),
+    0 0 100px rgba(255, 190, 70, 0.35);
+}
+
+@keyframes sunCoronaBreathe {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   AMBIENT DISTANT BACKGROUND CLOUDS
+   ========================================================================== */
+
 .ambient-sky-cloud {
   position: absolute;
   pointer-events: none;
-  opacity: 0.38;
-  filter: blur(6px);
+  opacity: 0.42;
+  filter: blur(5px);
   z-index: 1;
 }
 
 .ambient-cloud-1 {
   top: 10%;
-  left: 4%;
-  width: 280px;
-  height: 95px;
+  left: 3%;
+  width: 290px;
+  height: 98px;
   background: #FFFFFF;
   border-radius: 120px;
-  animation: ambientDriftSlow 52s ease-in-out infinite alternate;
+  animation: ambientDriftSlow 55s ease-in-out infinite alternate;
 }
 
 .ambient-cloud-2 {
-  top: 60%;
-  right: 6%;
-  width: 340px;
-  height: 115px;
+  top: 58%;
+  right: 5%;
+  width: 350px;
+  height: 120px;
   background: #FFFFFF;
   border-radius: 140px;
-  animation: ambientDriftSlow 60s ease-in-out 8s infinite alternate-reverse;
+  animation: ambientDriftSlow 65s ease-in-out 10s infinite alternate-reverse;
 }
 
 .ambient-cloud-3 {
-  bottom: 12%;
-  left: 14%;
-  width: 240px;
-  height: 80px;
+  bottom: 14%;
+  left: 12%;
+  width: 250px;
+  height: 84px;
   background: #FFFFFF;
   border-radius: 100px;
-  animation: ambientDriftSlow 46s ease-in-out 14s infinite alternate;
+  animation: ambientDriftSlow 48s ease-in-out 18s infinite alternate;
 }
 
 @keyframes ambientDriftSlow {
   0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(80px, -20px, 0); }
+  100% { transform: translate3d(90px, -24px, 0); }
 }
 
 /* ==========================================================================
-   VISIBLE WIND LAYER & BREEZE STREAKS
+   VISIBLE WIND LAYER, BREEZE RIBBONS & FLOATING MOTES
    ========================================================================== */
 
 .wind-layer {
@@ -103,77 +202,115 @@
 }
 
 .wind-streak {
-  stroke-dasharray: 180 800;
-  stroke-dashoffset: 980;
-  animation: windFlow 18s linear infinite;
-  opacity: 0.6;
+  stroke-dasharray: 200 900;
+  stroke-dashoffset: 1100;
+  animation: windFlow 20s linear infinite;
+  opacity: 0.65;
 }
 
-.wind-streak-1 {
-  animation-duration: 16s;
+.wind-streak-1 { animation-duration: 18s; animation-delay: 0s; }
+.wind-streak-2 { animation-duration: 24s; animation-delay: 5s; }
+.wind-streak-3 { animation-duration: 21s; animation-delay: 9s; }
+.wind-streak-4 { animation-duration: 28s; animation-delay: 14s; }
+.wind-streak-5 { animation-duration: 16s; animation-delay: 3s; }
+
+@keyframes windFlow {
+  0% { stroke-dashoffset: 1100; }
+  100% { stroke-dashoffset: -1100; }
+}
+
+/* Wispy Cloud Breeze Ribbons (Cirrus Vapor Bands) */
+.breeze-ribbon {
+  position: absolute;
+  height: 18px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.45) 45%, rgba(255, 248, 230, 0.4) 65%, transparent 100%);
+  border-radius: 20px;
+  filter: blur(4px);
+  animation: ribbonFlow 32s linear infinite;
+}
+
+.breeze-ribbon-1 {
+  top: 22%;
+  left: -200px;
+  width: 380px;
+  animation-duration: 28s;
   animation-delay: 0s;
 }
 
-.wind-streak-2 {
-  animation-duration: 22s;
-  animation-delay: 4s;
+.breeze-ribbon-2 {
+  top: 48%;
+  left: -240px;
+  width: 440px;
+  animation-duration: 36s;
+  animation-delay: 11s;
 }
 
-.wind-streak-3 {
-  animation-duration: 19s;
-  animation-delay: 8s;
+.breeze-ribbon-3 {
+  top: 72%;
+  left: -220px;
+  width: 360px;
+  animation-duration: 32s;
+  animation-delay: 20s;
 }
 
-.wind-streak-4 {
-  animation-duration: 25s;
-  animation-delay: 12s;
-}
-
-@keyframes windFlow {
+@keyframes ribbonFlow {
   0% {
-    stroke-dashoffset: 980;
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
   }
+  15% { opacity: 0.7; }
+  85% { opacity: 0.7; }
   100% {
-    stroke-dashoffset: -980;
+    transform: translate3d(calc(100vw + 400px), -30px, 0);
+    opacity: 0;
   }
 }
 
-/* Floating Wind Motes */
+/* Floating Wind Particles (Sunlit Motes & Cloud Seeds) */
 .wind-particle {
   position: absolute;
-  width: 5px;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.75);
   border-radius: 50%;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
-  animation: particleFly 18s linear infinite;
+  animation: particleFloat 22s linear infinite;
 }
 
-.particle-1 { top: 18%; left: -20px; animation-duration: 14s; animation-delay: 0s; }
-.particle-2 { top: 35%; left: -20px; animation-duration: 18s; animation-delay: 3s; width: 6px; height: 6px; }
-.particle-3 { top: 52%; left: -20px; animation-duration: 16s; animation-delay: 7s; }
-.particle-4 { top: 68%; left: -20px; animation-duration: 20s; animation-delay: 11s; width: 4px; height: 4px; }
-.particle-5 { top: 82%; left: -20px; animation-duration: 15s; animation-delay: 5s; }
-.particle-6 { top: 25%; left: -20px; animation-duration: 22s; animation-delay: 9s; width: 7px; height: 7px; opacity: 0.5; }
+/* Golden Sunlit Motes */
+.particle-sun-1 { top: 15%; left: -20px; width: 5px; height: 5px; background: #FFE8A0; box-shadow: 0 0 8px #FFD770; animation-duration: 15s; animation-delay: 0s; }
+.particle-sun-2 { top: 28%; left: -20px; width: 6px; height: 6px; background: #FFF0B8; box-shadow: 0 0 8px #FFE080; animation-duration: 19s; animation-delay: 3s; }
+.particle-sun-3 { top: 40%; left: -20px; width: 4px; height: 4px; background: #FFE08A; box-shadow: 0 0 6px #FFD060; animation-duration: 17s; animation-delay: 7s; }
+.particle-sun-4 { top: 22%; left: -20px; width: 5px; height: 5px; background: #FFF4C8; box-shadow: 0 0 7px #FFE890; animation-duration: 22s; animation-delay: 11s; }
+.particle-sun-5 { top: 35%; left: -20px; width: 7px; height: 7px; background: #FFEA9F; box-shadow: 0 0 9px #FFDA70; animation-duration: 16s; animation-delay: 5s; opacity: 0.75; }
+.particle-sun-6 { top: 46%; left: -20px; width: 4px; height: 4px; background: #FFF1BD; box-shadow: 0 0 6px #FFE585; animation-duration: 20s; animation-delay: 9s; }
+.particle-sun-7 { top: 18%; left: -20px; width: 6px; height: 6px; background: #FFE694; box-shadow: 0 0 8px #FFD565; animation-duration: 25s; animation-delay: 13s; }
+.particle-sun-8 { top: 32%; left: -20px; width: 5px; height: 5px; background: #FFF6CE; box-shadow: 0 0 8px #FFEC9E; animation-duration: 18s; animation-delay: 15s; }
 
-@keyframes particleFly {
+/* Translucent White Cloud Seeds */
+.particle-seed-1 { top: 55%; left: -20px; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-duration: 16s; animation-delay: 1s; }
+.particle-seed-2 { top: 68%; left: -20px; width: 6px; height: 6px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-duration: 21s; animation-delay: 4s; }
+.particle-seed-3 { top: 78%; left: -20px; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 5px rgba(255, 255, 255, 0.9); animation-duration: 18s; animation-delay: 8s; }
+.particle-seed-4 { top: 86%; left: -20px; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.75); box-shadow: 0 0 6px rgba(255, 255, 255, 0.85); animation-duration: 23s; animation-delay: 12s; }
+.particle-seed-5 { top: 62%; left: -20px; width: 7px; height: 7px; background: rgba(255, 255, 255, 0.7); box-shadow: 0 0 8px rgba(255, 255, 255, 0.85); animation-duration: 17s; animation-delay: 6s; opacity: 0.65; }
+.particle-seed-6 { top: 74%; left: -20px; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 5px rgba(255, 255, 255, 0.9); animation-duration: 22s; animation-delay: 10s; }
+.particle-seed-7 { top: 82%; left: -20px; width: 6px; height: 6px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 0 7px rgba(255, 255, 255, 0.9); animation-duration: 26s; animation-delay: 14s; }
+.particle-seed-8 { top: 92%; left: -20px; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 0 6px rgba(255, 255, 255, 0.9); animation-duration: 19s; animation-delay: 16s; }
+
+@keyframes particleFloat {
   0% {
     transform: translate3d(0, 0, 0) scale(0.8);
     opacity: 0;
   }
-  10% {
-    opacity: 0.8;
-  }
-  90% {
-    opacity: 0.8;
-  }
+  10% { opacity: 0.85; }
+  50% { transform: translate3d(55vw, -25px, 0) scale(1.05); }
+  90% { opacity: 0.85; }
   100% {
-    transform: translate3d(105vw, -40px, 0) scale(1.1);
+    transform: translate3d(calc(100vw + 50px), -45px, 0) scale(1.1);
     opacity: 0;
   }
 }
 
-/* Minimal Sky Header */
+/* ==========================================================================
+   MINIMAL SKY HEADER
+   ========================================================================== */
+
 .wandering-top-nav {
   position: relative;
   z-index: 30;
@@ -200,7 +337,10 @@
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
 }
 
-/* Sky Canvas Container */
+/* ==========================================================================
+   SKY CANVAS CONTAINER & PAUSE STATE
+   ========================================================================== */
+
 .wandering-canvas-container {
   position: relative;
   flex: 1;
@@ -224,14 +364,14 @@
 }
 
 /* ==========================================================================
-   MEMORY CLOUD ANCHOR & DEPTH TIERS
+   MEMORY CLOUD ANCHOR & DEPTH / SUNLIGHT TIERS
    ========================================================================== */
 
 .memory-cloud-anchor {
   position: absolute;
   cursor: pointer;
   outline: none;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.1s ease;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.1s ease;
   will-change: transform;
 }
 
@@ -247,9 +387,9 @@
   border-radius: 40px;
 }
 
-/* Depth Tiers */
+/* Depth Levels */
 .depth-near {
-  filter: drop-shadow(0 20px 40px rgba(60, 110, 150, 0.32)) drop-shadow(0 4px 12px rgba(43, 40, 37, 0.08));
+  filter: drop-shadow(0 20px 42px rgba(60, 110, 150, 0.32)) drop-shadow(0 4px 12px rgba(43, 40, 37, 0.08));
 }
 
 .depth-mid {
@@ -259,6 +399,21 @@
 .depth-far {
   opacity: 0.92;
   filter: drop-shadow(0 8px 18px rgba(60, 110, 150, 0.18));
+}
+
+/* Directional Sunlight Modifiers */
+.sunlit-warm {
+  filter: drop-shadow(0 18px 36px rgba(185, 125, 55, 0.25)) drop-shadow(0 4px 10px rgba(43, 40, 37, 0.07));
+}
+
+.sunlit-warm .washi-tape-photo,
+.sunlit-warm .note-washi-tape {
+  background: rgba(255, 235, 185, 0.95) !important;
+}
+
+.sunlit-cool {
+  filter: drop-shadow(0 10px 22px rgba(50, 95, 135, 0.18));
+  opacity: 0.94;
 }
 
 /* Organic Fluffy Cloud Silhouette Backdrop */
@@ -527,90 +682,93 @@
 }
 
 /* ==========================================================================
-   CONTINUOUS WIND-DRIFT KEYFRAMES (NOTICEABLE IN 2-3 SECONDS)
+   CONTINUOUS NON-TELEPORTING WIND-DRIFT KEYFRAMES (SEAMLESS CLOSED LOOPS)
    ========================================================================== */
 
-/* Trajectory 1: Breeze Drift A (rightward wind with gentle lift) */
-@keyframes windDriftBreezeA {
+/* Trajectory 1: Sweeping East-Northeast Wave Loop */
+@keyframes windDriftHarmonicA {
   0%, 100% {
     transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
   25% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * 0.4), calc(var(--wind-drift-y, 20px) * -0.7), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 1.01));
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 0.55), calc(var(--wind-drift-y, 25px) * -0.85), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 1.015));
   }
   50% {
-    transform: translate3d(var(--wind-drift-x, 45px), calc(var(--wind-drift-y, 20px) * 0.5), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+    transform: translate3d(var(--wind-drift-x, 60px), calc(var(--wind-drift-y, 25px) * 0.4), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
   75% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * -0.3), var(--wind-drift-y, 20px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 0.3), var(--wind-drift-y, 25px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 0.985));
   }
 }
 
-/* Trajectory 2: Breeze Drift B (sweeping rightward drift) */
-@keyframes windDriftBreezeB {
+/* Trajectory 2: Wide East-Southeast Glide Loop */
+@keyframes windDriftHarmonicB {
   0%, 100% {
     transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
   30% {
-    transform: translate3d(var(--wind-drift-x, 45px), calc(var(--wind-drift-y, 20px) * -0.8), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
+    transform: translate3d(var(--wind-drift-x, 60px), calc(var(--wind-drift-y, 25px) * 0.9), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.6deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
   }
   65% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * 0.6), var(--wind-drift-y, 20px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.8deg))) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 0.45), calc(var(--wind-drift-y, 25px) * -0.7), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.6deg))) scale(var(--cloud-scale, 1));
   }
 }
 
-/* Trajectory 3: Ascending Gust */
-@keyframes windDriftAscend {
+/* Trajectory 3: Ascending Thermal Breeze Loop */
+@keyframes windDriftHarmonicC {
   0%, 100% {
     transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
   35% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * 0.8), calc(var(--wind-drift-y, 20px) * -1.2), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 2deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 0.85), calc(var(--wind-drift-y, 25px) * -1.3), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 2deg))) scale(calc(var(--cloud-scale, 1) * 1.025));
   }
   70% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * -0.4), calc(var(--wind-drift-y, 20px) * 0.6), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 2deg))) scale(var(--cloud-scale, 1));
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 0.25), calc(var(--wind-drift-y, 25px) * 0.5), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.8deg))) scale(var(--cloud-scale, 1));
   }
 }
 
-/* Trajectory 4: Descending Thermal */
-@keyframes windDriftDescend {
+/* Trajectory 4: Figure-8 Lazy Air Current */
+@keyframes windDriftHarmonicD {
   0%, 100% {
     transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
-  35% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * 0.9), var(--wind-drift-y, 20px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
+  25% {
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 0.7), calc(var(--wind-drift-y, 25px) * -0.9), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 2.2deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
   }
-  70% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * -0.5), calc(var(--wind-drift-y, 20px) * -0.7), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 1.01));
+  50% {
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 1.1), 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  75% {
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 0.4), var(--wind-drift-y, 25px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 2deg))) scale(calc(var(--cloud-scale, 1) * 0.98));
   }
 }
 
-/* Trajectory 5: Undulating Wave */
-@keyframes windDriftWave {
+/* Trajectory 5: Deep Lazy Horizontal Current */
+@keyframes windDriftHarmonicE {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  }
+  30% {
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 1.25), calc(var(--wind-drift-y, 25px) * 0.35), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 1.015));
+  }
+  65% {
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 0.2), calc(var(--wind-drift-y, 25px) * -0.6), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.5deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
+  }
+}
+
+/* Trajectory 6: Undulating Golden Hour Air Stream */
+@keyframes windDriftHarmonicF {
   0%, 100% {
     transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
   20% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * 0.5), calc(var(--wind-drift-y, 20px) * -1), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 2.2deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 0.6), calc(var(--wind-drift-y, 25px) * -1.1), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 2deg))) scale(calc(var(--cloud-scale, 1) * 1.02));
   }
-  50% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * 1.1), 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
+  55% {
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 1.15), calc(var(--wind-drift-y, 25px) * 0.6), 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
   }
   80% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * -0.4), var(--wind-drift-y, 20px), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 2.2deg))) scale(calc(var(--cloud-scale, 1) * 0.98));
-  }
-}
-
-/* Trajectory 6: Sweeping Breeze Current */
-@keyframes windDriftSweep {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1));
-  }
-  30% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * 1.2), calc(var(--wind-drift-y, 20px) * 0.4), 0) rotate(calc(var(--rot-start, 0deg) + var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 1.01));
-  }
-  65% {
-    transform: translate3d(calc(var(--wind-drift-x, 45px) * -0.7), calc(var(--wind-drift-y, 20px) * -0.8), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 0.99));
+    transform: translate3d(calc(var(--wind-drift-x, 60px) * 0.35), calc(var(--wind-drift-y, 25px) * 1.1), 0) rotate(calc(var(--rot-start, 0deg) - var(--rot-delta, 1.8deg))) scale(calc(var(--cloud-scale, 1) * 0.985));
   }
 }
 
@@ -622,7 +780,7 @@
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(30, 50, 70, 0.45);
+  background: rgba(25, 45, 65, 0.48);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   display: flex;
@@ -872,6 +1030,12 @@
 
 /* Mobile viewports (320px to 480px) */
 @media (max-width: 480px) {
+  .nostalgic-sun-container {
+    top: 2%;
+    right: 5%;
+    transform: scale(0.75);
+  }
+
   .wandering-top-nav {
     padding: 12px 16px;
   }
@@ -1009,7 +1173,10 @@
   .memory-cloud-anchor,
   .ambient-sky-cloud,
   .wind-streak,
-  .wind-particle {
+  .breeze-ribbon,
+  .wind-particle,
+  .sun-light-beams,
+  .sun-outer-corona {
     animation: none !important;
     transform: rotate(var(--rot-start, 0deg)) scale(var(--cloud-scale, 1)) !important;
   }

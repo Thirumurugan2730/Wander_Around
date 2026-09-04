@@ -112,4 +112,30 @@ describe('WanderingPage Wandering Through Clouds', () => {
       expect(screen.getByRole('button', { name: /Try again/i })).toBeInTheDocument();
     });
   });
+
+  it('renders the nostalgic sun and visible wind layer elements', async () => {
+    vi.spyOn(apiClient, 'getTodayPosts').mockResolvedValue([
+      { id: 101, text: 'Golden afternoon', username: 'Sol', hasPhoto: false },
+    ]);
+
+    const { container } = render(
+      <MemoryRouter>
+        <WanderingPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Golden afternoon')).toBeInTheDocument();
+    });
+
+    // Verify Nostalgic Sun elements
+    expect(container.querySelector('.nostalgic-sun-container')).toBeInTheDocument();
+    expect(container.querySelector('.sun-core-disc')).toBeInTheDocument();
+    expect(container.querySelector('.sun-outer-corona')).toBeInTheDocument();
+
+    // Verify Wind Layer and breeze particles
+    expect(container.querySelector('.wind-layer')).toBeInTheDocument();
+    expect(container.querySelector('.wind-streak')).toBeInTheDocument();
+    expect(container.querySelector('.breeze-ribbon')).toBeInTheDocument();
+  });
 });

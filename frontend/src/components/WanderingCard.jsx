@@ -8,6 +8,7 @@ export default function WanderingCard({
   cloudVariant = 0,
   compositionType = 'photo-rest',
   depthClass = 'depth-mid',
+  sunlitClass = 'sunlit-neutral',
   onSelect,
 }) {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -37,7 +38,7 @@ export default function WanderingCard({
     <div
       role="button"
       tabIndex={0}
-      className={`memory-cloud-anchor ${depthClass} comp-${compositionType}`}
+      className={`memory-cloud-anchor ${depthClass} ${sunlitClass} comp-${compositionType}`}
       style={style}
       onClick={() => onSelect(post)}
       onKeyDown={handleKeyDown}
@@ -45,7 +46,7 @@ export default function WanderingCard({
     >
       {/* Real Organic Fluffy Cloud Silhouette */}
       <div className="cloud-backdrop-wrapper">
-        <CloudSilhouette variant={cloudVariant} className="cloud-silhouette-svg" />
+        <CloudSilhouette variant={cloudVariant} sunlitClass={sunlitClass} className="cloud-silhouette-svg" />
       </div>
 
       {hasPhoto ? (

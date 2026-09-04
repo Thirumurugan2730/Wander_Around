@@ -4,6 +4,7 @@ import { useWanderingLayout } from '../hooks/useWanderingLayout';
 import WanderingCard from '../components/WanderingCard';
 import ExpandedMoment from '../components/ExpandedMoment';
 import WindLayer from '../components/WindLayer';
+import NostalgicSun from '../components/NostalgicSun';
 import LoadingState from '../components/LoadingState';
 import EmptyState from '../components/EmptyState';
 
@@ -71,13 +72,15 @@ export default function WanderingPage() {
 
   return (
     <main className="wandering-page" aria-label="Wandering Sky Canvas">
-      {/* Ambient Sun Haze & Distant Clouds */}
-      <div className="ambient-sun-haze" aria-hidden="true" />
+      {/* Nostalgic Golden Hour Sun & Solar Aura */}
+      <NostalgicSun />
+
+      {/* Ambient Distant Clouds */}
       <div className="ambient-sky-cloud ambient-cloud-1" aria-hidden="true" />
       <div className="ambient-sky-cloud ambient-cloud-2" aria-hidden="true" />
       <div className="ambient-sky-cloud ambient-cloud-3" aria-hidden="true" />
 
-      {/* Visible Wind Trails & Floating Motes */}
+      {/* Visible Wind Trails, Breeze Ribbons & Floating Motes */}
       <WindLayer />
 
       {/* Atmospheric Sky Header */}
@@ -128,7 +131,7 @@ export default function WanderingPage() {
           className={`wandering-canvas-container ${selectedPost ? 'is-paused' : ''}`}
           aria-label="Interactive floating memories"
         >
-          {positionedCards.map(({ post, style, cloudVariant, compositionType, depthClass }, index) => {
+          {positionedCards.map(({ post, style, cloudVariant, compositionType, depthClass, sunlitClass }, index) => {
             const postKey = post.id || `moment-${index}`;
             return (
               <WanderingCard
@@ -138,6 +141,7 @@ export default function WanderingPage() {
                 cloudVariant={cloudVariant}
                 compositionType={compositionType}
                 depthClass={depthClass}
+                sunlitClass={sunlitClass}
                 onSelect={handleSelectPost}
               />
             );
